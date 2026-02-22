@@ -1,85 +1,213 @@
-/* Global Styles */
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-  margin: 0;
-  font-family: 'Noto Sans KR', sans-serif;
-  line-height: 1.6;
-  color: #333;
-  background-color: #f8faff;
+    font-family: 'Noto Sans KR', 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f7f6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: 0.3s;
+}
+
+ul {
+    list-style: none;
 }
 
 .container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 20px;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 0;
 }
 
 /* Header */
 header {
-  background-color: #ffffff;
-  padding: 20px 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    background-color: #1a2a44; /* 네이비 배경 */
+    color: #ffffff;
+    text-align: center;
+    padding: 60px 0;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 1.5rem;
-  color: #007aff; /* Rocket-like blue */
-  font-weight: 700;
+header h1 a {
+    font-size: 2.5rem;
+    color: #f1c40f; /* 일렉트릭 옐로우 */
+    font-weight: 700;
 }
 
-/* Hero Section */
-.hero {
-  padding: 100px 0;
-  text-align: center;
-  background: linear-gradient(135deg, #007aff 0%, #00c6ff 100%);
-  color: white;
+header p {
+    font-size: 1.1rem;
+    margin-top: 10px;
+    font-weight: 300;
+    color: #bdc3c7;
 }
 
-.hero h2 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  font-weight: 700;
+/* Navigation */
+nav {
+    background-color: #ffffff;
+    border-bottom: 2px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-.hero .intro-text {
-  font-size: 1.25rem;
-  margin-bottom: 40px;
-  opacity: 0.9;
+nav ul {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
 }
 
-/* Buttons */
-.btn {
-  display: inline-block;
-  padding: 12px 30px;
-  border-radius: 30px;
-  text-decoration: none;
-  font-weight: 700;
-  cursor: pointer;
-  border: none;
-  transition: transform 0.2s, box-shadow 0.2s;
-  margin: 0 10px;
+nav li {
+    margin: 0 15px;
 }
 
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+nav a {
+    font-weight: 700;
+    color: #1a2a44;
 }
 
-.btn-primary {
-  background-color: white;
-  color: #007aff;
+nav a:hover {
+    color: #f1c40f;
 }
 
-.btn-secondary {
-  background-color: transparent;
-  color: white;
-  border: 2px solid white;
+/* Main Layout */
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 40px;
+}
+
+#posts {
+    width: 70%;
+}
+
+aside {
+    width: 25%;
+}
+
+/* Post Card */
+.post-card {
+    background-color: #ffffff;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: flex;
+    transition: transform 0.3s;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+}
+
+.post-image {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    background-color: #f1c40f;
+}
+
+.post-content {
+    padding: 25px;
+    width: 70%;
+}
+
+.category {
+    font-size: 0.8rem;
+    color: #3498db;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.post-content h2 {
+    font-size: 1.5rem;
+    margin: 10px 0;
+    color: #1a2a44;
+}
+
+.post-content p {
+    color: #666;
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+.read-more {
+    color: #f1c40f;
+    font-weight: 700;
+    border-bottom: 2px solid transparent;
+}
+
+.read-more:hover {
+    border-bottom-color: #f1c40f;
+}
+
+/* Sidebar Widgets */
+.sidebar-widget {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.sidebar-widget h3 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #f1c40f;
+    display: inline-block;
+}
+
+.sidebar-widget ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar-widget ul li a:hover {
+    color: #3498db;
+}
+
+.ad-placeholder {
+    background-color: #ecf0f1;
+    border: 1px dashed #bdc3c7;
+    text-align: center;
+    padding: 40px 10px;
 }
 
 /* Footer */
 footer {
-  text-align: center;
-  padding: 40px 0;
-  color: #888;
-  font-size: 0.9rem;
+    background-color: #1a2a44;
+    color: #ffffff;
+    text-align: center;
+    padding: 40px 0;
+    margin-top: 60px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+    }
+    #posts, aside {
+        width: 100%;
+    }
+    .post-card {
+        flex-direction: column;
+    }
+    .post-image {
+        width: 100%;
+        padding: 40px 0;
+    }
+    .post-content {
+        width: 100%;
+    }
 }
