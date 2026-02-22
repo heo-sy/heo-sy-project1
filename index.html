@@ -9,12 +9,13 @@
     <style>
         :root {
             --bg: #000000;
-            --card-bg: #111111;
-            --logic-bg: #1a1a1a;
+            --card-bg: #0a0a0a;
+            --bill-bg: #111111;
             --text-main: #ffffff;
             --text-sub: #94a3b8;
             --accent: #3b82f6;
-            --border: #222222;
+            --negative: #ef4444;
+            --border: #1e293b;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -26,88 +27,115 @@
         }
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
         
-        header { padding: 50px 0; text-align: center; border-bottom: 1px solid var(--border); }
-        h1 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; }
-
-        /* Calculator Section */
-        .calculator { 
-            background: var(--card-bg); 
-            padding: 35px; 
-            border-radius: 12px; 
-            margin-top: 40px; 
-            border: 1px solid var(--border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .section-label { font-size: 0.75rem; color: var(--accent); font-weight: 800; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase; }
-        .input-group { display: flex; gap: 20px; margin-bottom: 25px; }
-        .input-item { flex: 1; }
-        label { display: block; font-size: 0.85rem; color: var(--text-sub); margin-bottom: 10px; font-weight: 600; }
-        input { 
-            width: 100%; 
-            background: #1a1a1a; 
-            border: 1px solid var(--border); 
-            color: #fff; 
-            padding: 15px; 
-            border-radius: 8px; 
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-        input:focus { outline: none; border-color: var(--accent); }
-        
-        .result-main { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 20px; 
-            padding: 25px; 
-            background: #000;
-            border-radius: 10px;
-        }
-        .result-item { text-align: center; }
-        .result-val { font-size: 1.7rem; font-weight: 900; color: var(--accent); margin-bottom: 5px; }
-        .result-label { font-size: 0.75rem; color: var(--text-sub); font-weight: 600; }
-
-        /* Logic Section (New) */
-        .logic-section {
-            background: var(--logic-bg);
-            padding: 35px;
-            border-radius: 0 0 12px 12px;
-            border: 1px solid var(--border);
-            border-top: none;
-            margin-bottom: 40px;
-        }
-        .logic-title { font-size: 1rem; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        .logic-title::before { content: ''; width: 4px; height: 16px; background: var(--accent); border-radius: 2px; }
-        
-        .logic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .logic-item { 
-            background: rgba(255,255,255,0.03); 
-            padding: 15px; 
-            border-radius: 8px; 
-            display: flex; 
-            align-items: center; 
-            gap: 12px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .logic-icon { font-size: 1.2rem; }
-        .logic-text { font-size: 0.85rem; color: var(--text-sub); }
-        .logic-text strong { color: var(--text-main); display: block; font-size: 0.9rem; }
+        header { padding: 40px 0; text-align: center; border-bottom: 1px solid var(--border); }
+        h1 { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.5px; }
 
         /* Navigation */
-        nav { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
-        nav a { color: var(--text-sub); font-size: 0.9rem; font-weight: 600; }
+        nav { display: flex; justify-content: center; gap: 30px; margin: 30px 0; }
+        nav a { color: var(--text-sub); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
         nav a:hover { color: var(--accent); }
 
-        /* Feed */
-        .post-item { margin-bottom: 40px; padding: 30px; border: 1px solid var(--border); border-radius: 10px; }
-        .post-meta { font-size: 0.75rem; color: #555; margin-bottom: 12px; font-weight: 700; }
-        .post-item h2 { font-size: 1.2rem; margin-bottom: 15px; letter-spacing: -0.5px; }
-        .post-item p { color: var(--text-sub); font-size: 0.95rem; }
+        /* Main Dashboard: High-Level Results */
+        .dashboard { 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 12px; 
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .dash-label { font-size: 0.75rem; color: var(--accent); font-weight: 800; margin-bottom: 15px; letter-spacing: 1.5px; }
+        .result-group { display: flex; justify-content: space-around; align-items: center; }
+        .main-val { font-size: 2.2rem; font-weight: 900; color: var(--text-main); }
+        .main-label { font-size: 0.8rem; color: var(--text-sub); margin-top: 5px; font-weight: 600; }
 
-        footer { text-align: center; padding: 60px 0; font-size: 0.8rem; color: #333; letter-spacing: 1px; }
+        /* Input Section */
+        .input-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .input-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        .input-card label { display: block; font-size: 0.75rem; color: var(--text-sub); margin-bottom: 8px; font-weight: 700; }
+        .input-card input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--border);
+            color: var(--text-main);
+            font-size: 1.4rem;
+            font-weight: 800;
+            padding: 5px 0;
+            outline: none;
+            transition: 0.3s;
+        }
+        .input-card input:focus { border-color: var(--accent); }
+
+        /* Real-time Bill Statement */
+        .bill-statement {
+            background: var(--bill-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        .bill-statement::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: repeating-linear-gradient(90deg, var(--accent), var(--accent) 10px, transparent 10px, transparent 20px);
+        }
+        .bill-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 25px; color: var(--text-main); display: flex; justify-content: space-between; }
+        
+        .bill-list { list-style: none; }
+        .bill-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed #222;
+            font-size: 0.9rem;
+        }
+        .bill-item:last-child { border-bottom: none; }
+        .item-name { color: var(--text-sub); }
+        .item-calc { font-size: 0.7rem; color: #444; margin-left: 8px; }
+        .item-price { font-weight: 700; color: var(--text-main); }
+        .negative { color: var(--negative); }
+
+        /* Summary Total in Bill */
+        .bill-total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+
+        /* Feed */
+        .feed-section { margin-top: 50px; }
+        .post-item { margin-bottom: 30px; padding: 25px; border: 1px solid var(--border); border-radius: 10px; }
+        .post-meta { font-size: 0.7rem; color: #444; margin-bottom: 10px; font-weight: 800; letter-spacing: 1px; }
+        .post-item h3 { font-size: 1.1rem; margin-bottom: 10px; }
+        .post-item p { color: var(--text-sub); font-size: 0.9rem; }
+
+        footer { text-align: center; padding: 60px 0; font-size: 0.75rem; color: #222; font-weight: 800; letter-spacing: 2px; }
+
+        /* Utility */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
         @media (max-width: 600px) {
-            .logic-grid { grid-template-columns: 1fr; }
-            .input-group { flex-direction: column; }
+            .input-section { grid-template-columns: 1fr; }
+            .result-group { flex-direction: column; gap: 20px; }
+            .main-val { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -117,82 +145,99 @@
             <h1>초보 셀러의 0원부터 매출 1,000만 원 도전기</h1>
         </header>
 
-        <!-- Margin Calculator -->
-        <section class="calculator">
-            <div class="section-label">REAL-TIME MARGIN CALCULATOR</div>
-            <div class="input-group">
-                <div class="input-item">
-                    <label>판매가 (KRW)</label>
-                    <input type="number" id="sellingPrice" placeholder="0" oninput="calculate()">
-                </div>
-                <div class="input-item">
-                    <label>매입 원가 (KRW)</label>
-                    <input type="number" id="costPrice" placeholder="0" oninput="calculate()">
-                </div>
-            </div>
-            <div class="result-main">
-                <div class="result-item">
-                    <div class="result-val" id="profitVal">0원</div>
-                    <div class="result-label">예상 순수익</div>
-                </div>
-                <div class="result-item">
-                    <div class="result-val" id="marginVal">0%</div>
-                    <div class="result-label">최종 마진율</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Logic Section -->
-        <section class="logic-section">
-            <div class="logic-title">실제 순수익 계산 방식 (정밀 산출)</div>
-            <div class="logic-grid">
-                <div class="logic-item">
-                    <div class="logic-icon">🚚</div>
-                    <div class="logic-text"><strong>배송비 고정 차감</strong>건당 3,000원 기본 반영</div>
-                </div>
-                <div class="logic-item">
-                    <div class="logic-icon">📉</div>
-                    <div class="logic-text"><strong>쿠팡 수수료 (10.8%)</strong>판매가 대비 플랫폼 수수료</div>
-                </div>
-                <div class="logic-item">
-                    <div class="logic-icon">📢</div>
-                    <div class="logic-text"><strong>광고 및 부가세 (11%)</strong>광고비 10% + 부가세 1.1%</div>
-                </div>
-                <div class="logic-item">
-                    <div class="logic-icon">⚠️</div>
-                    <div class="logic-text"><strong>예상 손실률 (3%)</strong>반품 및 파손 대비 리스크</div>
-                </div>
-                <div class="logic-item" style="grid-column: span 2;">
-                    <div class="logic-icon">🏦</div>
-                    <div class="logic-text"><strong>최종 세금 (10%)</strong>전체 비용 차감 후 순이익의 10% 산출</div>
-                </div>
-            </div>
-        </section>
-
         <nav>
-            <a href="#">도전 일지</a>
-            <a href="#">실패 노트</a>
-            <a href="#">소싱 데이터</a>
-            <a href="#">계산기 활용법</a>
+            <a href="#">Winner</a>
+            <a href="#">Profit</a>
+            <a href="#">Survival</a>
+            <a href="#">Roadmap</a>
         </nav>
 
-        <section id="feed">
-            <article class="post-item">
+        <!-- Top Dashboard: Summary -->
+        <section class="dashboard">
+            <div class="dash-label">REAL-TIME PERFORMANCE</div>
+            <div class="result-group">
+                <div class="res-block">
+                    <div class="main-val" id="profitVal">0</div>
+                    <div class="main-label">최종 예상 순수익 (KRW)</div>
+                </div>
+                <div class="res-block">
+                    <div class="main-val" id="marginVal" style="color: var(--accent);">0%</div>
+                    <div class="main-label">최종 마진율 (%)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Input Section -->
+        <section class="input-section">
+            <div class="input-card">
+                <label>판매가 (SELLING PRICE)</label>
+                <input type="number" id="sellingPrice" placeholder="0" oninput="calculate()">
+            </div>
+            <div class="input-card">
+                <label>매입 원가 (COST)</label>
+                <input type="number" id="costPrice" placeholder="0" oninput="calculate()">
+            </div>
+        </section>
+
+        <!-- Real-time Bill Statement -->
+        <section class="bill-statement">
+            <div class="bill-title">
+                <span>비용 상세 내역 (EXPENSE STATEMENT)</span>
+                <span id="currentDate" style="color: #444; font-size: 0.75rem;"></span>
+            </div>
+            <ul class="bill-list">
+                <li class="bill-item">
+                    <span class="item-name">📦 배송비 (고정)<span class="item-calc">기본 계약가</span></span>
+                    <span class="item-price negative">-3,000</span>
+                </li>
+                <li class="bill-item">
+                    <span class="item-name">📉 플랫폼 수수료<span class="item-calc">10.8%</span></span>
+                    <span class="item-price negative" id="bill-fee">0</span>
+                </li>
+                <li class="bill-item">
+                    <span class="item-name">📢 광고 및 부가세<span class="item-calc">11.0%</span></span>
+                    <span class="item-price negative" id="bill-ads">0</span>
+                </li>
+                <li class="bill-item">
+                    <span class="item-name">⚠️ 예상 손실 비용<span class="item-calc">3.0%</span></span>
+                    <span class="item-price negative" id="bill-loss">0</span>
+                </li>
+                <li class="bill-item">
+                    <span class="item-name">🏦 예상 납부 세금<span class="item-calc">수익의 10%</span></span>
+                    <span class="item-price negative" id="bill-tax">0</span>
+                </li>
+            </ul>
+            <div class="bill-total">
+                <span>TOTAL EXPENSES</span>
+                <span id="bill-total-cost">0</span>
+            </div>
+        </section>
+
+        <section class="feed-section">
+            <div class="post-item">
                 <div class="post-meta">LOG // 2026.02.22</div>
-                <h2>매출 0원에서 첫 주문이 들어오기까지</h2>
-                <p>상품 등록 15일 만에 첫 유입과 주문이 발생했습니다. 키워드 최적화의 중요성을 체감한 하루였습니다.</p>
-            </article>
+                <h3>첫 주문 발생: 데이터가 증명하는 순간</h3>
+                <p>계산기 기반의 정확한 마진 설계가 수익 구조의 핵심입니다. 첫 유입 데이터를 분석하여 소싱 리스트를 업데이트했습니다.</p>
+            </div>
         </section>
 
         <footer>
-            NO NICKNAME. NO ADVERTISEMENTS. PRAGMATIC SELLING TOOLS.
+            PRAGMATIC SELLER TOOLS // NO NICKNAME.
         </footer>
     </div>
 
     <script>
+        // 현재 날짜 표시
+        document.getElementById('currentDate').innerText = new Date().toLocaleDateString();
+
         function calculate() {
             const price = parseFloat(document.getElementById('sellingPrice').value) || 0;
             const cost = parseFloat(document.getElementById('costPrice').value) || 0;
+
+            if (price === 0) {
+                resetValues();
+                return;
+            }
 
             const shipping = 3000;
             const fee = price * 0.108;       // 쿠팡 수수료
@@ -205,12 +250,28 @@
             // 세금 (순이익의 10%)
             const tax = grossProfit > 0 ? grossProfit * 0.10 : 0;
 
-            // 최종 순이익
+            // 최종 결과
+            const totalExpenses = shipping + fee + adsVat + loss + tax;
             const netProfit = grossProfit - tax;
-            const margin = price > 0 ? (netProfit / price) * 100 : 0;
+            const margin = (netProfit / price) * 100;
 
-            document.getElementById('profitVal').innerText = Math.floor(netProfit).toLocaleString() + '원';
-            document.getElementById('marginVal').innerText = margin.toFixed(1) + '%';
+            // UI 업데이트
+            updateUI('profitVal', Math.floor(netProfit).toLocaleString());
+            updateUI('marginVal', margin.toFixed(1) + '%');
+            updateUI('bill-fee', '-' + Math.floor(fee).toLocaleString());
+            updateUI('bill-ads', '-' + Math.floor(adsVat).toLocaleString());
+            updateUI('bill-loss', '-' + Math.floor(loss).toLocaleString());
+            updateUI('bill-tax', '-' + Math.floor(tax).toLocaleString());
+            updateUI('bill-total-cost', '-' + Math.floor(totalExpenses).toLocaleString());
+        }
+
+        function updateUI(id, val) {
+            document.getElementById(id).innerText = val;
+        }
+
+        function resetValues() {
+            const ids = ['profitVal', 'marginVal', 'bill-fee', 'bill-ads', 'bill-loss', 'bill-tax', 'bill-total-cost'];
+            ids.forEach(id => document.getElementById(id).innerText = (id === 'marginVal' ? '0%' : '0'));
         }
     </script>
 </body>
