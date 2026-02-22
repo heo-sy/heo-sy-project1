@@ -246,7 +246,7 @@
                     <input type="number" id="rate-fee" value="10.8" step="0.1" oninput="runFinalSim()">
                 </div>
                 <div class="field-group">
-                    <label>광고 마케팅비 (%) <span>부가세 포함</span></label>
+                    <label>광고 마케팅비 (%) <span>부가세 별도</span></label>
                     <input type="number" id="rate-ads" value="10.0" step="0.1" oninput="runFinalSim()">
                 </div>
                 <div class="field-group">
@@ -272,7 +272,7 @@
                 <span class="amount" id="bill-fee">-0원</span>
             </div>
             <div class="bill-row">
-                <span class="name">📢 광고비 및 제반 부가세</span>
+                <span class="name">📢 광고비 및 부가세 (10% 별도)</span>
                 <span class="amount" id="bill-ads">-0원</span>
             </div>
             <div class="bill-row">
@@ -318,7 +318,7 @@
 
             // Calculations Logic
             const feeAmt = price * (rFee / 100);
-            const adsAmt = price * (rAds / 100);
+            const adsAmt = price * (rAds / 100) * 1.1; // 부가세 10% 별도 반영
             const lossAmt = price * (rLoss / 100);
             
             // 세전 이익 (Gross Profit)
