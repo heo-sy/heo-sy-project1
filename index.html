@@ -3,69 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>전기 마스터 - 자격증 합격부터 실무 지식까지</title>
-    <meta name="description" content="전기기사 합격하는 방법부터 누전 잡는 법까지, 전기에 관한 모든 정보를 공유합니다.">
-    <!-- 구글 애드센스 인증 메타 태그 -->
+    <title>전기기사 허선생 - 대한민국 No.1 전기 기술 및 자격증 가이드</title>
+    <meta name="description" content="전기기사 허선생의 현장 실무 노트, KEC 법령 해설, 자격증 합격 노하우 및 전기 안전 Q&A까지 전문적인 전기 지식을 공유합니다.">
+    
+    <!-- 구글 애드센스 인증 및 스크립트 -->
     <meta name="google-adsense-account" content="ca-pub-9707678635895853">
-    <!-- 구글 애드센스 스크립트 -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9707678635895853"
      crossorigin="anonymous"></script>
+    
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="container flex-between">
+            <div class="logo">
+                <a href="index.html">⚡ 전기기사 <span>허선생</span></a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#practice">현장실무</a></li>
+                <li><a href="#kec">KEC법령</a></li>
+                <li><a href="#license">자격증</a></li>
+                <li><a href="#instruments">계측기</a></li>
+                <li><a href="#safety">안전Q&A</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
         <div class="container">
-            <h1><a href="index.html">⚡ 전기 마스터</a></h1>
-            <p>당신의 전기 생활을 위한 모든 지식</p>
+            <div class="hero-content">
+                <span class="badge">Professional Electrical Engineer</span>
+                <h1>복잡한 전기 이론부터<br>현장의 생생한 실무까지</h1>
+                <p>전기기사 허선생이 전하는 20년 노하우. 법령 해석부터 자격증 합격까지 한 번에 해결하세요.</p>
+                <div class="hero-btns">
+                    <a href="#license" class="btn btn-primary">자격증 합격 가이드</a>
+                    <a href="#practice" class="btn btn-outline">실무 사례 보기</a>
+                </div>
+            </div>
         </div>
     </header>
 
-    <main class="container">
-        <section id="posts">
-            <!-- 글 1 -->
-            <article class="post-card">
-                <div class="post-image" style="background-color: #f1c40f;">📘</div>
-                <div class="post-content">
-                    <span class="category">자격증 가이드</span>
-                    <h2>전기기사 합격하는 방법: 비전공자도 한 번에 합격하는 4단계 전략</h2>
-                    <p>전기기사 자격증 취득을 위한 필기 및 실기 합격 전략을 공유합니다. 공부 순서부터 핵심 기법까지 알아보세요.</p>
-                    <a href="electrician-guide.html" class="btn-more">글 읽기 &rarr;</a>
+    <!-- AdSense Top -->
+    <div class="container ad-wrapper">
+        <div class="ad-placeholder">상단 배너 광고 영역</div>
+    </div>
+
+    <!-- Category Grid (The 5 Core Values) -->
+    <section class="categories container">
+        <div class="section-title">
+            <h2>핵심 서비스 카테고리</h2>
+            <p>전기 기술자의 전문성과 사용자 편의를 위한 5대 가치</p>
+        </div>
+        <div class="grid-5">
+            <div class="cat-card" id="practice">
+                <div class="icon">🏗️</div>
+                <h3>현장 실무 노트</h3>
+                <p class="value-tag">경험(Experience)</p>
+                <p>전기 시설 관리, 대행 현장의 생생한 해결 사례 공유</p>
+            </div>
+            <div class="cat-card" id="kec">
+                <div class="icon">📜</div>
+                <h3>KEC 법령 해설</h3>
+                <p class="value-tag">권위(Authority)</p>
+                <p>전기 기술자가 쉽게 풀어주는 최신 법규 가이드</p>
+            </div>
+            <div class="cat-card" id="license">
+                <div class="icon">🎓</div>
+                <h3>전기 기사 자격증</h3>
+                <p class="value-tag">유입(Inflow)</p>
+                <p>필기/실기 합격 노하우 및 최신 기출 문제 분석</p>
+            </div>
+            <div class="cat-card" id="instruments">
+                <div class="icon">📟</div>
+                <h3>계측기 사용 설명서</h3>
+                <p class="value-tag">신뢰(Trust)</p>
+                <p>메가, 클램프 미터 등 장비 활용법 및 솔직 리뷰</p>
+            </div>
+            <div class="cat-card" id="safety">
+                <div class="icon">🛡️</div>
+                <h3>전기 안전 Q&A</h3>
+                <p class="value-tag">편의(Convenience)</p>
+                <p>차단기 문제, 전기요금 등 일반인 궁금증 해결</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content & Sidebar -->
+    <div class="container main-layout">
+        <section class="latest-posts">
+            <div class="section-title">
+                <h2>최근 업데이트 포스트</h2>
+            </div>
+            
+            <article class="post-item">
+                <div class="post-thumb" style="background-color: #f1c40f;">📘</div>
+                <div class="post-info">
+                    <span class="cat-label">자격증</span>
+                    <h3><a href="electrician-guide.html">전기기사 비전공자 합격 수기: 4개월 만의 기적</a></h3>
+                    <p>어려운 용어와 공식, 비전공자는 어떻게 접근해야 할까요? 허선생만의 독창적인 암기법을 공개합니다.</p>
                 </div>
             </article>
 
-            <!-- 글 2 -->
-            <article class="post-card">
-                <div class="post-image" style="background-color: #e74c3c;">🚨</div>
-                <div class="post-content">
-                    <span class="category">실무 지식</span>
-                    <h2>누전 잡는 법: 갑자기 차단기 내려갈 때 5단계 해결 가이드</h2>
-                    <p>갑자기 전기가 나갔을 때 당황하지 마세요. 누전 원인 찾는 법부터 자가 점검법까지 상세히 설명합니다.</p>
-                    <a href="short-circuit-guide.html" class="btn-more">글 읽기 &rarr;</a>
+            <article class="post-item">
+                <div class="post-thumb" style="background-color: #e74c3c;">🚨</div>
+                <div class="post-info">
+                    <span class="cat-label">실무지식</span>
+                    <h3><a href="short-circuit-guide.html">누전 차단기가 안 올라갈 때: 현장 전문가의 5단계 체크리스트</a></h3>
+                    <p>현장에서 가장 많이 발생하는 누전 사고. 원인 기기를 10분 만에 찾아내는 실무 팁입니다.</p>
+                </div>
+            </article>
+
+            <!-- AdSense Middle -->
+            <div class="ad-placeholder inner-ad">인피드 광고 영역</div>
+
+            <article class="post-item">
+                <div class="post-thumb" style="background-color: #3498db;">📜</div>
+                <div class="post-info">
+                    <span class="cat-label">KEC법령</span>
+                    <h3>2026 개정 KEC 규정: 접지 시스템의 변화 핵심 정리</h3>
+                    <p>까다로워진 접지 규정, 실무에서 어떻게 적용해야 할까요? 쉽게 풀어드립니다.</p>
                 </div>
             </article>
         </section>
 
-        <aside>
-            <div class="sidebar-widget ad-placeholder">
-                <p>광고 영역</p>
+        <aside class="sidebar">
+            <div class="widget">
+                <h3>About 전기기사 허선생</h3>
+                <p>현직 전기 기술자이자 수험생들의 멘토. 실무와 이론을 잇는 가교 역할을 하고 있습니다.</p>
             </div>
-            <div class="sidebar-widget">
-                <h3>인기 카테고리</h3>
-                <ul>
-                    <li><a href="#">#자격증 가이드</a></li>
-                    <li><a href="#">#실무 지식</a></li>
-                    <li><a href="#">#전기 안전</a></li>
+            <div class="widget ad-placeholder">사이드바 광고</div>
+            <div class="widget">
+                <h3>인기 게시글</h3>
+                <ul class="popular-list">
+                    <li><a href="#">차단기 용량 선정표 (엑셀)</a></li>
+                    <li><a href="#">메거(절연저항계) 올바른 사용법</a></li>
+                    <li><a href="#">전기직 공무원 vs 공기업 비교</a></li>
                 </ul>
             </div>
         </aside>
-    </main>
+    </div>
 
+    <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2026 전기 마스터. All Rights Reserved.</p>
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>⚡ 전기기사 허선생</h3>
+                    <p>Email: contact@heosunsaeng.pro</p>
+                    <p>전기 기술의 미래를 함께 고민합니다.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">개인정보처리방침</a></li>
+                        <li><a href="ads.txt">ads.txt</a></li>
+                        <li><a href="#">광고문의</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2026 전기기사 허선생. All Rights Reserved.
+            </div>
         </div>
     </footer>
 </body>
