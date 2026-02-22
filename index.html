@@ -4,72 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>초보 셀러의 0원부터 매출 1,000만 원 도전기</title>
+    <!-- Pretendard 폰트 적용 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <style>
         :root {
             --bg: #000000;
             --card-bg: #111111;
-            --text: #ffffff;
+            --logic-bg: #1a1a1a;
+            --text-main: #ffffff;
+            --text-sub: #94a3b8;
             --accent: #3b82f6;
             --border: #222222;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            font-family: 'Pretendard', -apple-system, sans-serif; 
             background-color: var(--bg); 
-            color: var(--text); 
+            color: var(--text-main); 
             line-height: 1.6;
+            word-break: keep-all;
         }
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
         
-        header { padding: 40px 0; border-bottom: 1px solid var(--border); }
-        h1 { font-size: 1.5rem; font-weight: 700; text-align: center; }
+        header { padding: 50px 0; text-align: center; border-bottom: 1px solid var(--border); }
+        h1 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px; }
 
         /* Calculator Section */
         .calculator { 
             background: var(--card-bg); 
-            padding: 30px; 
-            border-radius: 8px; 
-            margin: 40px 0; 
+            padding: 35px; 
+            border-radius: 12px; 
+            margin-top: 40px; 
             border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .calc-title { font-size: 1.1rem; margin-bottom: 20px; color: var(--accent); font-weight: 700; }
-        .input-group { display: flex; gap: 20px; margin-bottom: 20px; }
+        .section-label { font-size: 0.75rem; color: var(--accent); font-weight: 800; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase; }
+        .input-group { display: flex; gap: 20px; margin-bottom: 25px; }
         .input-item { flex: 1; }
-        label { display: block; font-size: 0.8rem; color: #888; margin-bottom: 8px; }
+        label { display: block; font-size: 0.85rem; color: var(--text-sub); margin-bottom: 10px; font-weight: 600; }
         input { 
             width: 100%; 
-            background: #222; 
+            background: #1a1a1a; 
             border: 1px solid var(--border); 
             color: #fff; 
-            padding: 12px; 
-            border-radius: 4px; 
-            font-size: 1rem;
+            padding: 15px; 
+            border-radius: 8px; 
+            font-size: 1.1rem;
+            font-weight: 700;
         }
         input:focus { outline: none; border-color: var(--accent); }
         
-        .result-grid { 
+        .result-main { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
             gap: 20px; 
-            padding-top: 20px; 
-            border-top: 1px solid var(--border);
+            padding: 25px; 
+            background: #000;
+            border-radius: 10px;
         }
         .result-item { text-align: center; }
-        .result-val { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
-        .result-label { font-size: 0.75rem; color: #888; }
+        .result-val { font-size: 1.7rem; font-weight: 900; color: var(--accent); margin-bottom: 5px; }
+        .result-label { font-size: 0.75rem; color: var(--text-sub); font-weight: 600; }
+
+        /* Logic Section (New) */
+        .logic-section {
+            background: var(--logic-bg);
+            padding: 35px;
+            border-radius: 0 0 12px 12px;
+            border: 1px solid var(--border);
+            border-top: none;
+            margin-bottom: 40px;
+        }
+        .logic-title { font-size: 1rem; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .logic-title::before { content: ''; width: 4px; height: 16px; background: var(--accent); border-radius: 2px; }
+        
+        .logic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .logic-item { 
+            background: rgba(255,255,255,0.03); 
+            padding: 15px; 
+            border-radius: 8px; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .logic-icon { font-size: 1.2rem; }
+        .logic-text { font-size: 0.85rem; color: var(--text-sub); }
+        .logic-text strong { color: var(--text-main); display: block; font-size: 0.9rem; }
 
         /* Navigation */
-        nav { display: flex; justify-content: center; gap: 30px; margin-bottom: 60px; }
-        nav a { color: #888; font-size: 0.9rem; font-weight: 500; text-decoration: none; }
-        nav a:hover { color: var(--text); }
+        nav { display: flex; justify-content: center; gap: 25px; margin-bottom: 50px; }
+        nav a { color: var(--text-sub); font-size: 0.9rem; font-weight: 600; }
+        nav a:hover { color: var(--accent); }
 
         /* Feed */
-        .post-item { margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid var(--border); }
-        .post-meta { font-size: 0.8rem; color: #555; margin-bottom: 10px; }
-        .post-item h2 { font-size: 1.25rem; margin-bottom: 15px; }
-        .post-item p { color: #aaa; font-size: 0.95rem; }
+        .post-item { margin-bottom: 40px; padding: 30px; border: 1px solid var(--border); border-radius: 10px; }
+        .post-meta { font-size: 0.75rem; color: #555; margin-bottom: 12px; font-weight: 700; }
+        .post-item h2 { font-size: 1.2rem; margin-bottom: 15px; letter-spacing: -0.5px; }
+        .post-item p { color: var(--text-sub); font-size: 0.95rem; }
 
-        footer { text-align: center; padding: 60px 0; font-size: 0.8rem; color: #444; }
+        footer { text-align: center; padding: 60px 0; font-size: 0.8rem; color: #333; letter-spacing: 1px; }
+
+        @media (max-width: 600px) {
+            .logic-grid { grid-template-columns: 1fr; }
+            .input-group { flex-direction: column; }
+        }
     </style>
 </head>
 <body>
@@ -80,25 +119,52 @@
 
         <!-- Margin Calculator -->
         <section class="calculator">
-            <div class="calc-title">실시간 마진 계산기</div>
+            <div class="section-label">REAL-TIME MARGIN CALCULATOR</div>
             <div class="input-group">
                 <div class="input-item">
-                    <label>판매가 (원)</label>
+                    <label>판매가 (KRW)</label>
                     <input type="number" id="sellingPrice" placeholder="0" oninput="calculate()">
                 </div>
                 <div class="input-item">
-                    <label>원가 (원)</label>
+                    <label>매입 원가 (KRW)</label>
                     <input type="number" id="costPrice" placeholder="0" oninput="calculate()">
                 </div>
             </div>
-            <div class="result-grid">
+            <div class="result-main">
                 <div class="result-item">
                     <div class="result-val" id="profitVal">0원</div>
-                    <div class="result-label">예상 수익금</div>
+                    <div class="result-label">예상 순수익</div>
                 </div>
                 <div class="result-item">
                     <div class="result-val" id="marginVal">0%</div>
-                    <div class="result-label">마진율</div>
+                    <div class="result-label">최종 마진율</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logic Section -->
+        <section class="logic-section">
+            <div class="logic-title">실제 순수익 계산 방식 (정밀 산출)</div>
+            <div class="logic-grid">
+                <div class="logic-item">
+                    <div class="logic-icon">🚚</div>
+                    <div class="logic-text"><strong>배송비 고정 차감</strong>건당 3,000원 기본 반영</div>
+                </div>
+                <div class="logic-item">
+                    <div class="logic-icon">📉</div>
+                    <div class="logic-text"><strong>쿠팡 수수료 (10.8%)</strong>판매가 대비 플랫폼 수수료</div>
+                </div>
+                <div class="logic-item">
+                    <div class="logic-icon">📢</div>
+                    <div class="logic-text"><strong>광고 및 부가세 (11%)</strong>광고비 10% + 부가세 1.1%</div>
+                </div>
+                <div class="logic-item">
+                    <div class="logic-icon">⚠️</div>
+                    <div class="logic-text"><strong>예상 손실률 (3%)</strong>반품 및 파손 대비 리스크</div>
+                </div>
+                <div class="logic-item" style="grid-column: span 2;">
+                    <div class="logic-icon">🏦</div>
+                    <div class="logic-text"><strong>최종 세금 (10%)</strong>전체 비용 차감 후 순이익의 10% 산출</div>
                 </div>
             </div>
         </section>
@@ -112,20 +178,14 @@
 
         <section id="feed">
             <article class="post-item">
-                <div class="post-meta">2026.02.22 // CHALLENGE LOG</div>
+                <div class="post-meta">LOG // 2026.02.22</div>
                 <h2>매출 0원에서 첫 주문이 들어오기까지</h2>
                 <p>상품 등록 15일 만에 첫 유입과 주문이 발생했습니다. 키워드 최적화의 중요성을 체감한 하루였습니다.</p>
-            </article>
-
-            <article class="post-item">
-                <div class="post-meta">2026.02.21 // FAILURE NOTE</div>
-                <h2>사입 실패와 재고 관리의 어려움</h2>
-                <p>단순히 저렴한 단가만 보고 결정한 사입이 왜 위험한지, 초기 셀러가 범하기 쉬운 실수에 대해 기록합니다.</p>
             </article>
         </section>
 
         <footer>
-            &copy; 2026 초보 셀러의 도전기. No Tracking. No Ads.
+            NO NICKNAME. NO ADVERTISEMENTS. PRAGMATIC SELLING TOOLS.
         </footer>
     </div>
 
@@ -135,16 +195,21 @@
             const cost = parseFloat(document.getElementById('costPrice').value) || 0;
 
             const shipping = 3000;
-            const fee = price * 0.108;
-            const ads = price * 0.11;
-            const loss = price * 0.03;
-            const tax = price * 0.10;
+            const fee = price * 0.108;       // 쿠팡 수수료
+            const adsVat = price * 0.11;     // 광고비 10% + 부가세 1.1%
+            const loss = price * 0.03;       // 예상 손실
 
-            const totalCost = cost + shipping + fee + ads + loss + tax;
-            const profit = price - totalCost;
-            const margin = price > 0 ? (profit / price) * 100 : 0;
+            // 1차 수익금 (세전 마진)
+            const grossProfit = price - (cost + shipping + fee + adsVat + loss);
+            
+            // 세금 (순이익의 10%)
+            const tax = grossProfit > 0 ? grossProfit * 0.10 : 0;
 
-            document.getElementById('profitVal').innerText = Math.floor(profit).toLocaleString() + '원';
+            // 최종 순이익
+            const netProfit = grossProfit - tax;
+            const margin = price > 0 ? (netProfit / price) * 100 : 0;
+
+            document.getElementById('profitVal').innerText = Math.floor(netProfit).toLocaleString() + '원';
             document.getElementById('marginVal').innerText = margin.toFixed(1) + '%';
         }
     </script>
