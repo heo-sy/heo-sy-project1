@@ -4,7 +4,7 @@
     <meta name="google-site-verification" content="ZG6gfxDhR1g3iGvjrZ5d4_ba7230zxs_PrDnE-ogSwk" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>이커머스 및 투자자를 위한 핵심 도구 모음 - 스르륵</title>
+    <title>이커머스 및 투자자를 위한 핵심 도구 모음</title>
     <meta name="description" content="이커머스 셀러와 투자자를 위한 필수 도구. 마진 계산, 평단가 분석, 원가 계산 등 성공적인 비즈니스와 투자를 위한 모든 것을 지원합니다.">
     
     <!-- Pretendard 폰트 -->
@@ -60,7 +60,7 @@
 
         .tool-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
             width: 100%;
             max-width: 900px;
@@ -85,7 +85,7 @@
         }
 
         .tool-card h3 {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 800;
             margin-bottom: 10px;
             color: var(--text);
@@ -156,18 +156,27 @@
             </a>
             
             <a href="coin-calc.html" class="tool-card">
-                <h3>코인 선물 다중 물타기 계산기 (USDT/레버리지)</h3>
+                <h3>코인 선물 다중 물타기 계산기</h3>
                 <p>분할매수 시뮬레이터로 최종 평단가, 청산가, 본절가를 즉시 계산합니다.</p>
             </a>
 
-            <a href="stock-calc.html" class="tool-card">
+            <a href="margin-calc.html" class="tool-card">
+                <h3>초정밀 역마진 경고 알리미 (사입/로켓그로스)</h3>
+                <p>1688원가, 물류비, 광고비, 세금을 모두 반영한 최종 순수익을 계산합니다.</p>
+            </a>
+            
+            <a href="#" class="tool-card disabled">
+                <h3>유튜브 예상 수익 계산기</h3>
+                <p>조회수, 구독자, 광고 단가를 기반으로 예상 월수익을 시뮬레이션합니다.</p>
+            </a>
+             <a href="stock-calc.html" class="tool-card">
                 <h3>주식 평단가 계산기</h3>
                 <p>분할매수(물타기) 시뮬레이터로 최종 평단가와 하락률을 즉시 계산합니다.</p>
             </a>
         </main>
         
         <footer>
-            <p>SRRG.NET</p>
+            <p>&copy; 2024. All rights reserved.</p>
         </footer>
     </div>
 </body>
