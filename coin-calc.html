@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>코인 선물 다중 물타기 및 청산가 계산기 - 스르륵</title>
+    <title>코인 물타기 프로그램 & 청산가 계산기</title>
     <meta name="description" content="바이낸스, 비트겟 등 모든 거래소용 코인 선물 청산가 계산기. 다중 분할매수(물타기) 시나리오를 시뮬레이션하여 최종 평단가, 레버리지, 예상 청산 가격, 진짜 본절가를 즉시 확인하고 청산 위험을 관리하세요.">
-    <meta name="keywords" content="코인 선물 계산기, 청산가 계산기, 물타기 계산기, 평단가 계산기, 바이낸스 물타기 계산기, 비트겟 청산가 계산, 코인 선물 평단가, 수수료 계산법, 롱포지션, 숏포지션, 격리, 교차">
+    <meta name="keywords" content="코인 물타기 프로그램, 코인 선물 계산기, 청산가 계산기, 물타기 계산기, 평단가 계산기, 바이낸스 물타기 계산기, 비트겟 청산가 계산, 코인 선물 평단가, 수수료 계산법, 롱포지션, 숏포지션, 격리, 교차">
 
     <!-- Pretendard 폰트 -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
@@ -19,6 +19,7 @@
             --accent-glow: rgba(0, 242, 255, 0.3);
             --text: #f0f6fc;
             --text-dim: #8b949e;
+            --text-bright: #E0E0E0;
             --border: #30363d;
             --danger: #ff4d4d;
             --long: #00b386;
@@ -53,34 +54,24 @@
             margin-bottom: 20px;
         }
         
-        .logo {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .logo a {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--text);
-            text-decoration: none;
-        }
-
         h1 {
             text-align: center;
             color: var(--accent);
             font-size: 1.8rem;
-            margin-top: 10px;
             margin-bottom: 25px;
             text-shadow: 0 0 10px var(--accent-glow);
         }
 
-        /* 결과 섹션 (상단으로 이동) */
+        /* 결과 섹션 (상단) */
         #results-container {
             background-color: transparent;
             border: none;
+            border-radius: 12px;
             padding: 0;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             animation: fadeIn 0.5s ease-in-out;
+            width: 100%;
+            max-width: 700px;
         }
         
         .result-grid {
@@ -141,6 +132,12 @@
             margin-bottom: 8px;
             font-size: 0.9em;
         }
+        
+        .fee-disclaimer {
+            font-size: 0.75em;
+            color: var(--text-dim);
+            margin-top: 8px;
+        }
 
         .input-group input, .input-group select {
             background-color: var(--input);
@@ -154,6 +151,11 @@
             transition: border-color 0.3s, box-shadow 0.3s;
         }
         
+        #exchange {
+            padding: 12px 10px;
+            font-size: 0.9em; /* 폰트 크기 조정 */
+        }
+        
         /* input type=number 화살표 제거 */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
@@ -163,7 +165,6 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
-
 
         .input-group input:focus, .input-group select:focus {
             outline: none;
@@ -198,15 +199,10 @@
         #short-btn.active { background-color: var(--short); box-shadow: 0 0 10px var(--short-glow); }
         #isolated-btn.active, #cross-btn.active { background-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); color: var(--bg); }
 
-        /* 거래소 선택 드롭다운 폰트 사이즈 조정 */
-        #exchange {
-             font-size: 0.9em;
-        }
-
         /* 분할 매수 섹션 */
         #entries-container .entry-row {
             display: grid;
-            grid-template-columns: 1fr 1fr 40px;
+            grid-template-columns: 1fr 1fr auto;
             gap: 10px;
             align-items: center;
             margin-bottom: 10px;
@@ -217,13 +213,14 @@
             border: 1px solid var(--danger);
             color: var(--danger);
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 35px; /* 고정 너비 */
+            height: 35px; /* 고정 높이 */
             cursor: pointer;
             font-size: 1.2em;
             line-height: 1;
             transition: background-color 0.3s, color 0.3s;
-            margin-left: 10px;
+            padding: 0;
+            justify-self: center;
         }
         .delete-btn:hover { background-color: var(--danger); color: var(--bg); }
         .delete-btn:disabled { border-color: var(--text-dim); color: var(--text-dim); cursor: not-allowed; }
@@ -249,20 +246,14 @@
             background: var(--accent); border-radius: 50%; border: 3px solid var(--bg);
             box-shadow: 0 0 5px var(--accent-glow);
         }
-        .slider::-moz-range-thumb {
-            width: 22px; height: 22px; background: var(--accent);
-            border-radius: 50%; border: 3px solid var(--bg);
-            box-shadow: 0 0 5px var(--accent-glow);
-        }
         
         /* SEO 콘텐츠 */
         .seo-content {
-            background-color: var(--card); border: 1px solid var(--border); border-radius: 12px;
-            padding: 25px; margin-top: 30px; max-width: 700px;
+            padding: 25px; margin-top: 30px;
         }
         .seo-content h2 { color: var(--accent); font-size: 1.5rem; border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; }
         .seo-content h3 { color: var(--text); font-size: 1.2rem; margin-top: 30px; }
-        .seo-content p, .seo-content ul { color: var(--text-dim); }
+        .seo-content p, .seo-content ul, .seo-content li { color: var(--text-bright); }
         .seo-content li { margin-bottom: 10px; }
         .seo-content a { color: var(--accent); text-decoration: none; }
         .seo-content a:hover { text-decoration: underline; }
@@ -276,34 +267,33 @@
             .toggle-switch button { font-size: 0.85em;}
             #exchange { font-size: 0.8em; }
             #entries-container .entry-row { grid-template-columns: 1fr 1fr; gap: 15px; }
-            #entries-container .entry-row .delete-btn { grid-column: 1 / -1; width: 100%; margin: 5px 0 0 0; }
+            #entries-container .entry-row .delete-btn { grid-column: 1 / -1; width: 100%; margin: 5px 0 0 0; border-radius: 8px; height: 40px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="logo"><a href="index.html">스르륵</a></div>
-        <h1>코인 선물<br>다중 물타기 & 청산가 계산기</h1>
+    <h1>코인 물타기 프로그램 & 청산가 계산기</h1>
 
-        <!-- 결과 표시 (상단으로 이동) -->
-        <div id="results-container" style="display: none;">
-            <div class="result-grid">
-                <div class="result-item" id="final-avg-price">
-                    <h3>최종 평단가</h3>
-                    <p>$0</p>
-                </div>
-                <div class="result-item" id="liquidation-price">
-                    <h3>예상 청산가</h3>
-                    <p>$0</p>
-                </div>
-                <div class="result-item" id="break-even-price">
-                    <h3>수수료 포함 본절가</h3>
-                    <p>$0</p>
-                </div>
+    <!-- 결과 표시 (상단) -->
+    <div id="results-container" style="display: none;">
+        <div class="result-grid">
+            <div class="result-item" id="final-avg-price">
+                <h3>최종 평단가</h3>
+                <p>$0</p>
+            </div>
+            <div class="result-item" id="liquidation-price">
+                <h3>예상 청산가</h3>
+                <p>$0</p>
+            </div>
+            <div class="result-item" id="break-even-price">
+                <h3>수수료 포함 본절가</h3>
+                <p>$0</p>
             </div>
         </div>
-
+    </div>
+    
+    <div class="container">
         <!-- 기본 설정 -->
         <div class="control-group">
             <div class="input-group">
@@ -324,6 +314,10 @@
                 <label for="leverage">레버리지 (1x-125x)</label>
                 <input type="number" id="leverage" value="10" min="1" max="125" step="1">
             </div>
+             <div class="input-group" id="wallet-balance-group" style="display: none;">
+                <label for="wallet-balance">지갑 총 잔고 (USDT)</label>
+                <input type="number" id="wallet-balance" placeholder="0">
+            </div>
             <div class="input-group">
                 <label for="exchange">거래소 수수료</label>
                 <select id="exchange">
@@ -335,15 +329,19 @@
                 </select>
             </div>
             <div class="input-group">
-                <label for="maker-fee">지정가 수수료 (%)</label>
+                <label for="maker-fee">지정가(Maker) 수수료 (%)</label>
                 <input type="number" id="maker-fee" value="0.02" step="0.001">
             </div>
             <div class="input-group">
-                <label for="taker-fee">시장가 수수료 (%)</label>
+                <label for="taker-fee">시장가(Taker) 수수료 (%)</label>
                 <input type="number" id="taker-fee" value="0.05" step="0.001">
             </div>
         </div>
+         <p class="fee-disclaimer">* VIP 0등급 기준. 거래소 정책에 따라 변동될 수 있으니 실제 수수료 확인 후 수정 요망</p>
 
+    </div>
+    
+    <div class="container">
         <!-- 진입 정보 -->
         <div id="entries-container">
             <div class="entry-row">
@@ -367,32 +365,34 @@
                 <input type="range" id="usdt-slider" class="slider" min="0" max="10000" value="0">
              </div>
         </div>
-        
     </div>
     
-    <div class="seo-content">
-        <h2>코인 선물 물타기(DCA) 시뮬레이션이 필수인 이유 (청산 방어 전략)</h2>
-        <p>코인 선물 거래에서 '물타기' 또는 Dollar-Cost Averaging(DCA)은 변동성이 큰 시장에서 청산 위험을 관리하고 평균 진입 단가(평단가)를 개선하는 핵심 전략입니다. 하지만 레버리지를 사용하는 선물 거래의 특성상, 계획 없는 물타기는 오히려 증거금을 빠르게 소진시켜 청산을 앞당기는 독이 될 수 있습니다. 본 <strong>바이낸스 물타기 계산기</strong>는 이러한 위험을 사전에 방지하고, 체계적인 분할 매수 전략을 수립할 수 있도록 돕습니다. 여러 번의 추가 진입 시나리오를 미리 시뮬레이션하여 최종 평단가와 예상 청산가의 변화를 정밀하게 예측하고, 공격적인 동시에 안정적인 포지션 관리를 가능하게 합니다.</p>
+    <div class="container seo-content">
+        <h2>코인 물타기 시뮬레이션이 필수인 이유</h2>
+        <p>코인 선물 거래에서 '물타기' 또는 Dollar-Cost Averaging(DCA)은 변동성이 큰 시장에서 청산 위험을 관리하고 평균 진입 단가(평단가)를 개선하는 핵심 전략입니다. 하지만 레버리지를 사용하는 선물 거래의 특성상, 계획 없는 물타기는 오히려 증거금을 빠르게 소진시켜 청산을 앞당기는 독이 될 수 있습니다. 본 <strong>물타기 계산기</strong>는 이러한 위험을 사전에 방지하고, 체계적인 분할 매수 전략을 수립할 수 있도록 돕습니다. 여러 번의 추가 진입 시나리오를 미리 시뮬레이션하여 최종 평단가와 예상 청산가의 변화를 정밀하게 예측하고, 공격적인 동시에 안정적인 포지션 관리를 가능하게 합니다.</p>
         
         <h3>격리(Isolated) 마진과 교차(Cross) 마진의 물타기 차이점</h3>
-        <p>선물 거래의 마진 모드는 물타기 전략과 청산 가격에 결정적인 영향을 미칩니다.</p>
         <ul>
-            <li><strong>격리(Isolated) 마진:</strong> 각 포지션에 할당된 증거금만이 청산의 기준이 됩니다. 물타기를 위해 추가 USDT를 투입하면, 해당 포지션의 증거금이 늘어나면서 진입가와 청산가 간의 거리가 멀어집니다. 즉, 추가 투입 자금만큼 청산 방어력이 직접적으로 강화됩니다. 본 계산기는 격리 모드를 기준으로, 추가 투입액이 청산가에 미치는 영향을 정확히 계산합니다.</li>
-            <li><strong>교차(Cross) 마진:</strong> 지갑에 보유한 모든 선물 자산이 모든 포지션의 증거금으로 공유됩니다. 한 포지션의 손실이 다른 포지션의 수익이나 다른 자산으로 메꿔질 수 있어 청산 가능성이 낮아지는 장점이 있지만, 한번 청산이 발생하면 모든 자산을 잃을 수 있는 치명적인 단점이 존재합니다. 교차 모드에서의 물타기는 전체 계정의 증거금 상태를 고려해야 하므로, 본 계산기에서는 'N/A'로 표시하여 격리 모드 사용을 권장합니다. 성공적인 리스크 관리를 위해서는 각 포지션을 개별적으로 통제할 수 있는 격리 마진 활용이 훨씬 효과적입니다.</li>
+            <li><strong>격리(Isolated) 마진:</strong> 각 포지션에 할당된 증거금만이 청산의 기준이 됩니다. 물타기를 위해 추가 USDT를 투입하면, 해당 포지션의 증거금이 늘어나면서 진입가와 청산가 간의 거리가 멀어집니다. 즉, 추가 투입 자금만큼 청산 방어력이 직접적으로 강화됩니다.</li>
+            <li><strong>교차(Cross) 마진:</strong> 지갑에 보유한 모든 선물 자산이 모든 포지션의 증거금으로 공유됩니다. 이 모드에서는 특정 포지션의 증거금(내가 투입한 USDT)뿐만 아니라 지갑에 있는 전체 잔고가 담보로 사용되어 청산 라인이 훨씬 낮아지는 효과가 있습니다. 하지만 한번 청산이 발생하면 지갑의 모든 자산을 잃을 수 있으므로 리스크 관리에 각별히 유의해야 합니다.</li>
         </ul>
 
-        <h3>숨은 함정: 레버리지 수수료와 진짜 본절가(Break-even)의 비밀</h3>
-        <p>많은 트레이더들이 자신의 '평단가'만 보고 포지션을 정리하다 손실을 보곤 합니다. 그 이유는 바로 '수수료'를 고려하지 않았기 때문입니다. 선물 거래에서는 포지션에 진입할 때와 종료할 때 모두 수수료가 발생하며, 이는 레버리지를 반영한 전체 포지션 규모에 비례하여 부과됩니다. 예를 들어 100 USDT에 100x 레버리지를 사용하면, 10,000 USDT에 대한 수수료를 내야 합니다. 따라서 실제 수익 분기점(본절가)은 나의 평단가보다 높거나(롱 포지션), 낮아지게(숏 포지션) 됩니다. 이 <strong>비트겟 청산가 계산</strong>기는 바이낸스, OKX 등 주요 거래소의 수수료율을 프리셋으로 제공하고, Taker/Maker 수수료를 직접 입력하여 레버리지를 모두 반영한 '진짜 본절가'를 계산해줍니다. 이 가격을 알아야만 미세한 손실 없이 완벽한 본절 탈출이 가능합니다.</p>
+        <h3>계산기 사용하는 방법 (Step-by-Step)</h3>
+        <ol>
+            <li><strong>포지션 선택:</strong> 롱(Long) 또는 숏(Short) 포지션을 선택합니다.</li>
+            <li><strong>마진 모드 선택:</strong> 격리(Isolated) 또는 교차(Cross)를 선택합니다. '교차' 선택 시 '지갑 총 잔고' 입력칸이 나타납니다.</li>
+            <li><strong>레버리지 및 수수료 설정:</strong> 거래에 사용할 레버리지를 입력하고, 이용 중인 거래소의 수수료를 선택하거나 직접 입력합니다.</li>
+            <li><strong>최초 진입 정보 입력:</strong> 나의 첫 포지션의 진입 가격과 투자한 금액(USDT)을 입력합니다.</li>
+            <li><strong>물타기 추가:</strong> '[+ 물타기 추가]' 버튼을 눌러 추가로 진입할 가격과 수량을 계속해서 더할 수 있습니다. 이를 통해 다중 분할매수 시뮬레이션이 가능합니다.</li>
+            <li><strong>결과 실시간 확인:</strong> 모든 값을 입력하거나 변경할 때마다 상단의 결과창에서 '최종 평단가', '예상 청산가', '본절가'가 실시간으로 업데이트되는 것을 확인합니다.</li>
+        </ol>
 
-        <h3>코인 트레이더들이 자주 묻는 질문 (FAQ)</h3>
-        <p><strong>1. 이 계산기는 모든 코인에 적용할 수 있나요?</strong><br>네, 특정 코인에 종속되지 않습니다. 비트코인(BTC), 이더리움(ETH) 등 모든 알트코인의 USDT 기반 선물 계약에 사용할 수 있습니다. 가격($)과 수량(USDT)만 정확히 입력하면 <strong>코인 선물 평단가</strong>와 청산가를 계산할 수 있습니다.</p>
-        <p><strong>2. '격리' 모드에서 청산가는 어떻게 계산되나요?</strong><br>롱 포지션 기준, 청산가는 대략 `진입가 * (1 - (초기 마진 / 레버리지))` 공식과 유사하게 계산됩니다. 하지만 실제로는 유지 증거금률 등 거래소의 복잡한 요소가 추가됩니다. 본 계산기는 `(총 코인 수량 * 평단가 - 총 투입 USDT) / (총 코인 수량 - 유지 증거금률 * 총 코인 수량)` 이라는 더 정밀한 추정 공식을 사용하여 실제 청산가와 매우 근사한 값을 제공합니다. (숏 포지션은 반대 로직 적용)</p>
-        <p><strong>3. 레버리지가 높을수록 수수료가 더 많이 나가나요?</strong><br>정확히 말하면, 레버리지 자체가 아니라 '레버리지를 통해 부풀려진 포지션 규모'가 수수료를 증가시킵니다. 예를 들어, 1,000 USDT로 10x 레버리지를 사용하면 10,000 USDT 규모의 포지션을 잡게 되고, 수수료도 10,000 USDT에 맞춰 부과됩니다. 따라서, 정확한 <strong>수수료 계산법</strong>을 이해하고 거래 비용을 최소화하는 전략이 중요합니다.</p>
+        <h3>숨은 함정: 레버리지 수수료와 진짜 본절가(Break-even)의 비밀</h3>
+        <p>많은 트레이더들이 자신의 '평단가'만 보고 포지션을 정리하다 손실을 보곤 합니다. 그 이유는 바로 '수수료'를 고려하지 않았기 때문입니다. 선물 거래에서는 포지션에 진입할 때와 종료할 때 모두 수수료가 발생하며, 이는 레버리지를 반영한 전체 포지션 규모에 비례하여 부과됩니다. 예를 들어 100 USDT에 100x 레버리지를 사용하면, 10,000 USDT에 대한 수수료를 내야 합니다. 따라서 실제 수익 분기점(본절가)은 나의 평단가보다 높거나(롱 포지션), 낮아지게(숏 포지션) 됩니다. 이 <strong>비트겟 청산가 계산</strong>기는 바이낸스, OKX 등 주요 거래소의 수수료율을 프리셋으로 제공하고, 지정가/시장가 수수료를 직접 입력하여 레버리지를 모두 반영한 '진짜 본절가'를 계산해줍니다. 이 가격을 알아야만 미세한 손실 없이 완벽한 본절 탈출이 가능합니다.</p>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // UI 요소
             const longBtn = document.getElementById('long-btn');
             const shortBtn = document.getElementById('short-btn');
             const isolatedBtn = document.getElementById('isolated-btn');
@@ -406,13 +406,13 @@
             const resultsContainer = document.getElementById('results-container');
             const sliderContainer = document.getElementById('slider-container');
             const usdtSlider = document.getElementById('usdt-slider');
+            const walletBalanceGroup = document.getElementById('wallet-balance-group');
+            const walletBalanceInput = document.getElementById('wallet-balance');
 
-            // 결과 표시 요소
             const finalAvgPriceEl = resultsContainer.querySelector('#final-avg-price p');
             const breakEvenPriceEl = resultsContainer.querySelector('#break-even-price p');
             const liquidationPriceEl = resultsContainer.querySelector('#liquidation-price p');
 
-            // 거래소 수수료 프리셋
             const fees = {
                 binance: { maker: 0.02, taker: 0.05 },
                 bybit: { maker: 0.02, taker: 0.055 },
@@ -420,16 +420,21 @@
                 okx: { maker: 0.02, taker: 0.05 },
             };
             
-            // 이벤트 리스너
             longBtn.addEventListener('click', () => toggleActive(longBtn, shortBtn, calculate));
             shortBtn.addEventListener('click', () => toggleActive(shortBtn, longBtn, calculate));
-            isolatedBtn.addEventListener('click', () => toggleActive(isolatedBtn, crossBtn, calculate));
-            crossBtn.addEventListener('click', () => toggleActive(crossBtn, isolatedBtn, calculate));
+            isolatedBtn.addEventListener('click', () => {
+                toggleActive(isolatedBtn, crossBtn, calculate);
+                walletBalanceGroup.style.display = 'none';
+            });
+            crossBtn.addEventListener('click', () => {
+                toggleActive(crossBtn, isolatedBtn, calculate);
+                walletBalanceGroup.style.display = 'block';
+            });
             
             addEntryBtn.addEventListener('click', addEntryRow);
             exchangeSelect.addEventListener('change', setExchangeFees);
 
-            [leverageInput, makerFeeInput, takerFeeInput].forEach(el => el.addEventListener('input', calculate));
+            [leverageInput, makerFeeInput, takerFeeInput, walletBalanceInput].forEach(el => el.addEventListener('input', calculate));
             entriesContainer.addEventListener('input', handleEntryInput);
             usdtSlider.addEventListener('input', handleSliderInput);
 
@@ -471,7 +476,7 @@
             
             entriesContainer.addEventListener('click', (e) => {
                 if (e.target.classList.contains('delete-btn')) {
-                    e.target.parentElement.remove();
+                    e.target.closest('.entry-row').remove();
                     entryCount--;
                     updateEntryLabels();
                     updateDeleteButtons();
@@ -483,16 +488,14 @@
             function updateEntryLabels() {
                 const rows = entriesContainer.querySelectorAll('.entry-row');
                 rows.forEach((row, index) => {
-                    row.querySelector('.input-group label').textContent = `${index + 1}차 진입가 ($)`;
-                    row.querySelectorAll('.input-group label')[1].textContent = `${index + 1}차 투자액 (USDT)`;
+                    row.querySelector('.input-group:first-child label').textContent = `${index + 1}차 진입가 ($)`;
+                    row.querySelector('.input-group:nth-child(2) label').textContent = `${index + 1}차 투자액 (USDT)`;
                 });
             }
 
             function updateDeleteButtons() {
                 const deleteBtns = entriesContainer.querySelectorAll('.delete-btn');
-                deleteBtns.forEach((btn, index) => {
-                    btn.disabled = (deleteBtns.length === 1 && index === 0);
-                });
+                deleteBtns.forEach(btn => btn.disabled = (deleteBtns.length === 1));
             }
             
             function handleEntryInput(e) {
@@ -504,7 +507,7 @@
 
             function updateSlider() {
                 const lastEntryUsdtInput = entriesContainer.querySelector('.entry-row:last-child .entry-usdt');
-                if (entriesContainer.querySelectorAll('.entry-row').length > 1) {
+                if (entriesContainer.querySelectorAll('.entry-row').length > 1 && lastEntryUsdtInput) {
                      sliderContainer.style.display = 'block';
                      usdtSlider.value = parseFloat(lastEntryUsdtInput.value) || 0;
                 } else {
@@ -516,11 +519,6 @@
                 const lastEntryUsdtInput = entriesContainer.querySelector('.entry-row:last-child .entry-usdt');
                 if (lastEntryUsdtInput) {
                     lastEntryUsdtInput.value = e.target.value;
-                    lastEntryUsdtInput.style.transition = 'background-color 0.1s ease-in-out';
-                    lastEntryUsdtInput.style.backgroundColor = 'var(--accent-glow)';
-                    setTimeout(() => {
-                        lastEntryUsdtInput.style.backgroundColor = 'var(--input)';
-                    }, 100);
                     calculate();
                 }
             }
@@ -531,8 +529,7 @@
                 const leverage = parseFloat(leverageInput.value) || 1;
                 const makerFee = parseFloat(makerFeeInput.value) / 100 || 0;
                 const takerFee = parseFloat(takerFeeInput.value) / 100 || 0;
-                const entryFee = takerFee;
-                const exitFee = takerFee;
+                const walletBalance = parseFloat(walletBalanceInput.value) || 0;
 
                 const entries = Array.from(entriesContainer.querySelectorAll('.entry-row')).map(row => ({
                     price: parseFloat(row.querySelector('.entry-price').value) || 0,
@@ -548,9 +545,10 @@
                 
                 let totalUsdt = 0;
                 let totalCoinQuantity = 0;
+                let totalInitialMargin = 0;
 
                 entries.forEach((entry, index) => {
-                    const fee = (index === 0 ? entryFee : makerFee) * entry.usdt * leverage;
+                    const fee = (index === 0 ? takerFee : makerFee) * entry.usdt * leverage;
                     const effectiveUsdt = entry.usdt * leverage - fee;
                     totalCoinQuantity += effectiveUsdt / entry.price;
                     totalUsdt += entry.usdt;
@@ -559,26 +557,36 @@
                 const avgPrice = (totalCoinQuantity > 0) ? (totalUsdt * leverage) / totalCoinQuantity : 0;
                 
                 const totalPositionValue = totalCoinQuantity * avgPrice;
-                const totalExitFee = totalPositionValue * exitFee;
+                const totalExitFee = totalPositionValue * takerFee;
                 const breakEvenPrice = isLong 
                     ? (totalPositionValue + totalExitFee) / totalCoinQuantity
                     : (totalPositionValue - totalExitFee) / totalCoinQuantity;
                 
                 let liquidationPrice = 0;
-                if(isIsolated && avgPrice > 0){
+                if (avgPrice > 0) {
+                    // 유지증거금률은 거래소/레버리지에 따라 다르지만 대표적인 0.5%로 가정
                     const maintenanceMarginRate = 0.005; 
                     const maintenanceMargin = totalCoinQuantity * avgPrice * maintenanceMarginRate;
-                    
-                    if(isLong){
-                        liquidationPrice = avgPrice * (1 - (totalUsdt / (totalCoinQuantity * avgPrice))) + (maintenanceMargin / totalCoinQuantity);
-                    } else { // Short
-                        liquidationPrice = avgPrice * (1 + (totalUsdt / (totalCoinQuantity * avgPrice))) - (maintenanceMargin / totalCoinQuantity);
+
+                    if (isIsolated) {
+                        if(isLong){
+                             liquidationPrice = avgPrice * (1 - (totalUsdt / totalPositionValue)) + (maintenanceMargin / totalCoinQuantity);
+                        } else { // Short
+                             liquidationPrice = avgPrice * (1 + (totalUsdt / totalPositionValue)) - (maintenanceMargin / totalCoinQuantity);
+                        }
+                    } else { // Cross
+                         const totalCollateral = totalUsdt + walletBalance;
+                         if (isLong) {
+                            liquidationPrice = avgPrice - (totalCollateral - maintenanceMargin) / totalCoinQuantity;
+                         } else { // Short
+                            liquidationPrice = avgPrice + (totalCollateral - maintenanceMargin) / totalCoinQuantity;
+                         }
                     }
                 }
 
                 finalAvgPriceEl.textContent = `$${formatNumber(avgPrice)}`;
                 breakEvenPriceEl.textContent = `$${formatNumber(breakEvenPrice)}`;
-                liquidationPriceEl.textContent = isIsolated ? `$${formatNumber(Math.max(0, liquidationPrice))}` : 'N/A (교차)';
+                liquidationPriceEl.textContent = `$${formatNumber(Math.max(0, liquidationPrice))}`;
 
                 resultsContainer.style.animation = 'none';
                 void resultsContainer.offsetWidth; // Force reflow
