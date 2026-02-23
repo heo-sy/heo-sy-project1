@@ -21,7 +21,6 @@
             --text-dim: #8b949e;
             --border: #30363d;
             --danger: #ff4d4d;
-            --success: #33ff99;
             --long: #00b386;
             --short: #ff4d4d;
             --long-glow: rgba(0, 179, 134, 0.3);
@@ -54,20 +53,82 @@
             margin-bottom: 20px;
         }
         
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo a {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text);
+            text-decoration: none;
+        }
+
         h1 {
             text-align: center;
             color: var(--accent);
-            font-size: 2rem;
+            font-size: 1.8rem;
+            margin-top: 10px;
             margin-bottom: 25px;
             text-shadow: 0 0 10px var(--accent-glow);
         }
+
+        /* 결과 섹션 (상단으로 이동) */
+        #results-container {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            margin-bottom: 25px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .result-item {
+            background-color: var(--input);
+            padding: 20px;
+            border-radius: 12px;
+            border-bottom: 4px solid var(--border);
+            text-align: center;
+        }
+
+        .result-item h3 {
+            margin: 0 0 8px;
+            color: var(--text-dim);
+            font-size: 1em;
+            font-weight: bold;
+        }
+        
+        .result-item p {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--text);
+            word-break: break-all;
+        }
+
+        #final-avg-price { border-color: var(--accent); }
+        #final-avg-price p { color: var(--accent); }
+        
+        #liquidation-price { border-color: var(--danger); }
+        #liquidation-price p { color: var(--danger); }
+        
+        #break-even-price { border-color: #f3ba2f; }
+        #break-even-price p { color: #f3ba2f; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* 컨트롤 그룹 */
         .control-group {
             margin-bottom: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
         }
 
         .input-group {
@@ -92,6 +153,17 @@
             box-sizing: border-box;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
+        
+        /* input type=number 화살표 제거 */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
 
         .input-group input:focus, .input-group select:focus {
             outline: none;
@@ -110,25 +182,26 @@
 
         .toggle-switch button {
             flex: 1;
-            padding: 12px;
+            padding: 12px 5px; /* 패딩 조정 */
             border: none;
             background-color: var(--input);
             color: var(--text-dim);
             cursor: pointer;
-            font-size: 1em;
+            font-size: 0.95em; /* 폰트 조정 */
             font-weight: bold;
             transition: background-color 0.3s, color 0.3s;
+            white-space: nowrap; /* 글자 잘림 방지 */
         }
 
-        .toggle-switch button.active {
-            color: var(--bg);
-        }
-        
+        .toggle-switch button.active { color: var(--bg); }
         #long-btn.active { background-color: var(--long); box-shadow: 0 0 10px var(--long-glow); }
         #short-btn.active { background-color: var(--short); box-shadow: 0 0 10px var(--short-glow); }
-        #isolated-btn.active { background-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); color: var(--bg); }
-        #cross-btn.active { background-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); color: var(--bg); }
+        #isolated-btn.active, #cross-btn.active { background-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); color: var(--bg); }
 
+        /* 거래소 선택 드롭다운 폰트 사이즈 조정 */
+        #exchange {
+             font-size: 0.9em;
+        }
 
         /* 분할 매수 섹션 */
         #entries-container .entry-row {
@@ -156,17 +229,10 @@
         .delete-btn:disabled { border-color: var(--text-dim); color: var(--text-dim); cursor: not-allowed; }
         .delete-btn:disabled:hover { background: none; }
 
-
         #add-entry-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--input);
-            border: 1px dashed var(--accent);
-            color: var(--accent);
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            margin-top: 10px;
+            width: 100%; padding: 12px; background-color: var(--input);
+            border: 1px dashed var(--accent); color: var(--accent);
+            border-radius: 8px; cursor: pointer; font-size: 1em; margin-top: 10px;
             transition: background-color 0.3s;
         }
         #add-entry-btn:hover { background-color: rgba(0, 242, 255, 0.1); }
@@ -174,146 +240,44 @@
         /* 슬라이더 */
         .slider-group { margin-top: 15px; }
         .slider {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 8px;
-            background: var(--input);
-            border-radius: 5px;
-            outline: none;
-            transition: opacity .2s;
-            cursor: pointer;
+            -webkit-appearance: none; width: 100%; height: 8px; background: var(--input);
+            border-radius: 5px; outline: none; transition: opacity .2s; cursor: pointer;
             border: 1px solid var(--border);
         }
         .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 22px;
-            height: 22px;
-            background: var(--accent);
-            border-radius: 50%;
-            border: 3px solid var(--bg);
+            -webkit-appearance: none; appearance: none; width: 22px; height: 22px;
+            background: var(--accent); border-radius: 50%; border: 3px solid var(--bg);
             box-shadow: 0 0 5px var(--accent-glow);
         }
         .slider::-moz-range-thumb {
-            width: 22px;
-            height: 22px;
-            background: var(--accent);
-            border-radius: 50%;
-            border: 3px solid var(--bg);
+            width: 22px; height: 22px; background: var(--accent);
+            border-radius: 50%; border: 3px solid var(--bg);
             box-shadow: 0 0 5px var(--accent-glow);
         }
-
-
-        /* 결과 섹션 */
-        #results-container {
-            background-color: var(--input);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 25px;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        
-        .result-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        
-        .result-item {
-            background-color: var(--bg);
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid var(--border);
-        }
-
-        .result-item h3 {
-            margin: 0 0 5px;
-            color: var(--text-dim);
-            font-size: 0.9em;
-        }
-        
-        .result-item p {
-            margin: 0;
-            font-size: 1.4em;
-            font-weight: bold;
-            color: var(--text);
-            word-break: break-all;
-        }
-
-        #final-avg-price { border-color: var(--accent); }
-        #break-even-price { border-color: #f3ba2f; }
-        #liquidation-price { border-color: var(--danger); }
-        #total-usdt { border-color: #29b6f6; }
-        
-        #total-position-size { grid-column: 1 / -1; border-color: var(--success); }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         /* SEO 콘텐츠 */
         .seo-content {
-            background-color: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 30px;
-            max-width: 700px;
+            background-color: var(--card); border: 1px solid var(--border); border-radius: 12px;
+            padding: 25px; margin-top: 30px; max-width: 700px;
         }
-
-        .seo-content h2 {
-            color: var(--accent);
-            font-size: 1.5rem;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .seo-content h3 {
-            color: var(--text);
-            font-size: 1.2rem;
-            margin-top: 30px;
-        }
-
-        .seo-content p, .seo-content ul {
-            color: var(--text-dim);
-        }
-
-        .seo-content li {
-            margin-bottom: 10px;
-        }
-        
-        .seo-content a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-        
-        .seo-content a:hover {
-            text-decoration: underline;
-        }
-        
-        .logo {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .logo a {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--text);
-            text-decoration: none;
-        }
+        .seo-content h2 { color: var(--accent); font-size: 1.5rem; border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; }
+        .seo-content h3 { color: var(--text); font-size: 1.2rem; margin-top: 30px; }
+        .seo-content p, .seo-content ul { color: var(--text-dim); }
+        .seo-content li { margin-bottom: 10px; }
+        .seo-content a { color: var(--accent); text-decoration: none; }
+        .seo-content a:hover { text-decoration: underline; }
 
         @media (max-width: 600px) {
             body { padding: 10px; }
             .container, .seo-content { padding: 15px; }
-            h1 { font-size: 1.8rem; }
+            h1 { font-size: 1.5rem; }
+            .result-item p { font-size: 1.8rem; }
             .control-group { grid-template-columns: 1fr 1fr; }
+            .toggle-switch button { font-size: 0.85em;}
+            #exchange { font-size: 0.8em; }
             #entries-container .entry-row { grid-template-columns: 1fr 1fr; gap: 15px; }
             #entries-container .entry-row .delete-btn { grid-column: 1 / -1; width: 100%; margin: 5px 0 0 0; }
-            .result-grid { grid-template-columns: 1fr; }
-            #total-position-size { grid-column: 1; }
         }
-
     </style>
 </head>
 <body>
@@ -321,6 +285,24 @@
     <div class="container">
         <div class="logo"><a href="index.html">스르륵</a></div>
         <h1>코인 선물<br>다중 물타기 & 청산가 계산기</h1>
+
+        <!-- 결과 표시 (상단으로 이동) -->
+        <div id="results-container" style="display: none;">
+            <div class="result-grid">
+                <div class="result-item" id="final-avg-price">
+                    <h3>최종 평단가</h3>
+                    <p>$0</p>
+                </div>
+                <div class="result-item" id="liquidation-price">
+                    <h3>예상 청산가</h3>
+                    <p>$0</p>
+                </div>
+                <div class="result-item" id="break-even-price">
+                    <h3>수수료 포함 본절가</h3>
+                    <p>$0</p>
+                </div>
+            </div>
+        </div>
 
         <!-- 기본 설정 -->
         <div class="control-group">
@@ -339,25 +321,25 @@
                 </div>
             </div>
             <div class="input-group">
-                <label for="leverage">레버리지 (1x ~ 125x)</label>
+                <label for="leverage">레버리지 (1x-125x)</label>
                 <input type="number" id="leverage" value="10" min="1" max="125" step="1">
             </div>
             <div class="input-group">
                 <label for="exchange">거래소 수수료</label>
                 <select id="exchange">
                     <option value="custom">직접 입력</option>
-                    <option value="binance">바이낸스 (0.02% / 0.05%)</option>
-                    <option value="bybit">바이비트 (0.02% / 0.055%)</option>
-                    <option value="bitget">비트겟 (0.02% / 0.06%)</option>
-                    <option value="okx">OKX (0.02% / 0.05%)</option>
+                    <option value="binance">바이낸스 (지정 0.02% / 시장 0.05%)</option>
+                    <option value="bybit">바이비트 (지정 0.02% / 시장 0.055%)</option>
+                    <option value="bitget">비트겟 (지정 0.02% / 시장 0.06%)</option>
+                    <option value="okx">OKX (지정 0.02% / 시장 0.05%)</option>
                 </select>
             </div>
             <div class="input-group">
-                <label for="maker-fee">Maker 수수료 (%)</label>
+                <label for="maker-fee">지정가 수수료 (%)</label>
                 <input type="number" id="maker-fee" value="0.02" step="0.001">
             </div>
             <div class="input-group">
-                <label for="taker-fee">Taker 수수료 (%)</label>
+                <label for="taker-fee">시장가 수수료 (%)</label>
                 <input type="number" id="taker-fee" value="0.05" step="0.001">
             </div>
         </div>
@@ -386,32 +368,6 @@
              </div>
         </div>
         
-    </div>
-    
-    <!-- 결과 표시 -->
-    <div class="container" id="results-container" style="display: none;">
-        <div class="result-grid">
-            <div class="result-item" id="final-avg-price">
-                <h3>최종 평단가</h3>
-                <p>$0</p>
-            </div>
-            <div class="result-item" id="break-even-price">
-                <h3>수수료 포함 본절가 (탈출가)</h3>
-                <p>$0</p>
-            </div>
-            <div class="result-item" id="liquidation-price">
-                <h3>예상 청산가</h3>
-                <p>$0</p>
-            </div>
-            <div class="result-item" id="total-usdt">
-                <h3>총 투입 USDT</h3>
-                <p>0 USDT</p>
-            </div>
-            <div class="result-item" id="total-position-size">
-                <h3>레버리지 반영 총 포지션</h3>
-                <p>0 USDT</p>
-            </div>
-        </div>
     </div>
     
     <div class="seo-content">
@@ -455,8 +411,6 @@
             const finalAvgPriceEl = resultsContainer.querySelector('#final-avg-price p');
             const breakEvenPriceEl = resultsContainer.querySelector('#break-even-price p');
             const liquidationPriceEl = resultsContainer.querySelector('#liquidation-price p');
-            const totalUsdtEl = resultsContainer.querySelector('#total-usdt p');
-            const totalPositionSizeEl = resultsContainer.querySelector('#total-position-size p');
 
             // 거래소 수수료 프리셋
             const fees = {
@@ -562,7 +516,6 @@
                 const lastEntryUsdtInput = entriesContainer.querySelector('.entry-row:last-child .entry-usdt');
                 if (lastEntryUsdtInput) {
                     lastEntryUsdtInput.value = e.target.value;
-                    // 값 변경 애니메이션 효과
                     lastEntryUsdtInput.style.transition = 'background-color 0.1s ease-in-out';
                     lastEntryUsdtInput.style.backgroundColor = 'var(--accent-glow)';
                     setTimeout(() => {
@@ -578,9 +531,8 @@
                 const leverage = parseFloat(leverageInput.value) || 1;
                 const makerFee = parseFloat(makerFeeInput.value) / 100 || 0;
                 const takerFee = parseFloat(takerFeeInput.value) / 100 || 0;
-                // 가정: 첫 진입은 Taker, 물타기는 Maker로 계산
                 const entryFee = takerFee;
-                const exitFee = takerFee; // 종료는 일반적으로 지정가(Maker)가 아닌 시장가(Taker)로 가정
+                const exitFee = takerFee;
 
                 const entries = Array.from(entriesContainer.querySelectorAll('.entry-row')).map(row => ({
                     price: parseFloat(row.querySelector('.entry-price').value) || 0,
@@ -606,47 +558,36 @@
 
                 const avgPrice = (totalCoinQuantity > 0) ? (totalUsdt * leverage) / totalCoinQuantity : 0;
                 
-                // 본절가 계산
                 const totalPositionValue = totalCoinQuantity * avgPrice;
                 const totalExitFee = totalPositionValue * exitFee;
                 const breakEvenPrice = isLong 
                     ? (totalPositionValue + totalExitFee) / totalCoinQuantity
                     : (totalPositionValue - totalExitFee) / totalCoinQuantity;
                 
-                // 청산가 계산 (격리 모드 기준, 유지증거금률 0.5% 가정 - 거래소마다 다름)
                 let liquidationPrice = 0;
                 if(isIsolated && avgPrice > 0){
-                    const maintenanceMarginRate = 0.005; // 0.5%
+                    const maintenanceMarginRate = 0.005; 
                     const maintenanceMargin = totalCoinQuantity * avgPrice * maintenanceMarginRate;
                     
                     if(isLong){
                         liquidationPrice = avgPrice * (1 - (totalUsdt / (totalCoinQuantity * avgPrice))) + (maintenanceMargin / totalCoinQuantity);
-                        //liquidationPrice = (avgPrice * totalCoinQuantity - totalUsdt) / (totalCoinQuantity * (1-maintenanceMarginRate));
                     } else { // Short
                         liquidationPrice = avgPrice * (1 + (totalUsdt / (totalCoinQuantity * avgPrice))) - (maintenanceMargin / totalCoinQuantity);
-                        //liquidationPrice = (avgPrice * totalCoinQuantity + totalUsdt) / (totalCoinQuantity * (1+maintenanceMarginRate));
                     }
                 }
 
-                // 결과 업데이트
                 finalAvgPriceEl.textContent = `$${formatNumber(avgPrice)}`;
                 breakEvenPriceEl.textContent = `$${formatNumber(breakEvenPrice)}`;
                 liquidationPriceEl.textContent = isIsolated ? `$${formatNumber(Math.max(0, liquidationPrice))}` : 'N/A (교차)';
-                totalUsdtEl.textContent = `${formatNumber(totalUsdt)} USDT`;
-                totalPositionSizeEl.textContent = `${formatNumber(totalCoinQuantity * avgPrice)} USDT`;
 
-                // 실시간 결과창 애니메이션
                 resultsContainer.style.animation = 'none';
-                void resultsContainer.offsetWidth; // 리플로우 강제
+                void resultsContainer.offsetWidth; // Force reflow
                 resultsContainer.style.animation = 'fadeIn 0.5s ease-in-out';
             }
 
             function formatNumber(num) {
                 if (isNaN(num) || !isFinite(num)) return '0';
-                return num.toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                });
+                return Math.round(num).toLocaleString('en-US');
             }
             
             // 초기화
