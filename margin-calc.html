@@ -3,195 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>1688 사입 및 로켓그로스 마진 계산기 - 관세, 물류비, 세금 정밀 분석 | 스르륵</title>
-    <meta name="description" content="1688 원가와 환율, 관부가세부터 쿠팡 로켓그로스 수수료, 광고비까지 포함된 국내 유일의 정밀 수익 시뮬레이터입니다.">
-    <meta name="keywords" content="1688, 로켓그로스, 마진 계산기, 순수익, 엔드 ROAS, 이커머스, 스르륵">
-    
+    <title>쿠팡 로켓그로스 마진 계산기 - 수수료 및 부가세 포함 순수익 계산기</title>
+    <meta name="description" content="쿠팡 로켓그로스 판매자를 위한 정밀 마진 계산기입니다. 입점 수수료, 광고비, 부가세, 배송비 등을 포함한 정확한 순수익과 ROI를 확인하세요.">
+    <meta name="keywords" content="쿠팡 마진 계산기, 로켓그로스 계산기, 순수익, 마진율, ROI, 부가세, 쿠팡 수수료, 커머스, 이커머스">
+
     <style>
         :root {
             --bg-color: #121212;
             --card-bg: #1e1e1e;
-            --neon-blue: #00f3ff;
             --neon-green: #39ff14;
-            --neon-red: #ff3131;
             --text-main: #ffffff;
             --text-dim: #cccccc;
+            --border-color: #333;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: 'Pretendard', -apple-system, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
             padding: 20px;
             line-height: 1.6;
         }
 
-        .container { max-width: 1000px; margin: 0 auto; }
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 15px; }
-        .nav-menu { display: flex; gap: 15px; font-weight: bold; font-size: 14px; color: var(--neon-blue); }
-        .back-btn { text-decoration: none; color: var(--text-dim); font-size: 14px; }
+        .container { max-width: 800px; margin: 0 auto; }
 
-        h1 { font-size: 1.8rem; color: var(--text-main); margin: 10px 0; }
-
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
-        .card { background: var(--card-bg); padding: 25px; border-radius: 12px; border: 1px solid #333; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-        .input-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-size: 15px; color: var(--text-dim); }
-        input {
-            width: 100%; height: 50px; background: #000; border: 1px solid #444; border-radius: 8px;
-            color: var(--neon-blue); padding: 0 15px; font-size: 18px; box-sizing: border-box;
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
         }
 
-        .metric-title { font-size: 14px; color: var(--text-dim); margin-bottom: 5px; }
-        .metric-value { font-size: 32px; font-weight: 800; margin-bottom: 20px; color: var(--neon-blue); }
-        .highlight-green { color: var(--neon-green); }
-        .highlight-red { color: var(--neon-red); }
+        h1 {
+            font-size: 2rem;
+            color: var(--text-main);
+            font-weight: 700;
+            margin: 0;
+        }
 
-        article { margin-top: 50px; padding-top: 30px; border-top: 1px solid #333; }
-        article h2 { color: var(--neon-blue); font-size: 1.5rem; }
-        article h3 { color: var(--text-main); margin-top: 25px; }
-        article p { color: var(--text-dim); font-size: 16px; margin-bottom: 15px; }
+        main, section, article { display: block; }
 
-        footer { text-align: center; margin-top: 50px; padding: 20px; color: #666; font-size: 13px; }
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        .input-group { margin-bottom: 15px; }
+        .input-group label {
+            display: block; margin-bottom: 8px; font-size: 15px; font-weight: 600; color: var(--text-dim);
+        }
+        .input-group input {
+            width: 100%;
+            height: 52px; /* 터치 영역 확보 */
+            background: #000;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: var(--neon-green);
+            padding: 0 16px; /* 터치 영역 확보 */
+            font-size: 16px; /* 모바일 자동 확대 방지 */
+            font-weight: 600;
+            box-sizing: border-box;
+            -moz-appearance: textfield; /* Firefox 스피너 제거 */
+        }
+        .input-group input::-webkit-outer-spin-button,
+        .input-group input::-webkit-inner-spin-button {
+            -webkit-appearance: none; /* Chrome, Safari, Edge 스피너 제거 */
+            margin: 0;
+        }
+        .input-group .help-text {
+            font-size: 12px; color: #888; margin-top: 8px; line-height: 1.4;
+        }
+
+        .results-section h2 { text-align: center; margin-bottom: 20px; font-size: 1.5rem; color: var(--neon-green); }
+        .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center;}
+        .metric .title { font-size: 14px; color: var(--text-dim); margin-bottom: 5px; }
+        .metric .value { font-size: 28px; font-weight: 800; color: var(--neon-green); }
+
+        .seo-article { margin-top: 50px; padding-top: 30px; border-top: 1px solid var(--border-color); }
+        .seo-article h2 { text-align: center; font-size: 1.6rem; margin-bottom: 30px; }
+        .seo-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 3px solid var(--neon-green);
+            margin-bottom: 20px;
+        }
+        .seo-card h3 { margin-top: 0; font-size: 1.2rem; }
+        .seo-card p, .seo-card ul { font-size: 15px; color: var(--text-dim); }
+        .seo-card li { margin-bottom: 10px; }
 
         @media (max-width: 600px) {
-            body { padding: 15px; font-size: 80%; }
-            h1 { font-size: 1.5rem; }
-            .metric-value { font-size: 26px; }
-            input { height: 45px; font-size: 16px; }
-            .dashboard-grid { grid-template-columns: 1fr; }
+            body { padding: 15px; }
+            h1 { font-size: 1.6rem; }
+            .grid-layout, .results-grid { grid-template-columns: 1fr; }
+            .card { padding: 20px; }
+            .results-grid { gap: 25px; }
+            .metric .value { font-size: 26px; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <a href="index.html" class="back-btn">⬅ Dashboard</a>
-        <div class="nav-menu">
-            <span>Winner</span> | <span>Profit</span> | <span>Survival</span> | <span>Roadmap</span>
-        </div>
-    </header>
+    <div class="container">
+        <header>
+            <h1>쿠팡 로켓그로스 정밀 마진 계산기</h1>
+        </header>
 
-    <main>
-        <section>
-            <h1>1688-로켓그로스 전략 수익 대시보드</h1>
-            <div class="card">
-                <div class="dashboard-grid">
+        <main>
+            <section class="card">
+                <div class="grid-layout">
                     <div class="input-group">
-                        <label>1688 단가 (위안)</label>
-                        <input type="number" id="yuanPrice" placeholder="0" inputmode="numeric" oninput="calculate()">
+                        <label for="sellPrice">판매가 (원)</label>
+                        <input type="number" id="sellPrice" placeholder="판매 금액" inputmode="numeric" oninput="calculate()">
                     </div>
                     <div class="input-group">
-                        <label>현재 환율 (원)</label>
-                        <input type="number" id="exchangeRate" value="195" inputmode="numeric" oninput="calculate()">
-                    </div>
-                    <div class="input-group">
-                        <label>개당 국제 물류비 (원)</label>
-                        <input type="number" id="intlShipping" placeholder="0" inputmode="numeric" oninput="calculate()">
-                    </div>
-                    <div class="input-group">
-                        <label>쿠팡 판매가 (원)</label>
-                        <input type="number" id="sellPrice" placeholder="0" inputmode="numeric" oninput="calculate()">
+                        <label for="buyPrice">매입가 (원)</label>
+                        <input type="number" id="buyPrice" placeholder="총 원가" inputmode="numeric" oninput="calculate()">
                     </div>
                 </div>
+            </section>
+
+            <section class="card">
+                <div class="grid-layout">
+                    <div class="input-group">
+                        <label for="platformFee">쿠팡 수수료 (%)</label>
+                        <input type="number" id="platformFee" value="10" inputmode="numeric" oninput="calculate()">
+                        <p class="help-text">카테고리별 수수료(평균 5~11%)를 입력하세요.</p>
+                    </div>
+                    <div class="input-group">
+                        <label for="shippingCost">배송/보관비 (원)</label>
+                        <input type="number" id="shippingCost" value="3000" inputmode="numeric" oninput="calculate()">
+                        <p class="help-text">로켓그로스 요금(평균 3,000원~) 또는 3PL 실비를 입력하세요.</p>
+                    </div>
+                    <div class="input-group">
+                        <label for="adRate">광고비 (%)</label>
+                        <input type="number" id="adRate" value="10" inputmode="numeric" oninput="calculate()">
+                        <p class="help-text">매출 대비 목표 광고비 비율(ACOS)을 입력하세요.</p>
+                    </div>
+                    <div class="input-group">
+                        <label for="lossRate">손실/예비비 (%)</label>
+                        <input type="number" id="lossRate" value="3" inputmode="numeric" oninput="calculate()">
+                        <p class="help-text">반품, 불량, 재고 폐기 등 예상 손실률(3% 권장)입니다.</p>
+                    </div>
+                    <div class="input-group">
+                        <label for="taxRate">세금 (%)</label>
+                        <input type="number" id="taxRate" value="10" inputmode="numeric" oninput="calculate()">
+                        <p class="help-text">부가세(10%) 및 종소세 대비, 보수적 순수익 계산용입니다.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card results-section">
+                <h2>최종 수익 분석</h2>
+                <div class="results-grid">
+                    <div class="metric">
+                        <div class="title">순수익</div>
+                        <div class="value" id="netProfit">0원</div>
+                    </div>
+                    <div class="metric">
+                        <div class="title">마진율</div>
+                        <div class="value" id="marginRate">0%</div>
+                    </div>
+                    <div class="metric">
+                        <div class="title">ROI (수익률)</div>
+                        <div class="value" id="roi">0%</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <article class="seo-article">
+            <h2>로켓그로스 마진 계산 시 주의할 점 3가지</h2>
+            <div class="seo-card">
+                <h3>1. 부가세: 환급을 고려한 실질 비용 분석</h3>
+                <p>계산기에 입력하는 세금 10%는 최종 수익에 대한 보수적인 추정치입니다. 실제 사업에서는 매입 시 지불한 부가세(매입세액)를 매출 시 발생한 부가세(매출세액)에서 공제받을 수 있습니다. 예를 들어, 1,000원짜리 상품을 매입했다면 그 안에 포함된 100원(매입세액)은 나중에 환급 대상이 될 수 있습니다. 따라서 이 계산기로는 보수적인 현금 흐름을 파악하고, 실제 세무 신고 시에는 반드시 세무 전문가와 상담하여 매입세액 공제를 반영한 정확한 세금을 계산해야 합니다.</p>
             </div>
-        </section>
-
-        <section class="dashboard-grid">
-            <div class="card">
-                <div class="metric-title">총 매입 원가 (관세 포함)</div>
-                <div id="totalCost" class="metric-value">0원</div>
-
-                <div class="metric-title">정밀 순수익 (세후)</div>
-                <div id="netProfit" class="metric-value">0원</div>
+            <div class="seo-card">
+                <h3>2. 쿠팡 수수료: 카테고리, 판매가, 프로모션의 함정</h3>
+                <p>쿠팡의 판매 수수료는 카테고리마다 천차만별이며, 동일 카테고리 내에서도 판매 가격 구간에 따라 달라질 수 있습니다. 또한, 쿠팡이 자체적으로 진행하는 할인 프로모션에 동의할 경우, 할인 금액의 일부 또는 전체를 판매자가 부담하게 되어 실질 수수료가 예상보다 높아질 수 있습니다. '윙(Wing)' 판매자 센터의 [리포트] > [정산 현황] 메뉴에서 실제 정산 내역을 주기적으로 확인하여, 내 상품의 '실질 수수료율'이 얼마인지 파악하고 계산기에 반영해야 역마진을 피할 수 있습니다.</p>
             </div>
-
-            <div class="card">
-                <div class="metric-title">엔드 ROAS (손익분기점)</div>
-                <div id="endRoas" class="metric-value" style="color: #ffeb3b;">0%</div>
-                
-                <div class="metric-title">최대 광고비 한도</div>
-                <div id="maxAdBudget" class="metric-value highlight-red">0원</div>
+            <div class="seo-card">
+                <h3>3. 배송비: 부피와 무게에 따른 역마진 방지 전략</h3>
+                <p>로켓그로스의 배송 요금은 상품의 크기(부피)와 무게에 따라 결정됩니다. 작고 가벼운 상품은 저렴하지만, 부피가 크거나 무거운 상품(예: 가구, 생수)은 배송비가 판매가의 상당 부분을 차지할 수 있습니다. 상품 입고 전, '윙(Wing)'에서 제공하는 요금표를 기준으로 내 상품의 '예상 배송비'를 반드시 확인해야 합니다. 만약 배송비가 부담스럽다면, 1)여러 개를 묶어파는 합포장 전략으로 객단가를 높이거나, 2)부피를 줄일 수 있도록 포장을 개선하여 배송 요금 구간을 한 단계 낮추는 전략을 고려해야 합니다.</p>
             </div>
-        </section>
-
-        <article>
-            <h2>1688 사입부터 로켓그로스까지: 역마진을 피하는 3가지 필승 전략</h2>
-            <p>1688의 저렴한 소싱 비용과 쿠팡 로켓그로스의 강력한 물류 및 판매 인프라 결합은 엄청난 기회를 제공하지만, 치밀한 비용 분석 없이는 '팔수록 손해'인 역마진의 늪에 빠지기 쉽습니다. 성공적인 셀러가 되기 위해 반드시 기억해야 할 세 가지 핵심 전략을 제시합니다.</p>
-            
-            <h3>1. 환율 변동 리스크, '버퍼'를 두고 관리하라</h3>
-            <p>모든 계산의 시작점인 환율은 셀러의 의지와 무관하게 움직이는 가장 큰 변수입니다. 오늘 195원이었던 환율이 결제 시점에 205원으로 5% 오르면, 당신의 마진 5%는 그대로 증발합니다. 항상 현재 환율보다 3~5% 높은 '보수적 환율'을 적용하여 비용을 계산하는 습관을 들여야 합니다. 소싱 시점의 환율이 아닌, 실제 카드사나 은행에서 출금되는 시점의 최종 환율을 기준으로 삼고, 예상치 못한 환율 상승에 대비한 최소한의 안전마진을 확보하는 것이 생존의 첫걸음입니다.</p>
-
-            <h3>2. '보이지 않는 비용' 관부가세와 언더밸류의 함정</h3>
-            <p>많은 초보 셀러들이 '상품가 x 관세율' 정도로 관세를 단순 계산하는 오류를 범합니다. 정확한 관세는 '(상품가 x 고시환율) + 국제운송비'인 과세표준(CIF)에 관세율(기본 8%)을 곱해 산출됩니다. 여기서 끝이 아닙니다. 부가세 10%는 '(과세표준 + 관세)' 금액에 추가로 부과됩니다. 비용을 줄이려 수입 신고 금액을 실제보다 낮게 적는 '언더밸류'는 명백한 불법이며, 세관 적발 시 막대한 추징금과 가산세, 통관 불허 등의 치명적인 결과를 초래합니다. 본 계산기처럼 관부가세를 모두 포함한 '총 매입 원가'를 기준으로 수익을 분석해야 합니다.</p>
-
-            <h3>3. '엔드 ROAS'를 모르면 광고비를 태우지 마라</h3>
-            <p>광고는 감이 아닌 수학입니다. '엔드 ROAS'는 광고비를 제외한 모든 비용을 제했을 때 순수익이 정확히 0원이 되는 '손익분기 광고수익률'을 의미합니다. 만약 광고 전 마진율이 25%라면, 당신의 엔드 ROAS는 400% (1 / 0.25)가 됩니다. 즉, 광고 효율이 400% 밑으로 떨어지는 모든 상품은 팔릴 때마다 손실을 기록하고 있는 셈입니다. 지금 당장 당신의 주력 상품의 엔드 ROAS를 계산하고, 광고 캠페인별 성과를 비교 분석하여 기준에 미달하는 광고는 과감히 중단해야 합니다. '최대 광고비 한도'는 역마진 없이 지출할 수 있는 심리적, 물리적 마지노선입니다.</p>
         </article>
-    </main>
 
-    <footer>
-        <p>※ 본 대시보드는 1688 사입 및 로켓그로스 셀러의 전략적 의사결정을 지원합니다.</p>
-    </footer>
-</div>
+    </div>
 
-<script>
-    function calculate() {
-        // 기본값 및 변수 설정
-        const tariffRate = 0.08;      // 관세율 8%
-        const domesticShipping = 3000; // 국내배송비
-        const coupangFeeRate = 0.108; // 쿠팡수수료 10.8%
-        const adRate = 0.10;          // 광고비 10%
-        const lossRate = 0.03;        // 예상손실률 3%
-        const taxRate = 0.10;         // 세금 10%
-
-        // 사용자 입력값 가져오기
-        const yuanPrice = parseFloat(document.getElementById('yuanPrice').value) || 0;
-        const exchangeRate = parseFloat(document.getElementById('exchangeRate').value) || 195;
-        const intlShipping = parseFloat(document.getElementById('intlShipping').value) || 0;
-        const sellPrice = parseFloat(document.getElementById('sellPrice').value) || 0;
-
-        if (yuanPrice > 0 && sellPrice > 0) {
-            // 1. 총 매입 원가 계산
-            const priceInKRW = yuanPrice * exchangeRate;
-            const customs = priceInKRW * tariffRate;
-            const totalCost = priceInKRW + customs + intlShipping;
-
-            // 2. 비용 항목 계산
-            const coupangFee = sellPrice * coupangFeeRate;
-            const adExpense = sellPrice * adRate;
-            const lossExpense = sellPrice * lossRate;
+    <script>
+        function calculate() {
+            // 1. 모든 입력값 가져오기 (숫자, 없으면 0)
+            const sellPrice = parseFloat(document.getElementById('sellPrice').value) || 0;
+            const buyPrice = parseFloat(document.getElementById('buyPrice').value) || 0;
             
-            // 3. 정밀 순수익 계산 (세전 -> 세후)
-            const preTaxProfit = sellPrice - (totalCost + domesticShipping + coupangFee + adExpense + lossExpense);
-            const netProfit = preTaxProfit > 0 ? preTaxProfit * (1 - taxRate) : preTaxProfit;
+            const platformFeePercent = parseFloat(document.getElementById('platformFee').value) || 0;
+            const shippingCost = parseFloat(document.getElementById('shippingCost').value) || 0;
+            const adRatePercent = parseFloat(document.getElementById('adRate').value) || 0;
+            const lossRatePercent = parseFloat(document.getElementById('lossRate').value) || 0;
+            const taxRatePercent = parseFloat(document.getElementById('taxRate').value) || 0;
 
-            // 4. 엔드 ROAS 계산 (광고비를 제외한 마진 기준)
-            const marginBeforeAd = (sellPrice - (totalCost + domesticShipping + coupangFee + lossExpense)) / sellPrice;
-            const endRoas = marginBeforeAd > 0 ? (1 / marginBeforeAd) * 100 : 0;
-
-            // 5. 최대 광고비 한도 계산
-            const maxAdBudget = sellPrice - (totalCost + domesticShipping + coupangFee + lossExpense);
-
-            // 결과 UI 업데이트
-            document.getElementById('totalCost').innerText = Math.floor(totalCost).toLocaleString() + "원";
-            document.getElementById('netProfit').innerText = Math.floor(netProfit).toLocaleString() + "원";
-            document.getElementById('endRoas').innerText = endRoas > 0 ? Math.floor(endRoas) + "%" : "계산 불가";
-            document.getElementById('maxAdBudget').innerText = maxAdBudget > 0 ? Math.floor(maxAdBudget).toLocaleString() + "원" : "0원";
-
-            // 순수익 색상 변경
+            // 결과를 표시할 요소 가져오기
             const netProfitElem = document.getElementById('netProfit');
-            netProfitElem.classList.remove('highlight-red', 'highlight-green');
-            if (netProfit < 0) {
-                netProfitElem.classList.add('highlight-red');
+            const marginRateElem = document.getElementById('marginRate');
+            const roiElem = document.getElementById('roi');
+
+            if (sellPrice > 0) {
+                // 2. 비용 계산
+                const platformFee = sellPrice * (platformFeePercent / 100);
+                const adCost = sellPrice * (adRatePercent / 100);
+                const lossCost = sellPrice * (lossRatePercent / 100);
+                const totalCost = buyPrice + platformFee + shippingCost + adCost + lossCost;
+
+                // 3. 수익 계산
+                const preTaxProfit = sellPrice - totalCost;
+                const tax = preTaxProfit > 0 ? preTaxProfit * (taxRatePercent / 100) : 0;
+                const netProfit = preTaxProfit - tax;
+                
+                // 4. 마진율 및 ROI 계산
+                const marginRate = (netProfit / sellPrice) * 100;
+                const roi = buyPrice > 0 ? (netProfit / buyPrice) * 100 : 0;
+
+                // 5. 결과 업데이트
+                netProfitElem.innerText = Math.floor(netProfit).toLocaleString() + "원";
+                marginRateElem.innerText = marginRate.toFixed(1) + "%";
+                roiElem.innerText = roi.toFixed(1) + "%";
+
             } else {
-                netProfitElem.classList.add('highlight-green');
+                // 판매가가 0이면 모든 결과 초기화
+                netProfitElem.innerText = "0원";
+                marginRateElem.innerText = "0%";
+                roiElem.innerText = "0%";
             }
         }
-    }
-</script>
+
+        // 페이지 로드 및 모든 입력 필드에 이벤트 리스너 추가
+        document.addEventListener('DOMContentLoaded', () => {
+            calculate(); // 초기 계산 실행
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.addEventListener('input', calculate);
+            });
+        });
+    </script>
 
 </body>
 </html>
