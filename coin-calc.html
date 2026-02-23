@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>코인 선물 다중 물타기 및 청산가 계산기 - 스르륵</title>
+    <meta name="description" content="바이낸스, 비트겟 등 모든 거래소용 코인 선물 청산가 계산기. 다중 분할매수(물타기) 시나리오를 시뮬레이션하여 최종 평단가, 레버리지, 예상 청산 가격, 진짜 본절가를 즉시 확인하고 청산 위험을 관리하세요.">
+    <meta name="keywords" content="코인 선물 계산기, 청산가 계산기, 물타기 계산기, 평단가 계산기, 바이낸스 물타기 계산기, 비트겟 청산가 계산, 코인 선물 평단가, 수수료 계산법, 롱포지션, 숏포지션, 격리, 교차">
+
+    <!-- Pretendard 폰트 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+    <style>
+        :root {
+            --bg: #000000;
+            --card: #0d1117;
+            --input: #161b22;
+            --accent: #00f2ff;
+            --accent-glow: rgba(0, 242, 255, 0.3);
+            --text: #f0f6fc;
+            --text-dim: #8b949e;
+            --border: #30363d;
+            --danger: #ff4d4d;
+            --success: #33ff99;
+            --long: #00b386;
+            --short: #ff4d4d;
+            --long-glow: rgba(0, 179, 134, 0.3);
+            --short-glow: rgba(255, 77, 77, 0.3);
+            --base-font: 1rem;
+        }
+
+        /* 기본 스타일 */
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            font-size: var(--base-font);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--accent);
+            font-size: 2rem;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        /* 컨트롤 그룹 */
+        .control-group {
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .input-group label {
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .input-group input, .input-group select {
+            background-color: var(--input);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 1em;
+            width: 100%;
+            box-sizing: border-box;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        /* 토글 스위치 */
+        .toggle-switch {
+            display: flex;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            width: 100%;
+        }
+
+        .toggle-switch button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background-color: var(--input);
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .toggle-switch button.active {
+            color: var(--bg);
+        }
+        
+        #long-btn.active { background-color: var(--long); box-shadow: 0 0 10px var(--long-glow); }
+        #short-btn.active { background-color: var(--short); box-shadow: 0 0 10px var(--short-glow); }
+        #isolated-btn.active { background-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); color: var(--bg); }
+        #cross-btn.active { background-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); color: var(--bg); }
+
+
+        /* 분할 매수 섹션 */
+        #entries-container .entry-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 40px;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .delete-btn {
+            background: none;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1.2em;
+            line-height: 1;
+            transition: background-color 0.3s, color 0.3s;
+            margin-left: 10px;
+        }
+        .delete-btn:hover { background-color: var(--danger); color: var(--bg); }
+        .delete-btn:disabled { border-color: var(--text-dim); color: var(--text-dim); cursor: not-allowed; }
+        .delete-btn:disabled:hover { background: none; }
+
+
+        #add-entry-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--input);
+            border: 1px dashed var(--accent);
+            color: var(--accent);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        #add-entry-btn:hover { background-color: rgba(0, 242, 255, 0.1); }
+        
+        /* 슬라이더 */
+        .slider-group { margin-top: 15px; }
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            background: var(--input);
+            border-radius: 5px;
+            outline: none;
+            transition: opacity .2s;
+            cursor: pointer;
+            border: 1px solid var(--border);
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 3px solid var(--bg);
+            box-shadow: 0 0 5px var(--accent-glow);
+        }
+        .slider::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 3px solid var(--bg);
+            box-shadow: 0 0 5px var(--accent-glow);
+        }
+
+
+        /* 결과 섹션 */
+        #results-container {
+            background-color: var(--input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 25px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .result-item {
+            background-color: var(--bg);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--border);
+        }
+
+        .result-item h3 {
+            margin: 0 0 5px;
+            color: var(--text-dim);
+            font-size: 0.9em;
+        }
+        
+        .result-item p {
+            margin: 0;
+            font-size: 1.4em;
+            font-weight: bold;
+            color: var(--text);
+            word-break: break-all;
+        }
+
+        #final-avg-price { border-color: var(--accent); }
+        #break-even-price { border-color: #f3ba2f; }
+        #liquidation-price { border-color: var(--danger); }
+        #total-usdt { border-color: #29b6f6; }
+        
+        #total-position-size { grid-column: 1 / -1; border-color: var(--success); }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* SEO 콘텐츠 */
+        .seo-content {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            max-width: 700px;
+        }
+
+        .seo-content h2 {
+            color: var(--accent);
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .seo-content h3 {
+            color: var(--text);
+            font-size: 1.2rem;
+            margin-top: 30px;
+        }
+
+        .seo-content p, .seo-content ul {
+            color: var(--text-dim);
+        }
+
+        .seo-content li {
+            margin-bottom: 10px;
+        }
+        
+        .seo-content a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .seo-content a:hover {
+            text-decoration: underline;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo a {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .container, .seo-content { padding: 15px; }
+            h1 { font-size: 1.8rem; }
+            .control-group { grid-template-columns: 1fr 1fr; }
+            #entries-container .entry-row { grid-template-columns: 1fr 1fr; gap: 15px; }
+            #entries-container .entry-row .delete-btn { grid-column: 1 / -1; width: 100%; margin: 5px 0 0 0; }
+            .result-grid { grid-template-columns: 1fr; }
+            #total-position-size { grid-column: 1; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo"><a href="index.html">스르륵</a></div>
+        <h1>코인 선물<br>다중 물타기 & 청산가 계산기</h1>
+
+        <!-- 기본 설정 -->
+        <div class="control-group">
+            <div class="input-group">
+                <label>포지션</label>
+                <div class="toggle-switch">
+                    <button id="long-btn" class="active">롱(Long)</button>
+                    <button id="short-btn">숏(Short)</button>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>마진 모드</label>
+                <div class="toggle-switch">
+                    <button id="isolated-btn" class="active">격리</button>
+                    <button id="cross-btn">교차</button>
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="leverage">레버리지 (1x ~ 125x)</label>
+                <input type="number" id="leverage" value="10" min="1" max="125" step="1">
+            </div>
+            <div class="input-group">
+                <label for="exchange">거래소 수수료</label>
+                <select id="exchange">
+                    <option value="custom">직접 입력</option>
+                    <option value="binance">바이낸스 (0.02% / 0.05%)</option>
+                    <option value="bybit">바이비트 (0.02% / 0.055%)</option>
+                    <option value="bitget">비트겟 (0.02% / 0.06%)</option>
+                    <option value="okx">OKX (0.02% / 0.05%)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="maker-fee">Maker 수수료 (%)</label>
+                <input type="number" id="maker-fee" value="0.02" step="0.001">
+            </div>
+            <div class="input-group">
+                <label for="taker-fee">Taker 수수료 (%)</label>
+                <input type="number" id="taker-fee" value="0.05" step="0.001">
+            </div>
+        </div>
+
+        <!-- 진입 정보 -->
+        <div id="entries-container">
+            <div class="entry-row">
+                <div class="input-group">
+                    <label>1차 진입가 ($)</label>
+                    <input type="number" class="entry-price" placeholder="예: 50000">
+                </div>
+                <div class="input-group">
+                    <label>1차 투자액 (USDT)</label>
+                    <input type="number" class="entry-usdt" placeholder="예: 1000">
+                </div>
+                <button class="delete-btn" disabled>X</button>
+            </div>
+        </div>
+        <button id="add-entry-btn">+ 물타기 추가</button>
+
+        <!-- 슬라이더 (마지막 항목에 동적 추가) -->
+        <div id="slider-container" style="display: none;">
+             <div class="input-group slider-group">
+                <label for="usdt-slider">추가 투입액 (USDT) 실시간 조절</label>
+                <input type="range" id="usdt-slider" class="slider" min="0" max="10000" value="0">
+             </div>
+        </div>
+        
+    </div>
+    
+    <!-- 결과 표시 -->
+    <div class="container" id="results-container" style="display: none;">
+        <div class="result-grid">
+            <div class="result-item" id="final-avg-price">
+                <h3>최종 평단가</h3>
+                <p>$0</p>
+            </div>
+            <div class="result-item" id="break-even-price">
+                <h3>수수료 포함 본절가 (탈출가)</h3>
+                <p>$0</p>
+            </div>
+            <div class="result-item" id="liquidation-price">
+                <h3>예상 청산가</h3>
+                <p>$0</p>
+            </div>
+            <div class="result-item" id="total-usdt">
+                <h3>총 투입 USDT</h3>
+                <p>0 USDT</p>
+            </div>
+            <div class="result-item" id="total-position-size">
+                <h3>레버리지 반영 총 포지션</h3>
+                <p>0 USDT</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="seo-content">
+        <h2>코인 선물 물타기(DCA) 시뮬레이션이 필수인 이유 (청산 방어 전략)</h2>
+        <p>코인 선물 거래에서 '물타기' 또는 Dollar-Cost Averaging(DCA)은 변동성이 큰 시장에서 청산 위험을 관리하고 평균 진입 단가(평단가)를 개선하는 핵심 전략입니다. 하지만 레버리지를 사용하는 선물 거래의 특성상, 계획 없는 물타기는 오히려 증거금을 빠르게 소진시켜 청산을 앞당기는 독이 될 수 있습니다. 본 <strong>바이낸스 물타기 계산기</strong>는 이러한 위험을 사전에 방지하고, 체계적인 분할 매수 전략을 수립할 수 있도록 돕습니다. 여러 번의 추가 진입 시나리오를 미리 시뮬레이션하여 최종 평단가와 예상 청산가의 변화를 정밀하게 예측하고, 공격적인 동시에 안정적인 포지션 관리를 가능하게 합니다.</p>
+        
+        <h3>격리(Isolated) 마진과 교차(Cross) 마진의 물타기 차이점</h3>
+        <p>선물 거래의 마진 모드는 물타기 전략과 청산 가격에 결정적인 영향을 미칩니다.</p>
+        <ul>
+            <li><strong>격리(Isolated) 마진:</strong> 각 포지션에 할당된 증거금만이 청산의 기준이 됩니다. 물타기를 위해 추가 USDT를 투입하면, 해당 포지션의 증거금이 늘어나면서 진입가와 청산가 간의 거리가 멀어집니다. 즉, 추가 투입 자금만큼 청산 방어력이 직접적으로 강화됩니다. 본 계산기는 격리 모드를 기준으로, 추가 투입액이 청산가에 미치는 영향을 정확히 계산합니다.</li>
+            <li><strong>교차(Cross) 마진:</strong> 지갑에 보유한 모든 선물 자산이 모든 포지션의 증거금으로 공유됩니다. 한 포지션의 손실이 다른 포지션의 수익이나 다른 자산으로 메꿔질 수 있어 청산 가능성이 낮아지는 장점이 있지만, 한번 청산이 발생하면 모든 자산을 잃을 수 있는 치명적인 단점이 존재합니다. 교차 모드에서의 물타기는 전체 계정의 증거금 상태를 고려해야 하므로, 본 계산기에서는 'N/A'로 표시하여 격리 모드 사용을 권장합니다. 성공적인 리스크 관리를 위해서는 각 포지션을 개별적으로 통제할 수 있는 격리 마진 활용이 훨씬 효과적입니다.</li>
+        </ul>
+
+        <h3>숨은 함정: 레버리지 수수료와 진짜 본절가(Break-even)의 비밀</h3>
+        <p>많은 트레이더들이 자신의 '평단가'만 보고 포지션을 정리하다 손실을 보곤 합니다. 그 이유는 바로 '수수료'를 고려하지 않았기 때문입니다. 선물 거래에서는 포지션에 진입할 때와 종료할 때 모두 수수료가 발생하며, 이는 레버리지를 반영한 전체 포지션 규모에 비례하여 부과됩니다. 예를 들어 100 USDT에 100x 레버리지를 사용하면, 10,000 USDT에 대한 수수료를 내야 합니다. 따라서 실제 수익 분기점(본절가)은 나의 평단가보다 높거나(롱 포지션), 낮아지게(숏 포지션) 됩니다. 이 <strong>비트겟 청산가 계산</strong>기는 바이낸스, OKX 등 주요 거래소의 수수료율을 프리셋으로 제공하고, Taker/Maker 수수료를 직접 입력하여 레버리지를 모두 반영한 '진짜 본절가'를 계산해줍니다. 이 가격을 알아야만 미세한 손실 없이 완벽한 본절 탈출이 가능합니다.</p>
+
+        <h3>코인 트레이더들이 자주 묻는 질문 (FAQ)</h3>
+        <p><strong>1. 이 계산기는 모든 코인에 적용할 수 있나요?</strong><br>네, 특정 코인에 종속되지 않습니다. 비트코인(BTC), 이더리움(ETH) 등 모든 알트코인의 USDT 기반 선물 계약에 사용할 수 있습니다. 가격($)과 수량(USDT)만 정확히 입력하면 <strong>코인 선물 평단가</strong>와 청산가를 계산할 수 있습니다.</p>
+        <p><strong>2. '격리' 모드에서 청산가는 어떻게 계산되나요?</strong><br>롱 포지션 기준, 청산가는 대략 `진입가 * (1 - (초기 마진 / 레버리지))` 공식과 유사하게 계산됩니다. 하지만 실제로는 유지 증거금률 등 거래소의 복잡한 요소가 추가됩니다. 본 계산기는 `(총 코인 수량 * 평단가 - 총 투입 USDT) / (총 코인 수량 - 유지 증거금률 * 총 코인 수량)` 이라는 더 정밀한 추정 공식을 사용하여 실제 청산가와 매우 근사한 값을 제공합니다. (숏 포지션은 반대 로직 적용)</p>
+        <p><strong>3. 레버리지가 높을수록 수수료가 더 많이 나가나요?</strong><br>정확히 말하면, 레버리지 자체가 아니라 '레버리지를 통해 부풀려진 포지션 규모'가 수수료를 증가시킵니다. 예를 들어, 1,000 USDT로 10x 레버리지를 사용하면 10,000 USDT 규모의 포지션을 잡게 되고, 수수료도 10,000 USDT에 맞춰 부과됩니다. 따라서, 정확한 <strong>수수료 계산법</strong>을 이해하고 거래 비용을 최소화하는 전략이 중요합니다.</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // UI 요소
+            const longBtn = document.getElementById('long-btn');
+            const shortBtn = document.getElementById('short-btn');
+            const isolatedBtn = document.getElementById('isolated-btn');
+            const crossBtn = document.getElementById('cross-btn');
+            const leverageInput = document.getElementById('leverage');
+            const exchangeSelect = document.getElementById('exchange');
+            const makerFeeInput = document.getElementById('maker-fee');
+            const takerFeeInput = document.getElementById('taker-fee');
+            const entriesContainer = document.getElementById('entries-container');
+            const addEntryBtn = document.getElementById('add-entry-btn');
+            const resultsContainer = document.getElementById('results-container');
+            const sliderContainer = document.getElementById('slider-container');
+            const usdtSlider = document.getElementById('usdt-slider');
+
+            // 결과 표시 요소
+            const finalAvgPriceEl = resultsContainer.querySelector('#final-avg-price p');
+            const breakEvenPriceEl = resultsContainer.querySelector('#break-even-price p');
+            const liquidationPriceEl = resultsContainer.querySelector('#liquidation-price p');
+            const totalUsdtEl = resultsContainer.querySelector('#total-usdt p');
+            const totalPositionSizeEl = resultsContainer.querySelector('#total-position-size p');
+
+            // 거래소 수수료 프리셋
+            const fees = {
+                binance: { maker: 0.02, taker: 0.05 },
+                bybit: { maker: 0.02, taker: 0.055 },
+                bitget: { maker: 0.02, taker: 0.06 },
+                okx: { maker: 0.02, taker: 0.05 },
+            };
+            
+            // 이벤트 리스너
+            longBtn.addEventListener('click', () => toggleActive(longBtn, shortBtn, calculate));
+            shortBtn.addEventListener('click', () => toggleActive(shortBtn, longBtn, calculate));
+            isolatedBtn.addEventListener('click', () => toggleActive(isolatedBtn, crossBtn, calculate));
+            crossBtn.addEventListener('click', () => toggleActive(crossBtn, isolatedBtn, calculate));
+            
+            addEntryBtn.addEventListener('click', addEntryRow);
+            exchangeSelect.addEventListener('change', setExchangeFees);
+
+            [leverageInput, makerFeeInput, takerFeeInput].forEach(el => el.addEventListener('input', calculate));
+            entriesContainer.addEventListener('input', handleEntryInput);
+            usdtSlider.addEventListener('input', handleSliderInput);
+
+            function toggleActive(activeBtn, inactiveBtn, callback) {
+                activeBtn.classList.add('active');
+                inactiveBtn.classList.remove('active');
+                if (callback) callback();
+            }
+
+            function setExchangeFees() {
+                const selected = exchangeSelect.value;
+                if (selected !== 'custom') {
+                    makerFeeInput.value = fees[selected].maker;
+                    takerFeeInput.value = fees[selected].taker;
+                }
+                calculate();
+            }
+
+            let entryCount = 1;
+            function addEntryRow() {
+                entryCount++;
+                const newRow = document.createElement('div');
+                newRow.className = 'entry-row';
+                newRow.innerHTML = `
+                    <div class="input-group">
+                        <label>${entryCount}차 진입가 ($)</label>
+                        <input type="number" class="entry-price" placeholder="추가 진입가">
+                    </div>
+                    <div class="input-group">
+                        <label>${entryCount}차 투자액 (USDT)</label>
+                        <input type="number" class="entry-usdt" placeholder="추가 투자액">
+                    </div>
+                    <button class="delete-btn">X</button>
+                `;
+                entriesContainer.appendChild(newRow);
+                updateDeleteButtons();
+                updateSlider();
+            }
+            
+            entriesContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('delete-btn')) {
+                    e.target.parentElement.remove();
+                    entryCount--;
+                    updateEntryLabels();
+                    updateDeleteButtons();
+                    updateSlider();
+                    calculate();
+                }
+            });
+
+            function updateEntryLabels() {
+                const rows = entriesContainer.querySelectorAll('.entry-row');
+                rows.forEach((row, index) => {
+                    row.querySelector('.input-group label').textContent = `${index + 1}차 진입가 ($)`;
+                    row.querySelectorAll('.input-group label')[1].textContent = `${index + 1}차 투자액 (USDT)`;
+                });
+            }
+
+            function updateDeleteButtons() {
+                const deleteBtns = entriesContainer.querySelectorAll('.delete-btn');
+                deleteBtns.forEach((btn, index) => {
+                    btn.disabled = (deleteBtns.length === 1 && index === 0);
+                });
+            }
+            
+            function handleEntryInput(e) {
+                if (e.target.classList.contains('entry-price') || e.target.classList.contains('entry-usdt')) {
+                    updateSlider();
+                    calculate();
+                }
+            }
+
+            function updateSlider() {
+                const lastEntryUsdtInput = entriesContainer.querySelector('.entry-row:last-child .entry-usdt');
+                if (entriesContainer.querySelectorAll('.entry-row').length > 1) {
+                     sliderContainer.style.display = 'block';
+                     usdtSlider.value = parseFloat(lastEntryUsdtInput.value) || 0;
+                } else {
+                     sliderContainer.style.display = 'none';
+                }
+            }
+            
+            function handleSliderInput(e) {
+                const lastEntryUsdtInput = entriesContainer.querySelector('.entry-row:last-child .entry-usdt');
+                if (lastEntryUsdtInput) {
+                    lastEntryUsdtInput.value = e.target.value;
+                    // 값 변경 애니메이션 효과
+                    lastEntryUsdtInput.style.transition = 'background-color 0.1s ease-in-out';
+                    lastEntryUsdtInput.style.backgroundColor = 'var(--accent-glow)';
+                    setTimeout(() => {
+                        lastEntryUsdtInput.style.backgroundColor = 'var(--input)';
+                    }, 100);
+                    calculate();
+                }
+            }
+
+            function calculate() {
+                const isLong = longBtn.classList.contains('active');
+                const isIsolated = isolatedBtn.classList.contains('active');
+                const leverage = parseFloat(leverageInput.value) || 1;
+                const makerFee = parseFloat(makerFeeInput.value) / 100 || 0;
+                const takerFee = parseFloat(takerFeeInput.value) / 100 || 0;
+                // 가정: 첫 진입은 Taker, 물타기는 Maker로 계산
+                const entryFee = takerFee;
+                const exitFee = takerFee; // 종료는 일반적으로 지정가(Maker)가 아닌 시장가(Taker)로 가정
+
+                const entries = Array.from(entriesContainer.querySelectorAll('.entry-row')).map(row => ({
+                    price: parseFloat(row.querySelector('.entry-price').value) || 0,
+                    usdt: parseFloat(row.querySelector('.entry-usdt').value) || 0,
+                })).filter(e => e.price > 0 && e.usdt > 0);
+
+                if (entries.length === 0) {
+                    resultsContainer.style.display = 'none';
+                    return;
+                }
+                
+                resultsContainer.style.display = 'block';
+                
+                let totalUsdt = 0;
+                let totalCoinQuantity = 0;
+
+                entries.forEach((entry, index) => {
+                    const fee = (index === 0 ? entryFee : makerFee) * entry.usdt * leverage;
+                    const effectiveUsdt = entry.usdt * leverage - fee;
+                    totalCoinQuantity += effectiveUsdt / entry.price;
+                    totalUsdt += entry.usdt;
+                });
+
+                const avgPrice = (totalCoinQuantity > 0) ? (totalUsdt * leverage) / totalCoinQuantity : 0;
+                
+                // 본절가 계산
+                const totalPositionValue = totalCoinQuantity * avgPrice;
+                const totalExitFee = totalPositionValue * exitFee;
+                const breakEvenPrice = isLong 
+                    ? (totalPositionValue + totalExitFee) / totalCoinQuantity
+                    : (totalPositionValue - totalExitFee) / totalCoinQuantity;
+                
+                // 청산가 계산 (격리 모드 기준, 유지증거금률 0.5% 가정 - 거래소마다 다름)
+                let liquidationPrice = 0;
+                if(isIsolated && avgPrice > 0){
+                    const maintenanceMarginRate = 0.005; // 0.5%
+                    const maintenanceMargin = totalCoinQuantity * avgPrice * maintenanceMarginRate;
+                    
+                    if(isLong){
+                        liquidationPrice = avgPrice * (1 - (totalUsdt / (totalCoinQuantity * avgPrice))) + (maintenanceMargin / totalCoinQuantity);
+                        //liquidationPrice = (avgPrice * totalCoinQuantity - totalUsdt) / (totalCoinQuantity * (1-maintenanceMarginRate));
+                    } else { // Short
+                        liquidationPrice = avgPrice * (1 + (totalUsdt / (totalCoinQuantity * avgPrice))) - (maintenanceMargin / totalCoinQuantity);
+                        //liquidationPrice = (avgPrice * totalCoinQuantity + totalUsdt) / (totalCoinQuantity * (1+maintenanceMarginRate));
+                    }
+                }
+
+                // 결과 업데이트
+                finalAvgPriceEl.textContent = `$${formatNumber(avgPrice)}`;
+                breakEvenPriceEl.textContent = `$${formatNumber(breakEvenPrice)}`;
+                liquidationPriceEl.textContent = isIsolated ? `$${formatNumber(Math.max(0, liquidationPrice))}` : 'N/A (교차)';
+                totalUsdtEl.textContent = `${formatNumber(totalUsdt)} USDT`;
+                totalPositionSizeEl.textContent = `${formatNumber(totalCoinQuantity * avgPrice)} USDT`;
+
+                // 실시간 결과창 애니메이션
+                resultsContainer.style.animation = 'none';
+                void resultsContainer.offsetWidth; // 리플로우 강제
+                resultsContainer.style.animation = 'fadeIn 0.5s ease-in-out';
+            }
+
+            function formatNumber(num) {
+                if (isNaN(num) || !isFinite(num)) return '0';
+                return num.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                });
+            }
+            
+            // 초기화
+            setExchangeFees();
+            updateDeleteButtons();
+            calculate();
+        });
+    </script>
+</body>
+</html>
