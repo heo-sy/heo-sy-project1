@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>복리 계산기 | 수수료 반영, 손실 복구 플래너</title>
-    <meta name="description" content="수수료를 반영한 실전 트레이딩 복리 계산기. 손실률에 따른 원금 회복 필요 수익률(비대칭 손실)을 한눈에 확인하고, 장기적인 자산 증식 계획을 시뮬레이션하세요.">
-    <meta name="keywords" content="복리 계산기, 주식 복리, 코인 복리, 수수료, 손실 복구, 비대칭 손실, 자산 관리, 투자 시뮬레이터">
+    <title>실전 복리 매매 시뮬레이터</title>
+    <meta name="description" content="수수료를 반영한 실전 트레이딩 복리 시뮬레이터. 일별 자산 변화 데이터를 통해 수수료를 이기는 복리의 힘을 직접 확인하세요.">
+    <meta name="keywords" content="복리 계산기, 복리 시뮬레이터, 트레이딩, 수수료, 데이터 분석, 자산 증식, 투자 시뮬레이션">
 
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 
@@ -16,9 +16,7 @@
             --input: #1A1A1A;
             --accent-orange: #FF7A00;
             --accent-blue: #00B2FF;
-            --accent-red: #FF4141;
-            --accent-glow-orange: rgba(255, 122, 0, 0.4);
-            --accent-glow-red: rgba(255, 65, 65, 0.5);
+            --accent-glow-blue: rgba(0, 178, 255, 0.4);
             --text: #EAEAEA;
             --text-dim: #888888;
             --border: #2A2A2A;
@@ -35,7 +33,6 @@
             line-height: 1.7;
         }
 
-        /* --- Navigation --- */
         .main-nav {
             background-color: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
@@ -67,9 +64,9 @@
             padding: 40px 20px;
         }
 
-        header { text-align: center; margin-bottom: 50px; }
+        header { text-align: center; margin-bottom: 40px; }
         h1 { font-size: 2.2rem; font-weight: 900; color: var(--text); margin-bottom: 10px; }
-        h1 span { color: var(--accent-orange); }
+        h1 span { color: var(--accent-blue); }
         header p { color: var(--text-dim); font-size: 1.1rem; }
 
         .panel {
@@ -90,8 +87,9 @@
 
         .input-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 20px;
+            margin-bottom: 25px;
         }
         .input-group label {
             display: block;
@@ -113,58 +111,92 @@
             transition: border-color 0.2s, box-shadow 0.2s;
         }
         .input-group input:focus {
-            border-color: var(--accent-orange);
-            box-shadow: 0 0 0 3px var(--accent-glow-orange);
+            border-color: var(--accent-blue);
         }
+        input::placeholder { color: var(--text-dim); font-weight: normal; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
 
-        /* --- Result Panel --- */
-        .result-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        .calc-button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--bg);
+            background: var(--accent-blue);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .result-item { text-align: center; }
-        .result-item .label { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 5px; }
-        .result-item .value { font-size: 1.8rem; font-weight: bold; }
-        .value.highlight-orange { color: var(--accent-orange); }
-        .value.highlight-red { color: var(--accent-red); text-shadow: 0 0 10px var(--accent-glow-red); }
+        .calc-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--accent-glow-blue);
+        }
 
-        /* --- Loss Recovery Table --- */
-        #recovery-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        #recovery-table th, #recovery-table td { 
-            padding: 12px;
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .summary-card {
+            background: var(--input);
+            padding: 20px;
+            border-radius: 8px;
             text-align: center;
+        }
+        .summary-card .label {
+            font-size: 1rem;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+        }
+        .summary-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-blue);
+        }
+        
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 8px;
             border: 1px solid var(--border);
         }
-        #recovery-table th { background-color: var(--input); font-weight: bold; }
-        #recovery-table td:last-child { color: var(--accent-red); font-weight: bold; }
-
-        /* --- SEO Content --- */
-        .seo-panel { padding: 30px; }
-        .toc {
-            background-color: var(--input);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
+        #result-table {
+            width: 100%;
+            border-collapse: collapse;
         }
+        #result-table th, #result-table td {
+            padding: 12px 15px;
+            text-align: right;
+            white-space: nowrap;
+        }
+        #result-table thead th {
+            background-color: var(--input);
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+        #result-table tbody tr:nth-child(even) { background-color: var(--input); }
+        #result-table tbody tr:hover { background-color: #2a2a2a; }
+        
+        #result-container { display: none; }
+
+        .seo-panel { padding: 30px; }
+        .toc { background-color: var(--input); padding: 20px; border-radius: 10px; margin-bottom: 30px; }
         .toc h2 { font-size: 1.2rem; margin-top: 0; margin-bottom: 15px; }
         .toc ul { list-style-type: none; padding-left: 0; }
         .toc li { margin-bottom: 10px; }
         .toc a { color: var(--text-dim); text-decoration: none; font-weight: bold; }
         .toc a:hover { color: var(--accent-orange); text-decoration: underline; }
-
         .seo-content h2 { color: var(--accent-orange); scroll-margin-top: 80px; }
         .seo-content h3 { color: var(--accent-blue); margin-top: 25px; }
-        .seo-content p, .seo-content li { color: #BDBDBD; text-align: justify; }
+        .seo-content p { color: #BDBDBD; text-align: justify; }
         .seo-content code { background-color: var(--input); padding: 2px 6px; border-radius: 4px; font-weight: bold; }
         .seo-content strong { color: var(--accent-orange); }
 
-        /* --- Responsive --- */
         @media (max-width: 600px) {
             .container { padding: 20px 15px; }
-            header { margin-bottom: 30px; }
             h1 { font-size: 1.8rem; }
             .panel { padding: 20px; }
         }
@@ -177,84 +209,70 @@
 
     <div class="container">
         <header>
-            <h1>실전 <span>복리 계산기</span></h1>
-            <p>수수료와 손실 복구의 함정을 고려한 현실적인 자산 증식 시뮬레이터</p>
+            <h1>실전 복리 매매 <span>시뮬레이터</span></h1>
+            <p>수수료를 반영한 일별 자산 변화를 데이터로 직접 확인하세요.</p>
         </header>
 
-        <!-- Loss Recovery Panel -->
-        <section class="panel">
-            <h2>손실 복구 계산기</h2>
-            <div class="input-grid">
-                <div class="input-group">
-                    <label for="loss-rate">현재 손실률 (%)</label>
-                    <input type="number" id="loss-rate" placeholder="-50" oninput="calculateRecovery()">
-                </div>
-                <div class="result-item" style="margin: auto;">
-                    <div class="label">원금 회복에 필요한 수익률</div>
-                    <div class="value highlight-red" id="recovery-rate">100.00%</div>
-                </div>
-            </div>
-            <table id="recovery-table">
-                <thead>
-                    <tr><th>손실률</th><th>필요 수익률</th><th>손실률</th><th>필요 수익률</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>-10%</td><td>11.11%</td><td>-60%</td><td>150.00%</td></tr>
-                    <tr><td>-20%</td><td>25.00%</td><td>-70%</td><td>233.33%</td></tr>
-                    <tr><td>-30%</td><td>42.86%</td><td>-80%</td><td>400.00%</td></tr>
-                    <tr><td>-40%</td><td>66.67%</td><td>-90%</td><td>900.00%</td></tr>
-                    <tr><td>-50%</td><td>100.00%</td><td>-95%</td><td>1900.00%</td></tr>
-                </tbody>
-            </table>
-        </section>
-
-        <!-- Compound Interest Panel -->
         <section class="panel">
             <h2>시뮬레이션 조건 설정</h2>
             <div class="input-grid">
                 <div class="input-group">
-                    <label for="start-asset">시작 자산 ($)</label>
-                    <input type="number" id="start-asset" value="10000">
+                    <label for="start-asset">시작 자산 (USDT)</label>
+                    <input type="number" id="start-asset" placeholder="예: 10000">
                 </div>
                 <div class="input-group">
-                    <label for="target-return">회당 목표 수익률 (%)</label>
-                    <input type="number" id="target-return" value="10">
+                    <label for="daily-return">목표 일일 수익률 (%)</label>
+                    <input type="number" id="daily-return" placeholder="예: 2">
                 </div>
                 <div class="input-group">
-                    <label for="trade-count">매매 횟수</label>
-                    <input type="number" id="trade-count" value="30">
+                    <label for="period">시뮬레이션 기간 (일)</label>
+                    <input type="number" id="period" placeholder="최대 365일">
                 </div>
                 <div class="input-group">
                     <label for="fee-rate">왕복 수수료 (%)</label>
-                    <input type="number" id="fee-rate" value="0.1">
+                    <input type="number" id="fee-rate" placeholder="예: 0.1">
                 </div>
             </div>
+            <button id="calc-button" class="calc-button">시뮬레이션 실행</button>
         </section>
         
-        <!-- Result Panel -->
-        <section class="panel">
-             <h2>시뮬레이션 결과</h2>
-            <div class="result-grid">
-                <div class="result-item">
-                    <div class="label">수수료 없는 최종 자산</div>
-                    <div class="value" id="final-asset-no-fee">$0</div>
+        <div id="result-container">
+            <section class="panel">
+                <h2>시뮬레이션 요약</h2>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="label">최종 예상 잔고</div>
+                        <div class="value" id="final-balance"></div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="label">총 수익금액</div>
+                        <div class="value" id="total-profit"></div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="label">총 수익률</div>
+                        <div class="value" id="total-return-rate"></div>
+                    </div>
                 </div>
-                <div class="result-item">
-                    <div class="label">수수료 반영 실질 자산</div>
-                    <div class="value highlight-orange" id="final-asset-with-fee">$0</div>
-                </div>
-                <div class="result-item">
-                    <div class="label">총 납부 수수료</div>
-                    <div class="value" id="total-fees">$0</div>
-                </div>
-                <div class="result-item">
-                    <div class="label">수수료로 인한 손실</div>
-                    <div class="value highlight-red" id="loss-by-fees">0.00%</div>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- SEO Content -->
+            <section class="panel">
+                <h2>일별 상세 데이터</h2>
+                <div class="table-container">
+                    <table id="result-table">
+                        <thead>
+                            <tr>
+                                <th>회차(일)</th>
+                                <th>시작 잔고</th>
+                                <th>수익금(수수료 차감 후)</th>
+                                <th>종료 잔고</th>
+                            </tr>
+                        </thead>
+                        <tbody id="result-body"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
         <div class="panel seo-panel">
             <div class="toc">
                 <h2>목차 (Table of Contents)</h2>
@@ -269,7 +287,7 @@
                 <p>"복리(Compound Interest)는 세계 8대 불가사의다. 이를 이해하는 자는 돈을 벌고, 그렇지 않은 자는 돈을 지불하게 될 것이다." 알버트 아인슈타인이 남긴 이 말은 투자의 핵심 원리를 관통합니다. 단리(Simple Interest)가 원금에 대해서만 이자를 계산하는 반면, 복리는 <strong>원금과 누적된 이자를 합친 금액에 대해 다시 이자를 계산</strong>합니다. 이는 마치 눈덩이를 굴리는 것과 같습니다. 처음에는 미미한 차이지만, 시간이 지날수록 그 크기는 기하급수적으로 불어납니다. 이 계산기는 당신의 투자 전략이 복리의 마법을 얼마나 효과적으로 활용할 수 있는지, 혹은 해로운 복리(비용)의 저주에 빠져있는지를 수학적으로 명확하게 보여줍니다.</p>
 
                 <h2 id="toc-2">2. 복리의 적: 티끌 같은 수수료가 태산을 무너뜨리는 과정</h2>
-                <p>많은 투자자들이 0.1% 내외의 거래 수수료를 대수롭지 않게 여깁니다. 그러나 이는 복리의 관점에서 치명적인 착각입니다. 당신이 10%의 수익을 내는 매매를 30번 반복한다고 가정해 봅시다. 수수료가 없다면, 1,000만 원은 약 1억 7,449만 원이 됩니다. 하지만 여기에 <strong>매 회당 0.1%의 왕복 수수료</strong>가 붙는다면 어떻게 될까요? 매번 수익률은 9.9% (10% - 0.1%)로 미세하게 감소합니다. 30번의 거래가 끝나면 당신의 최종 자산은 약 1억 6,453만 원이 됩니다. 수수료로 인해 사라진 돈은 약 1,000만 원이며, 이는 초기 원금과 맞먹는 금액입니다. 잦은 거래(오버 트레이딩)는 당신도 모르는 사이 복리의 눈덩이를 녹이는 주범이 됩니다. <strong>성공적인 투자의 첫걸음은 수익을 내는 것이 아니라, 비용을 통제하는 것입니다.</strong></p>
+                <p>많은 투자자들이 0.1% 내외의 거래 수수료를 대수롭지 않게 여깁니다. 그러나 이는 복리의 관점에서 치명적인 착각입니다. 당신이 2%의 수익을 내는 매매를 30일간 반복한다고 가정해 봅시다. 수수료가 없다면, 1,000만 원은 약 1,811만 원이 됩니다. 하지만 여기에 <strong>매 회당 0.1%의 왕복 수수료</strong>가 붙는다면 어떻게 될까요? 매일 원금에서 수수료가 선차감되고, 남은 금액으로 수익이 발생합니다. 30일이 지나면 당신의 최종 자산은 약 1,757만 원이 됩니다. 수수료로 인해 사라진 돈은 약 54만 원에 달합니다. 기간이 길어지고 거래가 잦아질수록 이 차이는 눈덩이처럼 불어납니다. <strong>성공적인 투자의 첫걸음은 수익을 내는 것이 아니라, 비용을 통제하는 것입니다.</strong></p>
 
                 <h2 id="toc-3">3. 손실 복구의 수학: -50%가 +100%가 되어야 하는 이유(비대칭 손실)</h2>
                 <p>투자의 세계에서 수익과 손실은 결코 대칭적이지 않습니다. 만약 1,000만 원의 자산이 -50% 손실을 입어 500만 원이 되었다면, 원금 1,000만 원으로 돌아가기 위해 필요한 수익률은 얼마일까요? 정답은 50%가 아닌 <strong>100%</strong>입니다. 남은 500만 원으로 500만 원의 수익을 내야 하기 때문입니다. 이처럼 손실률이 깊어질수록 원금 회복에 필요한 수익률은 기하급수적으로 증가하는 현상을 <strong>'비대칭 손실의 원리(Asymmetry of Loss)'</strong>라고 합니다. -20%의 손실은 +25%의 수익으로 회복할 수 있지만, -80%의 손실은 무려 +400%의 수익을 내야만 본전입니다. 이는 '물타기'나 '존버'가 왜 위험한지를 수학적으로 증명합니다. 큰 손실은 단순히 자산의 일부를 잃는 것이 아니라, 회복 불가능한 상태로 가는 지름길이 될 수 있습니다. 따라서 손실을 보기 전에 리스크를 관리하는 것, 즉 '손절'이 장기 생존의 핵심 열쇠인 것입니다.</p>
@@ -278,73 +296,64 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const inputs = ['start-asset', 'target-return', 'trade-count', 'fee-rate', 'loss-rate'];
-            inputs.forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.addEventListener('input', calculateAll);
-            });
+        document.getElementById('calc-button').addEventListener('click', () => {
+            const startAsset = parseFloat(document.getElementById('start-asset').value) || 0;
+            const dailyReturn = parseFloat(document.getElementById('daily-return').value) || 0;
+            let period = parseInt(document.getElementById('period').value) || 0;
+            const feeRate = parseFloat(document.getElementById('fee-rate').value) || 0;
 
-            calculateAll(); // Initial calculation
-        });
-
-        function parse(id) {
-            const val = document.getElementById(id).value;
-            const parsed = parseFloat(val);
-            return isNaN(parsed) || parsed < 0 ? 0 : parsed;
-        }
-
-        function calculateAll() {
-            calculateRecovery();
-            calculateCompound();
-        }
-
-        function calculateRecovery() {
-            const lossRateInput = document.getElementById('loss-rate');
-            const lossRate = lossRateInput.value ? parse('loss-rate') : 50; // Default to 50 if empty
-            
-            let recoveryRate = 0;
-            if (lossRate > 0 && lossRate < 100) {
-                recoveryRate = (1 / (1 - lossRate / 100) - 1) * 100;
-            }
-            document.getElementById('recovery-rate').textContent = recoveryRate.toFixed(2) + '%';
-        }
-
-        function calculateCompound() {
-            const startAsset = parse('start-asset');
-            const targetReturn = parse('target-return') / 100;
-            const tradeCount = parse('trade-count');
-            const feeRate = parse('fee-rate') / 100;
-
-            if (startAsset <= 0 || tradeCount <= 0) {
-                // 초기값 또는 오류 처리
-                document.getElementById('final-asset-no-fee').textContent = '$' + startAsset.toLocaleString();
-                document.getElementById('final-asset-with-fee').textContent = '$' + startAsset.toLocaleString();
-                document.getElementById('total-fees').textContent = '$0';
-                document.getElementById('loss-by-fees').textContent = '0.00%';
+            if (startAsset <= 0 || period <= 0) {
+                alert("시작 자산과 시뮬레이션 기간을 올바르게 입력해주세요.");
                 return;
             }
-
-            // 수수료 없는 계산
-            const finalAssetNoFee = startAsset * Math.pow((1 + targetReturn), tradeCount);
             
-            // 수수료 반영 계산
-            let finalAssetWithFee = startAsset;
-            let totalFees = 0;
-            for (let i = 0; i < tradeCount; i++) {
-                const fee = finalAssetWithFee * feeRate;
-                totalFees += fee;
-                finalAssetWithFee -= fee; // 수수료 차감
-                finalAssetWithFee *= (1 + targetReturn); // 수익률 적용
+            // Limit period to prevent browser freeze
+            if (period > 365) {
+                alert("시뮬레이션 기간은 최대 365일로 제한됩니다.");
+                period = 365;
+                document.getElementById('period').value = 365;
             }
-            
-            const lossByFees = finalAssetNoFee > 0 ? (1 - finalAssetWithFee / finalAssetNoFee) * 100 : 0;
 
-            document.getElementById('final-asset-no-fee').textContent = '$' + Math.round(finalAssetNoFee).toLocaleString();
-            document.getElementById('final-asset-with-fee').textContent = '$' + Math.round(finalAssetWithFee).toLocaleString();
-            document.getElementById('total-fees').textContent = '$' + Math.round(totalFees).toLocaleString();
-            document.getElementById('loss-by-fees').textContent = lossByFees.toFixed(2) + '%';
-        }
+            const dailyReturnRate = dailyReturn / 100;
+            const feeDecimal = feeRate / 100;
+            
+            let currentBalance = startAsset;
+            let resultBody = document.getElementById('result-body');
+            resultBody.innerHTML = ''; // Clear previous results
+
+            for (let i = 1; i <= period; i++) {
+                const startOfDayBalance = currentBalance;
+                
+                // 실전 로직: 수수료를 원금에서 선차감
+                const fee = startOfDayBalance * feeDecimal;
+                const balanceAfterFee = startOfDayBalance - fee;
+                
+                const profit = balanceAfterFee * dailyReturnRate;
+                const endOfDayBalance = balanceAfterFee + profit;
+                
+                currentBalance = endOfDayBalance;
+
+                // Add row to table
+                const row = `<tr>
+                    <td>${i}일</td>
+                    <td>${Math.round(startOfDayBalance).toLocaleString()}</td>
+                    <td>${Math.round(profit).toLocaleString()}</td>
+                    <td>${Math.round(endOfDayBalance).toLocaleString()}</td>
+                </tr>`;
+                resultBody.innerHTML += row;
+            }
+
+            // Update summary cards
+            const totalProfit = currentBalance - startAsset;
+            const totalReturnRate = (totalProfit / startAsset) * 100;
+
+            document.getElementById('final-balance').textContent = `${Math.round(currentBalance).toLocaleString()} USDT`;
+            document.getElementById('total-profit').textContent = `${Math.round(totalProfit).toLocaleString()} USDT`;
+            document.getElementById('total-return-rate').textContent = `${totalReturnRate.toFixed(2)}%`;
+
+            // Show result container
+            document.getElementById('result-container').style.display = 'block';
+        });
     </script>
 </body>
 </html>
