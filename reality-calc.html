@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>트레이더 생존 확률 & 복구 마스터플랜</title>
+    <meta name="description" content="당신이 시장에서 퇴출당하는 수학적 이유: 수수료와 복구율의 함정. 실전 수수료, 슬리피지, 승률, 손익비를 반영한 복리 시뮬레이터로 파산 확률과 생존 전략을 분석합니다.">
+    <meta name="keywords" content="복리 계산기, 트레이딩, 생존 확률, 켈리 공식, MDD, 손실 복구, 수수료, 슬리피지, 손익비, 자산 관리">
+
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+    <style>
+        :root {
+            --bg: #000000;
+            --card: #0A0A0A;
+            --input: #1A1A1A;
+            --accent-orange: #FF7A00;
+            --accent-blue: #00B2FF;
+            --accent-red: #FF4141;
+            --accent-glow-orange: rgba(255, 122, 0, 0.4);
+            --accent-glow-blue: rgba(0, 178, 255, 0.4);
+            --accent-glow-red: rgba(255, 65, 65, 0.5);
+            --text: #EAEAEA;
+            --text-dim: #888888;
+            --border: #2A2A2A;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: "Pretendard", "Menlo", "Consolas", monospace;
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.7;
+        }
+
+        /* --- Navigation --- */
+        .main-nav {
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+        .main-nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .main-nav a:hover {
+            background-color: var(--input);
+            color: var(--accent-orange);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header { text-align: center; margin-bottom: 50px; }
+        h1 { font-size: 2.2rem; font-weight: 900; color: var(--text); margin-bottom: 10px; }
+        h1 span { color: var(--accent-orange); }
+        header p { color: var(--text-dim); font-size: 1.1rem; }
+
+        /* --- Main Grid --- */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 25px;
+        }
+
+        /* --- Input & Analysis Panel --- */
+        .panel {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+        }
+        .panel h2 {
+            font-size: 1.5rem;
+            color: var(--accent-blue);
+            margin-top: 0;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .input-group label {
+            display: block;
+            color: var(--text-dim);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+        .input-group input {
+            width: 100%;
+            background: var(--input);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: right;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .input-group input:focus {
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 0 3px var(--accent-glow-orange);
+        }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+
+        /* --- Analysis Cards --- */
+        .analysis-card { margin-bottom: 20px; }
+        .analysis-card h3 {
+            color: var(--accent-orange);
+            font-size: 1.2rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .analysis-card .result-box {
+            background-color: var(--input);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .analysis-card .label {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 5px;
+        }
+        .analysis-card .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .value.highlight-red { color: var(--accent-red); text-shadow: 0 0 10px var(--accent-glow-red); }
+        .value.highlight-blue { color: var(--accent-blue); text-shadow: 0 0 10px var(--accent-glow-blue); }
+
+        /* --- Result Panel --- */
+        #result-panel h2 { color: var(--accent-orange); }
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .result-item { text-align: center; }
+        #final-asset.value { font-size: 2.2rem; }
+
+        /* --- SEO Content --- */
+        .seo-panel { padding: 30px; }
+        .toc {
+            background-color: var(--input);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .toc h2 { font-size: 1.2rem; color: var(--accent-orange); margin-top: 0; margin-bottom: 15px; }
+        .toc ul { list-style-type: none; padding-left: 0; }
+        .toc li { margin-bottom: 10px; }
+        .toc a { color: var(--text-dim); text-decoration: none; font-weight: bold; }
+        .toc a:hover { color: var(--accent-orange); text-decoration: underline; }
+
+        .seo-content h2 { color: var(--accent-blue); scroll-margin-top: 80px; }
+        .seo-content h3 { color: var(--accent-orange); margin-top: 25px; }
+        .seo-content p, .seo-content li { color: #BDBDBD; text-align: justify; }
+        .seo-content code { background-color: var(--input); padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .seo-content strong { color: var(--accent-orange); }
+
+        /* --- Responsive --- */
+        @media (max-width: 900px) {
+            .main-grid { grid-template-columns: 1fr; }
+            header { margin-bottom: 40px; }
+            h1 { font-size: 1.8rem; }
+        }
+        @media (max-width: 600px) {
+            .input-grid { grid-template-columns: 1fr; }
+            .container { padding: 20px 15px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <a href="index.html">⬅ 메인 대시보드로 돌아가기</a>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>트레이더 <span>생존 확률</span> & 복구 마스터플랜</h1>
+            <p>수수료와 복리, 파산의 수학적 관계 시뮬레이터</p>
+        </header>
+
+        <div class="main-grid">
+            <main>
+                <!-- Input Panel -->
+                <section id="input-panel" class="panel">
+                    <h2>초정밀 입력 섹션</h2>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="start-asset">시작 자산 ($)</label>
+                            <input type="number" id="start-asset" value="10000">
+                        </div>
+                        <div class="input-group">
+                            <label for="target-return">목표 수익률 (%)</label>
+                            <input type="number" id="target-return" value="100">
+                        </div>
+                        <div class="input-group">
+                            <label for="win-rate">승률 (%)</label>
+                            <input type="number" id="win-rate" value="55">
+                        </div>
+                        <div class="input-group">
+                            <label for="pnl-ratio">평균 손익비 (R:R)</label>
+                            <input type="number" id="pnl-ratio" value="1.5">
+                        </div>
+                        <div class="input-group">
+                            <label for="fee-rate">거래 수수료 (%, 왕복)</label>
+                            <input type="number" id="fee-rate" value="0.1">
+                        </div>
+                        <div class="input-group">
+                            <label for="slippage">슬리피지 (%, 왕복)</label>
+                            <input type="number" id="slippage" value="0.05">
+                        </div>
+                        <div class="input-group">
+                            <label for="trade-count">매매 횟수 (누적)</label>
+                            <input type="number" id="trade-count" value="100">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Result Panel -->
+                <section id="result-panel" class="panel">
+                    <h2>시뮬레이션 결과</h2>
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <div class="label">예상 최종 자산</div>
+                            <div class="value highlight-orange" id="final-asset">$0</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="label">최종 수익률</div>
+                            <div class="value" id="final-return">0.00%</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="label">기하 평균 수익률 (1회당)</div>
+                            <div class="value" id="geo-mean-return">0.00%</div>
+                        </div>
+                        <div class="result-item">
+                            <div class="label">총 납부 비용 (수수료+슬리피지)</div>
+                            <div class="value" id="total-cost">$0</div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <aside>
+                <!-- Analysis Panel -->
+                <div class="panel">
+                    <div class="analysis-card">
+                        <h3>손실 복구 팩트 체크</h3>
+                        <div class="input-group">
+                            <label for="loss-rate">현재 손실률 (%)</label>
+                            <input type="number" id="loss-rate" placeholder="-50">
+                        </div>
+                        <div class="result-box" style="margin-top: 15px;">
+                            <div class="label">원금 회복에 필요한 수익률</div>
+                            <div class="value highlight-red" id="recovery-rate">0.00%</div>
+                        </div>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3>켈리 공식 가이드</h3>
+                        <div class="result-box">
+                            <div class="label">파산 방지를 위한 최적 베팅 비중</div>
+                            <div class="value highlight-blue" id="kelly-bet-size">0.00%</div>
+                        </div>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3>최악의 시나리오 (MDD)</h3>
+                         <div class="result-box">
+                            <div class="label">50% 손실까지 허용 가능한 연속 패배</div>
+                            <div class="value" id="mdd-streak">0회</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- SEO Content -->
+        <div class="panel seo-panel">
+            <div class="toc">
+                <h2>목차 (Table of Contents)</h2>
+                <ul>
+                    <li><a href="#toc-1">1. 서론: 당신이 시장에서 퇴출당하는 수학적 이유</a></li>
+                    <li><a href="#toc-2">2. 복리의 파괴자: 수수료와 슬리피지의 실체</a></li>
+                    <li><a href="#toc-3">3. 손실 복구의 함정: -50%는 +100%로만 회복 가능하다</a></li>
+                    <li><a href="#toc-4">4. 과학적 리스크 관리: 켈리 공식과 2% 룰</a></li>
+                </ul>
+            </div>
+            <div class="seo-content">
+                <h2 id="toc-1">1. 서론: 당신이 시장에서 퇴출당하는 수학적 이유</h2>
+                <p>대부분의 트레이더는 심리적 요인으로 시장을 떠난다고 믿지만, 월가의 퀀트들은 명확히 알고 있습니다. <strong>퇴출의 99%는 수학적 파산입니다.</strong> 그들은 '어떻게 돈을 벌 것인가'에만 집중할 뿐, '어떻게 돈을 잃지 않을 것인가'의 수학적 모델을 이해하지 못합니다. 이 시뮬레이터는 당신의 매매 전략이 장기적으로 통계적 우위를 가지는지, 아니면 결국 0에 수렴하는지를 냉혹하게 증명합니다.</p>
+
+                <h2 id="toc-2">2. 복리의 파괴자: 수수료와 슬리피지의 실체</h2>
+                <p>승률 55%에 손익비 1.5인 전략이 있다고 가정합시다. 표면적으로는 기대값이 양수(+)이므로 돈을 벌 것처럼 보입니다. 하지만 여기에 왕복 거래 수수료 0.1%와 슬리피지(체결 오차) 0.05%가 추가되면 어떻게 될까요? 당신이 100번 매매한다면, 총 15% (0.15% * 100)의 자본이 '비용'으로 증발합니다. 이는 당신의 수익률에서 그대로 차감됩니다. 잦은 매매(스캘핑, 단타)를 할수록 이 비용은 복리의 마법을 파괴하고, 당신의 계좌를 서서히 좀먹습니다. <strong>수익을 내기 전에, 당신의 전략이 비용을 이길 수 있는지부터 증명해야 합니다.</strong></p>
+
+                <h2 id="toc-3">3. 손실 복구의 함정: -50%는 +100%로만 회복 가능하다</h2>
+                <p>많은 투자자들이 "손실은 만회하면 된다"고 쉽게 생각하지만, 여기에는 치명적인 수학적 함정이 있습니다. 당신의 자산이 1,000만 원에서 500만 원으로, 즉 <strong>-50%</strong>가 되었다고 가정합시다. 원금 1,000만 원으로 돌아가려면 남은 500만 원으로 500만 원을 벌어야 합니다. 이는 <strong>+100%</strong>의 수익률을 의미합니다. -80%가 손실이 났다면, 복구에는 +400%가 필요합니다. 손실률이 깊어질수록 복구에 필요한 수익률은 기하급수적으로 증가합니다. 이것이 '손절'이 선택이 아닌 필수인 이유입니다. 큰 손실 한 번이 당신의 트레이딩 커리어 전체를 끝낼 수 있습니다.</p>
+
+                <h2 id="toc-4">4. 과학적 리스크 관리: 켈리 공식과 2% 룰</h2>
+                <h3>켈리 공식 (Kelly Criterion)</h3>
+                <p>전설적인 퀀트 존 켈리가 개발한 이 공식은 장기적으로 수익을 극대화하면서도 파산 위험은 0으로 만드는 최적의 베팅 비율을 알려줍니다. 공식은 <code>K% = W - [(1 - W) / R]</code> (W: 승률, R: 손익비) 입니다. 예를 들어 승률 55%, 손익비 2라면, 켈리 비율은 <code>0.55 - [(1 - 0.55) / 2] = 32.5%</code> 입니다. 이는 매 거래마다 총자산의 32.5%를 베팅하는 것이 수학적으로 가장 이상적이라는 의미입니다. 하지만 이는 변동성을 극대화하므로, 실전에서는 계산된 값의 절반(하프 켈리)이나 1/4을 사용하는 것이 일반적입니다.</p>
+                <h3>'자산 대비 2%' 룰의 과학적 근거</h3>
+                <p>많은 전문 트레이더들이 '단일 거래에서 총자산의 2% 이상을 리스크에 노출시키지 말라'는 원칙을 지킵니다. 왜일까요? 이 원칙을 사용하면, 이론적으로 계좌가 50% 손실을 보기까지 <strong>연속으로 34번</strong>을 잃어야 합니다. <code>log(0.5) / log(1 - 0.02) ≈ 34.3</code>. 승률이 50%인 트레이더가 연속 34번 패배할 확률은 거의 0에 가깝습니다. 이는 최악의 상황(Black Swan)이 닥치더라도 시장에서 퇴출당하지 않고, 재기할 기회를 가질 수 있는 강력한 수학적 방어막이 되어줍니다. 리스크 관리는 수익률을 쫓는 것보다 항상 우선되어야 합니다.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = ['start-asset', 'target-return', 'win-rate', 'pnl-ratio', 'fee-rate', 'slippage', 'trade-count', 'loss-rate'];
+            inputs.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.addEventListener('input', calculateAll);
+            });
+            
+            function parse(id) {
+                const val = document.getElementById(id).value;
+                const parsed = parseFloat(val);
+                return isNaN(parsed) || parsed < 0 ? 0 : parsed;
+            }
+
+            function calculateAll() {
+                // --- Analysis Panel Calculations ---
+                
+                // 1. Loss Recovery
+                const lossRate = parse('loss-rate');
+                let recoveryRate = 0;
+                if (lossRate > 0 && lossRate < 100) {
+                    recoveryRate = (1 / (1 - lossRate / 100) - 1) * 100;
+                }
+                document.getElementById('recovery-rate').textContent = recoveryRate.toFixed(2) + '%';
+                
+                // 2. Kelly Criterion
+                const winRate = parse('win-rate') / 100;
+                const pnlRatio = parse('pnl-ratio');
+                let kellyBetSize = 0;
+                if (winRate > 0 && winRate <= 1 && pnlRatio > 0) {
+                    const kellyRaw = winRate - ((1 - winRate) / pnlRatio);
+                    if (kellyRaw > 0) {
+                        kellyBetSize = kellyRaw * 100;
+                    }
+                }
+                document.getElementById('kelly-bet-size').textContent = kellyBetSize.toFixed(2) + '%';
+                
+                // 3. MDD Streak (using Kelly Bet Size)
+                let mddStreak = 0;
+                if (kellyBetSize > 0 && kellyBetSize < 100) {
+                    const betFraction = kellyBetSize / 100;
+                    // k = log(1-DD) / log(1-f)
+                    mddStreak = Math.log(1 - 0.5) / Math.log(1 - betFraction);
+                }
+                document.getElementById('mdd-streak').textContent = Math.floor(mddStreak) + '회';
+
+                // --- Main Simulation ---
+                const startAsset = parse('start-asset');
+                const tradeCount = parse('trade-count');
+                const feeRate = parse('fee-rate') / 100;
+                const slippage = parse('slippage') / 100;
+                const totalCostRate = feeRate + slippage;
+                
+                let finalAsset = startAsset;
+                let geoMeanReturn = 0;
+                let totalCost = 0;
+
+                const betFraction = kellyBetSize > 0 && kellyBetSize < 100 ? kellyBetSize / 100 : 0;
+
+                if (startAsset > 0 && tradeCount > 0 && betFraction > 0) {
+                    // Geometric Mean Return: g = (1 + f*R - T)^W * (1 - f - T)^(1-W) - 1
+                    const gainMultiplier = 1 + betFraction * pnlRatio - totalCostRate;
+                    const lossMultiplier = 1 - betFraction - totalCostRate;
+                    
+                    if (gainMultiplier > 0 && lossMultiplier > 0) {
+                        const geoMeanMultiplier = Math.pow(gainMultiplier, winRate) * Math.pow(lossMultiplier, 1 - winRate);
+                        geoMeanReturn = (geoMeanMultiplier - 1);
+                        finalAsset = startAsset * Math.pow(1 + geoMeanReturn, tradeCount);
+
+                        // Estimate total cost
+                        let cumulativeAsset = startAsset;
+                        let cumulativeCost = 0;
+                        for(let i = 0; i < tradeCount; i++) {
+                            const costOfTrade = cumulativeAsset * betFraction * totalCostRate;
+                            cumulativeCost += costOfTrade;
+                            cumulativeAsset *= (1 + geoMeanReturn);
+                        }
+                        totalCost = cumulativeCost;
+                    } else {
+                         finalAsset = 0; // Ruin
+                    }
+                } else {
+                     finalAsset = startAsset;
+                }
+                
+                const finalReturn = startAsset > 0 ? (finalAsset / startAsset - 1) * 100 : 0;
+                
+                document.getElementById('final-asset').textContent = '$' + Math.round(finalAsset).toLocaleString();
+                document.getElementById('final-return').textContent = finalReturn.toFixed(2) + '%';
+                document.getElementById('geo-mean-return').textContent = (geoMeanReturn * 100).toFixed(2) + '%';
+                document.getElementById('total-cost').textContent = '$' + Math.round(totalCost).toLocaleString();
+            }
+            
+            // Initial calculation
+            calculateAll();
+        });
+    </script>
+</body>
+</html>
