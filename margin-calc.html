@@ -36,40 +36,51 @@
             color: var(--text);
             font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
-            padding: 20px;
             font-size: var(--base-font);
+            line-height: 1.6;
+        }
+        
+        /* Sticky Nav */
+        .main-nav {
+            background-color: var(--bg);
+            padding: 15px 20px;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+        .main-nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .main-nav a:hover {
+            background-color: var(--input);
+            color: var(--accent);
+        }
+
+        .content-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            line-height: 1.6;
+            padding: 20px;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .container {
             width: 100%;
-            max-width: 800px;
             margin-bottom: 20px;
         }
         
-        .main-nav {
-            width: 100%;
-            max-width: 800px;
-            margin-bottom: 20px;
-        }
-        
-        .nav-link {
-            display: inline-block;
-            background-color: var(--input);
-            color: var(--accent);
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        .nav-link:hover {
-            background-color: var(--border);
-        }
-
         /* 결과 섹션 */
         #results-container {
             display: grid;
@@ -79,10 +90,6 @@
             background-color: var(--card);
             border: 1px solid var(--border);
             border-radius: 12px;
-            position: -webkit-sticky;
-            position: sticky;
-            top: 10px;
-            z-index: 100;
         }
         
         .result-item {
@@ -227,152 +234,152 @@
         }
 
         @media (max-width: 600px) {
-            body { padding: 10px; }
-            .container { padding: 0; }
-            #results-container { grid-template-columns: 1fr; top: 5px; }
+            .content-wrapper { padding: 10px; }
+            #results-container { grid-template-columns: 1fr; }
             .result-item p { font-size: 1.6rem; }
             .accordion-header { font-size: 1.1em; }
         }
     </style>
 </head>
 <body>
+    <nav class="main-nav">
+        <a href="index.html">⬅ 메인 대시보드로 돌아가기</a>
+    </nav>
 
-    <div class="container">
-        <nav class="main-nav">
-            <a href="index.html" class="nav-link">&lt; 메인 대시보드로 돌아가기</a>
-        </nav>
+    <div class="content-wrapper">
+        <div class="container">
+            <section id="results-container">
+                <div class="result-item">
+                    <h3>최종 세후 순수익</h3>
+                    <p id="final-profit">₩0</p>
+                </div>
+                <div class="result-item">
+                    <h3>최종 마진율</h3>
+                    <p id="final-margin" class="margin-rate-value">0.00%</p>
+                </div>
+            </section>
+            
+            <div id="calculator-body" style="margin-top: 20px;">
+                <div class="accordion">
+                    <!-- 1단계: 소싱 및 원가 -->
+                    <div class="accordion-item active">
+                        <div class="accordion-header">1단계: 소싱 및 원가</div>
+                        <div class="accordion-content">
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label for="purchase-price-cny">1688 매입가 (위안)</label>
+                                    <input type="text" id="purchase-price-cny" placeholder="0">
+                                </div>
+                                <div class="input-group">
+                                    <label for="exchange-rate">적용 환율 (1위안 당)</label>
+                                    <input type="text" id="exchange-rate" placeholder="195">
+                                </div>
+                                <div class="input-group">
+                                    <label for="shipping-cost">해운/배대지 비용</label>
+                                    <input type="text" id="shipping-cost" placeholder="0">
+                                </div>
+                                <div class="input-group">
+                                    <label for="customs-tax">관부가세 (개당)</label>
+                                    <input type="text" id="customs-tax" placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-        <section id="results-container">
-            <div class="result-item">
-                <h3>최종 세후 순수익</h3>
-                <p id="final-profit">₩0</p>
+                    <!-- 2단계: 플랫폼 및 물류 -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">2단계: 플랫폼 및 물류</div>
+                        <div class="accordion-content">
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label for="sell-price">판매가</label>
+                                    <input type="text" id="sell-price" placeholder="0">
+                                </div>
+                                <div class="input-group">
+                                    <label for="platform-fee">카테고리 수수료 (%)</label>
+                                    <input type="text" id="platform-fee" placeholder="10.8">
+                                </div>
+                                <div class="input-group">
+                                    <label for="fulfillment-cost">로켓그로스 풀필먼트 비용</label>
+                                    <input type="text" id="fulfillment-cost" placeholder="4500">
+                                </div>
+                                 <div class="input-group">
+                                    <label for="packaging-cost">포장/부자재 비용</label>
+                                    <input type="text" id="packaging-cost" placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3단계: 광고 및 세금 -->
+                    <div class="accordion-item">
+                        <div class="accordion-header">3단계: 광고 및 세금</div>
+                        <div class="accordion-content">
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <label for="target-roas">목표 ROAS (%)</label>
+                                    <input type="text" id="target-roas" placeholder="400">
+                                </div>
+                                <div class="input-group">
+                                    <label for="return-rate">반품률 (%)</label>
+                                    <input type="text" id="return-rate" placeholder="1">
+                                </div>
+                                <div class="input-group">
+                                    <label for="vat-tax-rate">부가세 예비비 (%)</label>
+                                    <input type="text" id="vat-tax-rate" placeholder="5">
+                                </div>
+                                 <div class="input-group">
+                                    <label for="income-tax-rate">종소세 예비비 (%)</label>
+                                    <input type="text" id="income-tax-rate" placeholder="5">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="result-item">
-                <h3>최종 마진율</h3>
-                <p id="final-margin" class="margin-rate-value">0.00%</p>
-            </div>
-        </section>
+        </div>
         
-        <div id="calculator-body" style="margin-top: 20px;">
-            <div class="accordion">
-                <!-- 1단계: 소싱 및 원가 -->
-                <div class="accordion-item active">
-                    <div class="accordion-header">1단계: 소싱 및 원가</div>
-                    <div class="accordion-content">
-                        <div class="input-grid">
-                            <div class="input-group">
-                                <label for="purchase-price-cny">1688 매입가 (위안)</label>
-                                <input type="text" id="purchase-price-cny" placeholder="0">
-                            </div>
-                            <div class="input-group">
-                                <label for="exchange-rate">적용 환율 (1위안 당)</label>
-                                <input type="text" id="exchange-rate" placeholder="195">
-                            </div>
-                            <div class="input-group">
-                                <label for="shipping-cost">해운/배대지 비용</label>
-                                <input type="text" id="shipping-cost" placeholder="0">
-                            </div>
-                            <div class="input-group">
-                                <label for="customs-tax">관부가세 (개당)</label>
-                                <input type="text" id="customs-tax" placeholder="0">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2단계: 플랫폼 및 물류 -->
-                <div class="accordion-item">
-                    <div class="accordion-header">2단계: 플랫폼 및 물류</div>
-                    <div class="accordion-content">
-                        <div class="input-grid">
-                            <div class="input-group">
-                                <label for="sell-price">판매가</label>
-                                <input type="text" id="sell-price" placeholder="0">
-                            </div>
-                            <div class="input-group">
-                                <label for="platform-fee">카테고리 수수료 (%)</label>
-                                <input type="text" id="platform-fee" placeholder="10.8">
-                            </div>
-                            <div class="input-group">
-                                <label for="fulfillment-cost">로켓그로스 풀필먼트 비용</label>
-                                <input type="text" id="fulfillment-cost" placeholder="4500">
-                            </div>
-                             <div class="input-group">
-                                <label for="packaging-cost">포장/부자재 비용</label>
-                                <input type="text" id="packaging-cost" placeholder="0">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3단계: 광고 및 세금 -->
-                <div class="accordion-item">
-                    <div class="accordion-header">3단계: 광고 및 세금</div>
-                    <div class="accordion-content">
-                        <div class="input-grid">
-                            <div class="input-group">
-                                <label for="target-roas">목표 ROAS (%)</label>
-                                <input type="text" id="target-roas" placeholder="400">
-                            </div>
-                            <div class="input-group">
-                                <label for="return-rate">반품률 (%)</label>
-                                <input type="text" id="return-rate" placeholder="1">
-                            </div>
-                            <div class="input-group">
-                                <label for="vat-tax-rate">부가세 예비비 (%)</label>
-                                <input type="text" id="vat-tax-rate" placeholder="5">
-                            </div>
-                             <div class="input-group">
-                                <label for="income-tax-rate">종소세 예비비 (%)</label>
-                                <input type="text" id="income-tax-rate" placeholder="5">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="container seo-container">
+            <div class="toc">
+                <h2>목차 (Table of Contents)</h2>
+                <ul>
+                    <li><a href="#toc-1">1. 초정밀 마진 계산기: '세후 순수익' 산출 공식 해부</a></li>
+                    <li><a href="#toc-2">2. 케이스 스터디: '3D 수면 안대'로 알아보는 숨은 비용</a></li>
+                    <li><a href="#toc-3">3. 초보 셀러를 위한 역마진 탈출 3계명</a></li>
+                </ul>
             </div>
-        </div>
-    </div>
-    
-    <div class="container seo-container">
-        <div class="toc">
-            <h2>목차 (Table of Contents)</h2>
-            <ul>
-                <li><a href="#toc-1">1. 초정밀 마진 계산기: '세후 순수익' 산출 공식 해부</a></li>
-                <li><a href="#toc-2">2. 케이스 스터디: '3D 수면 안대'로 알아보는 숨은 비용</a></li>
-                <li><a href="#toc-3">3. 초보 셀러를 위한 역마진 탈출 3계명</a></li>
-            </ul>
-        </div>
-        <div class="seo-content">
-            <h2 id="toc-1">1. 초정밀 마진 계산기: '세후 순수익' 산출 공식 해부</h2>
-            <p>본 계산기는 단순 판매가에서 원가만 빼는 방식이 아닌, 이커머스 비즈니스에서 발생하는 거의 모든 변수를 고려하여 실제 통장에 남는 '세후 순수익'을 도출합니다. 그 공식은 다음과 같이 구성됩니다.</p>
-            <p><strong>세후 순수익 = (①판매가) - (②플랫폼 수수료) - (③매입원가) - (④물류비) - (⑤마케팅비) - (⑥기타비용 및 페널티) - (⑦세금)</strong></p>
-            <ul>
-                <li><strong>①판매가:</strong> 고객이 실제로 결제하는 최종 금액입니다.</li>
-                <li><strong>②플랫폼 수수료:</strong> 판매가에 카테고리별 수수료율(%)을 곱한 값입니다. (판매가 * 카테고리 수수료 %)</li>
-                <li><strong>③매입원가:</strong> 중국 1688 등에서 소싱한 제품의 원화 환산 가격입니다. (위안화 * 환율)</li>
-                <li><strong>④물류비:</strong> 해상운송료, 배대지 비용, 관부가세 등 수입 비용과 로켓그로스 입출고/배송/보관료 등 풀필먼트 비용의 합산입니다.</li>
-                <li><strong>⑤마케팅비:</strong> 목표 ROAS(광고수익률)를 기반으로 역산된 개당 광고비입니다. ROAS가 0이거나 비어있을 경우 에러가 발생하지 않도록, 이 계산기는 ROAS가 1 이상일 때만 `(판매가 / ROAS % * 100)` 공식을 적용하여 광고비를 자동 계산합니다.</li>
-                <li><strong>⑥기타비용 및 페널티:</strong> 개당 포장/부자재 비용과 예상 반품률(%)에 따른 손실 비용을 합산합니다. 반품 페널티는 `(판매가 * 반품률 %)`로 계산하여 예상 손실을 비용에 포함시킵니다.</li>
-                <li><strong>⑦세금:</strong> 최종 정산 금액에서 부가세와 종합소득세 예비비를 차감하여 실제 수령액과 가까운 값을 예측합니다.</li>
-            </ul>
-            <p>이 모든 요소를 종합해야만 정확한 마진율을 알 수 있으며, 역마진의 함정을 피할 수 있습니다.</p>
+            <div class="seo-content">
+                <h2 id="toc-1">1. 초정밀 마진 계산기: '세후 순수익' 산출 공식 해부</h2>
+                <p>본 계산기는 단순 판매가에서 원가만 빼는 방식이 아닌, 이커머스 비즈니스에서 발생하는 거의 모든 변수를 고려하여 실제 통장에 남는 '세후 순수익'을 도출합니다. 그 공식은 다음과 같이 구성됩니다.</p>
+                <p><strong>세후 순수익 = (①판매가) - (②플랫폼 수수료) - (③매입원가) - (④물류비) - (⑤마케팅비) - (⑥기타비용 및 페널티) - (⑦세금)</strong></p>
+                <ul>
+                    <li><strong>①판매가:</strong> 고객이 실제로 결제하는 최종 금액입니다.</li>
+                    <li><strong>②플랫폼 수수료:</strong> 판매가에 카테고리별 수수료율(%)을 곱한 값입니다. (판매가 * 카테고리 수수료 %)</li>
+                    <li><strong>③매입원가:</strong> 중국 1688 등에서 소싱한 제품의 원화 환산 가격입니다. (위안화 * 환율)</li>
+                    <li><strong>④물류비:</strong> 해상운송료, 배대지 비용, 관부가세 등 수입 비용과 로켓그로스 입출고/배송/보관료 등 풀필먼트 비용의 합산입니다.</li>
+                    <li><strong>⑤마케팅비:</strong> 목표 ROAS(광고수익률)를 기반으로 역산된 개당 광고비입니다. ROAS가 0이거나 비어있을 경우 에러가 발생하지 않도록, 이 계산기는 ROAS가 1 이상일 때만 `(판매가 / ROAS % * 100)` 공식을 적용하여 광고비를 자동 계산합니다.</li>
+                    <li><strong>⑥기타비용 및 페널티:</strong> 개당 포장/부자재 비용과 예상 반품률(%)에 따른 손실 비용을 합산합니다. 반품 페널티는 `(판매가 * 반품률 %)`로 계산하여 예상 손실을 비용에 포함시킵니다.</li>
+                    <li><strong>⑦세금:</strong> 최종 정산 금액에서 부가세와 종합소득세 예비비를 차감하여 실제 수령액과 가까운 값을 예측합니다.</li>
+                </ul>
+                <p>이 모든 요소를 종합해야만 정확한 마진율을 알 수 있으며, 역마진의 함정을 피할 수 있습니다.</p>
 
-            <h2 id="toc-2">2. 케이스 스터디: '3D 수면 안대'로 알아보는 숨은 비용</h2>
-            <p>예를 들어, 1688에서 '3D 수면 안대'를 개당 5위안에 사 온다고 가정해 봅시다. 많은 초보 셀러들은 여기에 환율(예: 195원)만 곱해서 원가를 975원으로 계산하고 끝냅니다. 하지만 현실은 다릅니다.</p>
-            <h3>숨은 비용 ①: 국제 물류비와 관부가세</h3>
-            <p>수면 안대 100개를 들여온다고 가정할 때, 국제 배송비와 배대지 수수료가 약 30,000원 발생했다면 개당 300원의 물류비가 추가됩니다. 또한 사업자 통관 시 발생하는 관부가세(약 8~13%)까지 더하면 실제 원가는 이미 1,400원을 훌쩍 넘게 됩니다.</p>
-            <h3>숨은 비용 ②: 풀필먼트와 플랫폼 수수료</h3>
-            <p>이 제품을 로켓그로스로 9,900원에 판매한다면, 쿠팡은 카테고리 수수료 약 10.8%(1,069원)와 로켓그로스 풀필먼트 요금(입고/피킹/배송/보관) 약 4,500원을 가져갑니다. 여기서 중요한 점은 풀필먼트 비용은 판매가와 무관한 '고정비'라는 사실입니다. 저가 상품일수록 이 고정비의 타격이 치명적입니다.</p>
-             <h3>숨은 비용 ③: 광고비와 세금</h3>
-            <p>ROAS 400%를 목표로 광고를 집행한다면, 개당 약 2,475원(9900원 / 400%)의 광고비가 발생합니다. 여기에 반품 처리 비용, 부가세, 종소세까지 제외하고 나면, 겉보기엔 많이 남는 것 같았던 상품이 실제로는 역마진이거나 마진율 5% 미만의 위험한 상품일 수 있다는 결론이 나옵니다. 본 계산기는 이 모든 과정을 투명하게 시뮬레이션해줍니다.</p>
+                <h2 id="toc-2">2. 케이스 스터디: '3D 수면 안대'로 알아보는 숨은 비용</h2>
+                <p>예를 들어, 1688에서 '3D 수면 안대'를 개당 5위안에 사 온다고 가정해 봅시다. 많은 초보 셀러들은 여기에 환율(예: 195원)만 곱해서 원가를 975원으로 계산하고 끝냅니다. 하지만 현실은 다릅니다.</p>
+                <h3>숨은 비용 ①: 국제 물류비와 관부가세</h3>
+                <p>수면 안대 100개를 들여온다고 가정할 때, 국제 배송비와 배대지 수수료가 약 30,000원 발생했다면 개당 300원의 물류비가 추가됩니다. 또한 사업자 통관 시 발생하는 관부가세(약 8~13%)까지 더하면 실제 원가는 이미 1,400원을 훌쩍 넘게 됩니다.</p>
+                <h3>숨은 비용 ②: 풀필먼트와 플랫폼 수수료</h3>
+                <p>이 제품을 로켓그로스로 9,900원에 판매한다면, 쿠팡은 카테고리 수수료 약 10.8%(1,069원)와 로켓그로스 풀필먼트 요금(입고/피킹/배송/보관) 약 4,500원을 가져갑니다. 여기서 중요한 점은 풀필먼트 비용은 판매가와 무관한 '고정비'라는 사실입니다. 저가 상품일수록 이 고정비의 타격이 치명적입니다.</p>
+                 <h3>숨은 비용 ③: 광고비와 세금</h3>
+                <p>ROAS 400%를 목표로 광고를 집행한다면, 개당 약 2,475원(9900원 / 400%)의 광고비가 발생합니다. 여기에 반품 처리 비용, 부가세, 종소세까지 제외하고 나면, 겉보기엔 많이 남는 것 같았던 상품이 실제로는 역마진이거나 마진율 5% 미만의 위험한 상품일 수 있다는 결론이 나옵니다. 본 계산기는 이 모든 과정을 투명하게 시뮬레이션해줍니다.</p>
 
-            <h2 id="toc-3">3. 초보 셀러를 위한 역마진 탈출 3계명</h2>
-            <h3>1계명: 원가 계산은 보수적으로, 판매가는 시장적으로</h3>
-            <p>예상치 못한 비용은 항상 발생합니다. 환율 변동, 물류비 인상 등을 고려하여 원가 계산은 항상 최악의 경우를 염두에 두고 타이트하게 해야 합니다. 판매가는 나만의 희망 가격이 아닌, 경쟁사와 시장 상황을 고려한 현실적인 가격을 책정해야 합니다.</p>
-            <h3>2계명: 고정비를 반드시 숙지하라</h3>
-            <p>플랫폼 수수료와 같은 변동비보다 무서운 것이 풀필먼트 비용과 같은 '고정비'입니다. 판매가 대비 고정비의 비율이 너무 높다면, 해당 상품은 판매 채널에 적합하지 않을 수 있습니다. 고정비를 커버하고도 충분한 마진이 남는 가격 구조를 설계해야 합니다.</p>
-             <h3>3계명: 광고(ROAS)와 세금을 비용으로 인식하라</h3>
-            <p>광고는 투자가 아닌 '비용'의 관점에서 접근해야 합니다. 목표 ROAS를 설정하고, 그 기준을 넘지 못하면 즉시 광고를 개선하거나 중단해야 합니다. 또한, 부가세와 종소세는 '나중에 낼 돈'이 아니라, 판매가에 처음부터 포함되어야 할 핵심 비용 요소입니다. 이 계산기를 통해 세금까지 모두 제외한 '진짜 내 돈'이 얼마인지 반드시 확인하는 습관을 들이시길 바랍니다.</p>
+                <h2 id="toc-3">3. 초보 셀러를 위한 역마진 탈출 3계명</h2>
+                <h3>1계명: 원가 계산은 보수적으로, 판매가는 시장적으로</h3>
+                <p>예상치 못한 비용은 항상 발생합니다. 환율 변동, 물류비 인상 등을 고려하여 원가 계산은 항상 최악의 경우를 염두에 두고 타이트하게 해야 합니다. 판매가는 나만의 희망 가격이 아닌, 경쟁사와 시장 상황을 고려한 현실적인 가격을 책정해야 합니다.</p>
+                <h3>2계명: 고정비를 반드시 숙지하라</h3>
+                <p>플랫폼 수수료와 같은 변동비보다 무서운 것이 풀필먼트 비용과 같은 '고정비'입니다. 판매가 대비 고정비의 비율이 너무 높다면, 해당 상품은 판매 채널에 적합하지 않을 수 있습니다. 고정비를 커버하고도 충분한 마진이 남는 가격 구조를 설계해야 합니다.</p>
+                 <h3>3계명: 광고(ROAS)와 세금을 비용으로 인식하라</h3>
+                <p>광고는 투자가 아닌 '비용'의 관점에서 접근해야 합니다. 목표 ROAS를 설정하고, 그 기준을 넘지 못하면 즉시 광고를 개선하거나 중단해야 합니다. 또한, 부가세와 종소세는 '나중에 낼 돈'이 아니라, 판매가에 처음부터 포함되어야 할 핵심 비용 요소입니다. 이 계산기를 통해 세금까지 모두 제외한 '진짜 내 돈'이 얼마인지 반드시 확인하는 습관을 들이시길 바랍니다.</p>
+            </div>
         </div>
     </div>
     

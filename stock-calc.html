@@ -35,6 +35,32 @@
             font-size: var(--base-font);
             word-break: keep-all;
         }
+        
+        /* Sticky Nav */
+        .main-nav {
+            background-color: var(--bg);
+            padding: 15px 20px;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+        .main-nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .main-nav a:hover {
+            background-color: var(--input);
+            color: var(--accent);
+        }
 
         .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
 
@@ -156,6 +182,9 @@
     </style>
 </head>
 <body>
+    <nav class="main-nav">
+        <a href="index.html">⬅ 메인 대시보드로 돌아가기</a>
+    </nav>
     <div class="container">
         <header>
             <div class="badge">FINTECH TOOL #9</div>
