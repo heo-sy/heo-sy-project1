@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<url>
-  <loc>https://heo-sy.github.io/heo-sy-project1/</loc>
-  <lastmod>2024-05-24T00:00:00+00:00</lastmod>
-  <priority>1.00</priority>
-</url>
-<url>
-  <loc>https://heo-sy.github.io/heo-sy-project1/index.html</loc>
-  <lastmod>2024-05-24T00:00:00+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://heo-sy.github.io/heo-sy-project1/calculator.html</loc>
-  <lastmod>2024-05-24T00:00:00+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://heo-sy.github.io/heo-sy-project1/</loc>
+    <lastmod>2026-02-23</lastmod>
+    <priority>1.00</priority>
+  </url>
+  <url>
+    <loc>https://heo-sy.github.io/heo-sy-project1/index.html</loc>
+    <lastmod>2026-02-23</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://heo-sy.github.io/heo-sy-project1/reality-calc.html</loc>
+    <lastmod>2026-02-23</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://heo-sy.github.io/heo-sy-project1/coin-calc.html</loc>
+    <lastmod>2026-02-23</lastmod>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://heo-sy.github.io/heo-sy-project1/margin-calc.html</loc>
+    <lastmod>2026-02-23</lastmod>
+    <priority>0.80</priority>
+  </url>
 </urlset>
