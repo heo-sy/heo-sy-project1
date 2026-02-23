@@ -2,286 +2,185 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>켈리 공식 계산기 - 주식/코인 투자 비중 최적화 및 파산 방지 | 스르륵</title>
     <meta name="description" content="승률과 손익비를 바탕으로 파산을 막고 복리 수익을 극대화하는 켈리 공식 계산기입니다. 하프 켈리 비중과 리스크 관리 전략을 확인하세요.">
-    <meta name="keywords" content="켈리 공식, 켈리 기준, 투자 비중, 자산 관리, 파산 방지, 리스크 관리, 주식, 코인, 퀀트">
-
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-
     <style>
         :root {
-            --bg: #121212;
-            --card: #1E1E1E;
-            --input: #2C2C2C;
-            --accent-blue: #00f3ff;
-            --accent-glow-blue: rgba(0, 243, 255, 0.5);
-            --accent-red: #FF4747;
-            --text-primary: #ffffff;
-            --text-secondary: #cccccc;
-            --text-placeholder: #888888;
-            --border: #333333;
+            --background-color: #121212;
+            --text-color: #ffffff;
+            --muted-text-color: #cccccc;
+            --primary-color: #00f3ff;
+            --danger-color: #ff4d4d;
         }
-
-        html { scroll-behavior: smooth; }
-
         body {
-            background-color: var(--bg);
-            color: var(--text-primary);
-            font-family: "Pretendard", "Helvetica Neue", "Arial", sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             margin: 0;
-            font-size: 16px;
-            line-height: 1.7;
-        }
-
-        .main-nav {
-            background-color: rgba(18, 18, 18, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 15px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            width: 100%;
-            border-bottom: 1px solid var(--border);
-            text-align: center;
-        }
-        .main-nav a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1rem;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .main-nav a:hover {
-            background-color: var(--input);
-            color: var(--accent-blue);
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        header { text-align: center; margin-bottom: 40px; }
-        h1 { font-size: 2.5rem; font-weight: 900; color: var(--text-primary); margin-bottom: 10px; }
-        h1 span { color: var(--accent-blue); text-shadow: 0 0 10px var(--accent-glow-blue); }
-        header p { color: var(--text-secondary); font-size: 1.1rem; }
-
-        main {
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            align-items: center;
         }
-        
-        .panel {
-            background-color: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 30px;
+        .container {
+            width: 100%;
+            max-width: 800px;
         }
-
-        .panel h2 {
-            font-size: 1.5rem;
-            color: var(--accent-blue);
-            margin-top: 0;
-            margin-bottom: 25px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
+        header {
+            width: 100%;
+            margin-bottom: 2rem;
         }
-
-        .input-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
+        .back-button {
+            display: inline-block;
+            text-decoration: none;
+            color: var(--muted-text-color);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+        .back-button:hover {
+            color: var(--text-color);
+        }
+        main {
+            width: 100%;
+        }
+        .calculator-section {
+            background-color: #1e1e1e;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px var(--primary-color);
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
         }
         .input-group label {
             display: block;
-            color: var(--text-secondary);
-            font-size: 0.9em;
-            margin-bottom: 8px;
+            margin-bottom: 0.5rem;
+            color: var(--muted-text-color);
         }
         .input-group input {
             width: 100%;
-            background: var(--input);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 1.1em;
-            font-weight: bold;
-            text-align: right;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            padding: 0.75rem;
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+            border-radius: 5px;
+            color: var(--text-color);
+            font-size: 1rem;
         }
-        .input-group input:focus {
-            border-color: var(--accent-blue);
+        .input-group input::placeholder {
+            color: #666;
         }
-        input::placeholder { color: var(--text-placeholder); font-weight: normal; }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type=number] { -moz-appearance: textfield; }
-
-        .calc-button {
+        .calculate-button {
             width: 100%;
-            padding: 15px;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: #000;
+            border: none;
+            border-radius: 5px;
             font-size: 1.2rem;
             font-weight: bold;
-            color: #000;
-            background: var(--accent-blue);
-            border: none;
-            border-radius: 8px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: background-color 0.3s;
         }
-        .calc-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px var(--accent-glow-blue);
+        .calculate-button:hover {
+            background-color: #00c2cc;
         }
-
-        #result-container {
-            display: none;
+        .result-section {
             text-align: center;
+            margin-top: 2rem;
         }
-        .result-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 20px;
+        .result-title {
+            color: var(--muted-text-color);
         }
-        .result-card {
-            background: var(--input);
-            padding: 25px;
-            border-radius: 8px;
+        .result-value {
+            font-size: 48px;
+            font-weight: bold;
         }
-        .result-card .label {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
+        .result-value.positive {
+            color: var(--primary-color);
+            text-shadow: 0 0 15px var(--primary-color), 0 0 25px var(--primary-color);
         }
-        .result-card .value {
-            font-size: 42px;
-            font-weight: 900;
-            color: var(--accent-blue);
-            text-shadow: 0 0 15px var(--accent-glow-blue);
-        }
-        .result-card .value.negative {
-            color: var(--accent-red);
+        .result-value.negative {
+            color: var(--danger-color);
             text-shadow: none;
-            font-size: 1.8rem;
         }
-        
-        article.seo-content {
-            padding: 30px;
+        .result-description {
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            color: var(--muted-text-color);
         }
-        article h2 {
-            font-size: 2rem;
-            color: var(--accent-blue);
-            margin-bottom: 20px;
-            scroll-margin-top: 80px;
+        .seo-content {
+            background-color: #1e1e1e;
+            padding: 2rem;
+            border-radius: 10px;
         }
-        article h3 {
-            font-size: 1.5rem;
-            color: var(--text-primary);
-            margin-top: 30px;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--accent-blue);
-            padding-left: 10px;
+        .seo-content h2, .seo-content h3 {
+            color: var(--primary-color);
         }
-        article p {
-            color: var(--text-secondary);
-            text-align: justify;
-            font-size: 1.1rem;
-        }
-        article code {
-            background-color: var(--input);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: bold;
-            color: var(--accent-blue);
-        }
-        article strong {
-            color: var(--text-primary);
-            font-weight: bold;
-        }
-
-        @media (max-width: 600px) {
-            .container { padding: 20px 15px; }
-            h1 { font-size: 2rem; }
-            .panel { padding: 20px; }
-            .result-grid { grid-template-columns: 1fr; }
-            .result-card .value { font-size: 36px; }
+        .seo-content p {
+            line-height: 1.8;
+            color: var(--muted-text-color);
         }
     </style>
 </head>
 <body>
-    <nav class="main-nav">
-        <a href="index.html">⬅ 메인 대시보드로 돌아가기</a>
-    </nav>
-
     <div class="container">
         <header>
-            <h1>켈리 공식 <span>계산기</span></h1>
-            <p>최적의 투자 비중을 찾아 파산을 방지하고 복리 수익을 극대화하세요.</p>
+            <a href="index.html" class="back-button">⬅ 메인 대시보드로 돌아가기</a>
         </header>
 
         <main>
-            <section class="panel">
-                <h2>투자 전략 입력</h2>
-                <div class="input-grid">
-                    <div class="input-group">
-                        <label for="win-rate">예상 승률 (%)</label>
-                        <input type="number" id="win-rate" placeholder="예: 50">
-                    </div>
-                    <div class="input-group">
-                        <label for="profit-rate">익절 목표 수익률 (%)</label>
-                        <input type="number" id="profit-rate" placeholder="예: 5">
-                    </div>
-                    <div class="input-group">
-                        <label for="loss-rate">손절 제한률 (%)</label>
-                        <input type="number" id="loss-rate" placeholder="예: 2">
-                    </div>
+            <section class="calculator-section">
+                <h1>켈리 공식 계산기</h1>
+                <div class="input-group">
+                    <label for="winRate">예상 승률 (%)</label>
+                    <input type="number" id="winRate" placeholder="예: 50">
                 </div>
-                <button id="calc-button" class="calc-button">최적 투자 비중 계산</button>
-            </section>
-            
-            <section id="result-container" class="panel">
-                <h2>계산 결과</h2>
-                <div id="result-grid" class="result-grid">
-                    <div class="result-card">
-                        <div class="label">풀 켈리 (Full Kelly)</div>
-                        <div id="full-kelly" class="value"></div>
-                    </div>
-                    <div class="result-card">
-                        <div class="label">하프 켈리 (Half Kelly)</div>
-                        <id id="half-kelly" class="value"></div>
-                    </div>
+                <div class="input-group">
+                    <label for="profitRate">익절 목표 수익률 (%)</label>
+                    <input type="number" id="profitRate" placeholder="예: 5">
                 </div>
+                <div class="input-group">
+                    <label for="lossRate">손절 제한률 (%)</label>
+                    <input type="number" id="lossRate" placeholder="예: 2">
+                </div>
+                <button class="calculate-button" onclick="calculateKelly()">계산하기</button>
+                <div id="result" class="result-section"></div>
             </section>
 
-            <article class="panel seo-content">
+            <article class="seo-content">
                 <h2>켈리 공식(Kelly Criterion)이란 무엇인가?</h2>
-                <p>켈리 공식은 정보 이론에 뿌리를 둔 수학적 공식으로, <strong>장기적으로 수익을 극대화할 수 있는 최적의 베팅(투자) 비율</strong>을 계산하는 데 사용됩니다. 존 켈리(John Kelly)가 1956년에 발표한 이 공식은 당신의 투자 전략이 긍정적인 기대수익을 가질 때, 각 거래마다 자산의 몇 퍼센트를 투자해야 하는지를 알려줍니다. 이 공식의 핵심 목표는 <strong>파산 방지</strong>입니다. 아무리 승률 높은 전략이라도 한 번의 과도한 베팅으로 모든 것을 잃을 수 있습니다. 켈리 공식은 이러한 위험을 수학적으로 통제하여, 장기적인 관점에서 안정적인 자산 관리와 복리 수익 극대화를 추구하도록 돕습니다. 이는 감에 의존하는 투자가 아닌, 데이터 기반의 체계적인 <strong>리스크 관리</strong>의 첫걸음입니다.</p>
+                <p>켈리 공식은 정보 이론에 뿌리를 둔 수학적 공식으로, 장기적으로 수익을 극대화할 수 있는 최적의 투자 비중을 계산하는 데 사용됩니다. 1956년 벨 연구소의 과학자 존 켈리(John Kelly)가 발표한 이 공식은 당신의 투자 전략이 긍정적인 기대수익을 가질 때, 각 거래마다 총자산의 몇 퍼센트를 투자해야 하는지를 알려줍니다. 이 공식의 핵심 목표는 단기적인 대박이 아닌 '파산 방지'에 있습니다. 아무리 승률이 높은 훌륭한 전략이라도, 한 번의 과도한 베팅으로 모든 것을 잃는다면 아무 소용이 없습니다. 켈리 공식은 이러한 치명적인 리스크를 수학적으로 통제하여, 장기적인 관점에서 안정적인 자산 관리와 복리 수익 극대화를 추구하도록 돕습니다. 이는 감이나 운에 의존하는 투자가 아닌, 데이터와 확률에 기반한 체계적인 리스크 관리의 첫걸음입니다.</p>
 
                 <h3>왜 '풀 켈리' 대신 '하프 켈리'를 실전에서 쓰는가?</h3>
-                <p>계산기는 '풀 켈리'와 '하프 켈리' 두 가지 결과를 제공합니다. 이론적으로 '풀 켈리'는 가장 빠른 자산 증식 속도를 보장하지만, 여기에는 치명적인 단점이 존재합니다. 바로 <strong>엄청난 변동성(MDD, Maximum Drawdown)</strong>입니다. 켈리 공식은 미래의 승률과 손익비가 과거와 동일할 것이라고 가정하는데, 실제 시장은 예측 불가능한 변수로 가득합니다. 만약 '풀 켈리'가 제안하는 높은 <strong>투자 비중</strong>을 따르다가 예상치 못한 연패에 빠지면, 자산이 급격하게 줄어들어 심리적 압박감에 무너지고 회복 불가능한 손실을 입을 수 있습니다. 따라서 많은 전문 투자자들은 이론적 최적치인 '풀 켈리' 대신, 그 절반인 '하프 켈리' 또는 그 이하(1/4, 1/8)를 사용하여 변동성을 줄이고 심리적 안정감을 확보하는 전략을 선호합니다. 이는 장기적인 생존과 꾸준한 <strong>자산 관리</strong>에 훨씬 효과적입니다.</p>
-                
+                <p>계산된 켈리 값(풀 켈리)은 이론적으로 자산 증식 속도가 가장 빠른 최적의 베팅 비율이지만, 여기에는 몇 가지 함정이 존재합니다. 첫째, 풀 켈리 전략은 극심한 변동성(MDD, 최대 낙폭)을 동반합니다. 이론적으로 최적일지라도, 실제로 자산의 30~50%가 순식간에 사라지는 경험을 하면 대부분의 투자자는 심리적 압박을 견디지 못하고 비합리적인 결정을 내리게 됩니다. 둘째, 켈리 공식은 '정확한 승률과 손익비를 알고 있다'는 전제 하에 성립합니다. 하지만 현실 세계의 투자에서 승률과 손익비는 과거 데이터에 기반한 추정치일 뿐, 미래에도 동일하리란 보장이 없습니다. 만약 실제 승률이 추정치보다 낮게 나온다면, 풀 켈리 베팅은 오히려 파산의 지름길이 될 수 있습니다. 이러한 이유로 수많은 전문 투자자들은 계산된 켈리 값의 절반, 즉 '하프 켈리(Half Kelly)'를 사용하는 것을 선호합니다. 하프 켈리는 수익 극대화 속도를 다소 희생하는 대신, 변동성을 크게 줄여 훨씬 안정적인 자산 관리를 가능하게 하고, 추정 오류에 대한 안전 마진을 제공하여 장기 생존 확률을 비약적으로 높여줍니다.</p>
+
                 <h3>승률보다 중요한 '손익비'의 마법</h3>
-                <p>많은 투자자들이 90%의 승률을 자랑하지만 결국 돈을 잃고, 어떤 투자자들은 50%의 승률로도 막대한 부를 쌓습니다. 이 차이는 바로 <strong>손익비(Risk/Reward Ratio)</strong>에서 비롯됩니다. 손익비는 평균적인 수익이 평균적인 손실의 몇 배인지를 나타내는 지표입니다. 예를 들어, 이길 때는 10%를 벌고 질 때는 2%를 잃는다면 손익비는 5가 됩니다. 켈리 공식 <code>f = p - (q / b)</code>에서 p는 승률, q는 패률, b는 손익비를 의미합니다. 이 공식에서 볼 수 있듯이, 승률(p)이 다소 낮더라도 손익비(b)가 충분히 높다면 켈리 값(f)은 양수가 되어 장기적으로 돈을 벌 수 있는 구조가 됩니다. 반대로 승률이 아무리 높아도 손익비가 1보다 작으면(즉, 이길 때보다 질 때 더 많이 잃으면) 결국 <strong>파산</strong>으로 향하게 됩니다. 성공적인 투자는 단순히 많이 맞추는 게임이 아니라, 이길 때 크게 이기고 질 때 적게 잃는 '손익비' 중심의 <strong>리스크 관리</strong> 게임임을 명심해야 합니다.</p>
+                <p>많은 초보 투자자들이 '승률'에 집착하지만, 장기적인 성공은 오히려 '손익비'에 의해 결정되는 경우가 많습니다. 손익비는 평균 수익을 평균 손실로 나눈 값으로, '한 번 이길 때 얼마나 많이 얻고, 한 번 질 때 얼마나 적게 잃는가'를 측정하는 지표입니다. 예를 들어, 승률이 40%로 낮더라도 손익비가 3이라면(이길 때 30% 수익, 질 때 10% 손실), 장기적으로는 꾸준히 돈을 벌게 됩니다. 켈리 공식은 바로 이 승률과 손익비의 균형점을 찾아 최적의 투자 비중을 제시합니다. 따라서 무조건 자주 이기는 것보다, 한 번을 이기더라도 확실한 보상이 있는 기회를 노리고, 반대로 손실은 짧게 끊어내는 '손익비 중심의 자산 관리'가 파산 방지 및 리스크 관리의 핵심 원칙이라 할 수 있습니다. 높은 손익비 전략은 승률이 다소 낮아지더라도 투자자에게 심리적 안정감을 주며, 잃을 것에 대한 두려움을 줄여주어 더욱 과감하고 합리적인 의사결정을 내리도록 돕습니다.</p>
             </article>
         </main>
     </div>
 
     <script>
-        document.getElementById('calc-button').addEventListener('click', () => {
-            const winRate = parseFloat(document.getElementById('win-rate').value);
-            const profitRate = parseFloat(document.getElementById('profit-rate').value);
-            const lossRate = parseFloat(document.getElementById('loss-rate').value);
+        function calculateKelly() {
+            const winRate = parseFloat(document.getElementById('winRate').value);
+            const profitRate = parseFloat(document.getElementById('profitRate').value);
+            const lossRate = parseFloat(document.getElementById('lossRate').value);
+            const resultDiv = document.getElementById('result');
 
-            if (isNaN(winRate) || isNaN(profitRate) || isNaN(lossRate) || winRate < 0 || profitRate <= 0 || lossRate <= 0) {
-                alert("모든 값을 0보다 큰 양수로 올바르게 입력해주세요.");
+            if (isNaN(winRate) || isNaN(profitRate) || isNaN(lossRate)) {
+                resultDiv.innerHTML = '<p style="color: var(--danger-color);">모든 값을 정확히 입력해주세요.</p>';
+                return;
+            }
+
+            if (lossRate <= 0) {
+                resultDiv.innerHTML = '<p style="color: var(--danger-color);">손절 제한률은 0보다 커야 합니다.</p>';
                 return;
             }
 
@@ -289,38 +188,32 @@
             const q = 1 - p;
             const b = profitRate / lossRate;
 
-            if (b === Infinity) {
-                alert("손절 제한률은 0이 될 수 없습니다.");
-                return;
+            if (b === 0) {
+                 resultDiv.innerHTML = '<p class="result-value negative" style="font-size: 24px;">⚠️ 투자 금지 (손실 예상)</p>';
+                 return;
             }
 
             const f = p - (q / b);
             const fullKelly = f * 100;
             const halfKelly = fullKelly / 2;
 
-            const resultContainer = document.getElementById('result-container');
-            const resultGrid = document.getElementById('result-grid');
-            const fullKellyEl = document.getElementById('full-kelly');
-            const halfKellyEl = document.getElementById('half-kelly');
-
-            fullKellyEl.classList.remove('negative');
-            halfKellyEl.classList.remove('negative');
-            
-            if (fullKelly > 0) {
-                fullKellyEl.textContent = `${fullKelly.toFixed(2)}%`;
-                halfKellyEl.textContent = `${halfKelly.toFixed(2)}%`;
+            if (fullKelly <= 0) {
+                resultDiv.innerHTML = '<p class="result-value negative" style="font-size: 24px;">⚠️ 투자 금지 (손실 예상)</p>';
             } else {
-                resultGrid.innerHTML = \`
-                    <div class="result-card" style="grid-column: 1 / -1;">
-                        <div class="label">계산 결과</div>
-                        <div id="full-kelly" class="value negative">⚠️ 투자 금지 (손실 예상)</div>
+                resultDiv.innerHTML = \`
+                    <div>
+                        <h3 class="result-title">풀 켈리 (Full Kelly)</h3>
+                        <p class="result-value positive">\${fullKelly.toFixed(2)}%</p>
+                        <p class="result-description">이론상 수익 극대화 비중</p>
+                    </div>
+                    <div style="margin-top: 2rem;">
+                        <h3 class="result-title">하프 켈리 (Half Kelly)</h3>
+                        <p class="result-value positive">\${halfKelly.toFixed(2)}%</p>
+                        <p class="result-description">실전 권장 투자 비중 (변동성 관리)</p>
                     </div>
                 \`;
             }
-            
-            resultContainer.style.display = 'block';
-            resultContainer.scrollIntoView({ behavior: 'smooth' });
-        });
+        }
     </script>
 </body>
 </html>
