@@ -2,110 +2,319 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>쿠팡 로켓그로스 마진 계산기</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>로켓그로스 전략적 수익 관리 대시보드</title>
+    <meta name="description" content="로켓그로스 셀러를 위한 정밀 마진 분석 및 엔드 ROAS 계산기. 실시간 수익과 광고비 한도를 분석하여 성공적인 전략을 수립하세요.">
+    
+    <!-- Pretendard 폰트 -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    
     <style>
-        body { font-family: 'Pretendard', sans-serif; background-color: #0a0a0a; color: #f0f0f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background-color: #121212; padding: 30px 40px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.5); width: 100%; max-width: 600px; border: 1px solid #2a2a2a; }
-        h1 { color: #39ff14; text-align: center; font-size: 1.8rem; margin-bottom: 25px; }
-        .input-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 500; color: #a0a0a0; }
-        input { width: 100%; background-color: #1e1e1e; border: 1px solid #333; color: #f0f0f0; padding: 12px; border-radius: 6px; box-sizing: border-box; font-size: 1rem; transition: border-color 0.2s, box-shadow 0.2s; }
-        input:focus { outline: none; border-color: #39ff14; box-shadow: 0 0 0 3px rgba(57, 255, 20, 0.2); }
-        button { background-color: #39ff14; color: #000; border: none; padding: 14px 0; width: 100%; border-radius: 6px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: background-color 0.2s; margin-top: 10px;}
-        button:hover { background-color: #4aff2a; }
-        .result-section { margin-top: 30px; padding-top: 20px; border-top: 1px solid #2a2a2a; }
-        h2 { text-align: center; color: #f0f0f0; margin-bottom: 20px; }
-        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .result-item { background-color: #1e1e1e; padding: 15px; border-radius: 8px; }
-        .result-item p { margin: 0; font-size: 0.9rem; color: #a0a0a0; }
-        .result-item span { display: block; font-size: 1.4rem; font-weight: 700; color: #f0f0f0; margin-top: 5px; }
-        .profit { color: #39ff14 !important; }
-        .loss { color: #ff4136 !important; }
+        :root {
+            --bg: #000000;
+            --card: #0d1117;
+            --input: #161b22;
+            --accent: #00f2ff;
+            --accent-glow: rgba(0, 242, 255, 0.3);
+            --text: #f0f6fc;
+            --text-dim: #8b949e;
+            --border: #30363d;
+            --danger: #ff7b72;
+            --base-font: 1.2rem;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Pretendard', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            line-height: 1.5;
+            font-size: var(--base-font);
+            word-break: keep-all;
+        }
+
+        /* Sticky Nav */
+        .main-nav {
+            background-color: var(--bg);
+            padding: 15px 20px;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+        .main-nav a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .main-nav a:hover {
+            background-color: var(--input);
+            color: var(--accent);
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+        
+        /* Header */
+        header { text-align: center; margin-bottom: 50px; border-bottom: 1px solid var(--border); padding-bottom: 30px; }
+        .badge { display: inline-block; background: var(--accent); color: #000; padding: 5px 15px; border-radius: 20px; font-weight: 900; font-size: 0.85rem; margin-bottom: 15px; text-transform: uppercase; }
+        h1 { font-size: 2rem; font-weight: 900; letter-spacing: -1px; }
+        h1 span { color: var(--accent); }
+
+        /* Nav */
+        nav { display: flex; justify-content: center; gap: 30px; margin-bottom: 40px; }
+        nav a { color: var(--text-dim); font-size: 1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; }
+        nav a:hover { color: var(--accent); }
+
+        /* Dashboard Grid */
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .dash-card { 
+            background: var(--card); 
+            padding: 40px 20px; 
+            border-radius: 16px; 
+            border: 2px solid var(--accent); 
+            text-align: center;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+        .dash-card .val { font-size: 3rem; font-weight: 900; color: var(--accent); text-shadow: 0 0 15px var(--accent-glow); line-height: 1; margin-bottom: 10px; }
+        .dash-card .label { font-size: 1rem; color: var(--text-dim); font-weight: 700; }
+
+        /* Analysis Cards */
+        .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
+        .analysis-card { background: var(--card); padding: 25px; border-radius: 12px; border: 1px solid var(--border); text-align: center; }
+        .analysis-card .val { font-size: 1.8rem; font-weight: 800; color: var(--text); }
+        .analysis-card .label { font-size: 0.9rem; color: var(--text-dim); margin-top: 5px; }
+
+        /* Input Section */
+        .simulator-section { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; margin-bottom: 40px; }
+        .input-panel { background: var(--card); padding: 30px; border-radius: 16px; border: 1px solid var(--border); }
+        .input-panel h3 { font-size: 1.2rem; margin-bottom: 25px; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 10px; font-weight: 900; }
+        
+        .field { margin-bottom: 20px; }
+        .field label { display: flex; justify-content: space-between; font-size: 0.95rem; color: var(--text-dim); margin-bottom: 10px; font-weight: 700; }
+        .field label span { color: var(--accent); font-size: 0.8rem; }
+        .field input {
+            width: 100%;
+            background: var(--input);
+            border: 2px solid var(--border);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            outline: none;
+            inputmode: decimal;
+        }
+        .field input:focus { border-color: var(--accent); }
+
+        /* Bill Table */
+        .bill-panel { background: var(--card); padding: 30px; border-radius: 16px; border: 1px solid var(--border); }
+        .bill-panel h3 { font-size: 1.2rem; margin-bottom: 25px; font-weight: 900; }
+        .bill-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #1e293b; font-size: 1.05rem; }
+        .bill-row .name { color: var(--text-dim); }
+        .bill-row .amount { font-weight: 800; color: var(--danger); }
+        .bill-row.total { border-top: 2px solid var(--accent); margin-top: 15px; padding-top: 20px; border-bottom: none; font-weight: 900; font-size: 1.4rem; color: var(--accent); }
+
+        /* Notice & Footer */
+        .notice { font-size: 0.95rem; color: #555; text-align: center; padding: 25px; background: rgba(0,242,255,0.03); border-radius: 12px; border-left: 4px solid var(--accent); margin-bottom: 50px; }
+        footer { text-align: center; font-size: 0.8rem; color: #222; font-weight: 900; letter-spacing: 3px; padding-bottom: 40px; }
+
+        /* Mobile Optimization */
+        @media (max-width: 800px) {
+            body { font-size: calc(var(--base-font) * 0.8); }
+            .dashboard-grid, .analysis-grid, .simulator-section { grid-template-columns: 1fr; }
+            .dash-card .val { font-size: 2.5rem; }
+            .dash-card { padding: 30px 15px; }
+            h1 { font-size: 1.6rem; }
+            .field input { padding: 14px; font-size: 1.1rem; }
+        }
+
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
 <body>
+    <nav class="main-nav">
+        <a href="index.html">⬅ 메인 대시보드로 돌아가기</a>
+    </nav>
     <div class="container">
-        <h1>📦 쿠팡 로켓그로스 마진 계산기</h1>
-        <div>
-            <div class="input-group">
-                <label for="sellPrice">판매가 (원)</label>
-                <input type="number" id="sellPrice" placeholder="고객이 결제하는 최종 금액">
+        <header>
+            <div class="badge">Rocket Growth Strategy Lab</div>
+            <h1>로켓그로스 <span>전략적 수익 관리</span> 대시보드</h1>
+        </header>
+
+        <nav>
+            <a href="#">Winner</a>
+            <a href="#">Profit</a>
+            <a href="#">Survival</a>
+            <a href="#">Roadmap</a>
+        </nav>
+
+        <!-- Metrics Dashboard -->
+        <section class="dashboard-grid">
+            <div class="dash-card">
+                <div class="val" id="res-net-profit">0원</div>
+                <div class="label">정밀 예상 순수익</div>
             </div>
-            <div class="input-group">
-                <label for="purchaseCost">매입 원가 (원)</label>
-                <input type="number" id="purchaseCost" placeholder="제품 1개당 사입 비용">
+            <div class="dash-card">
+                <div class="val" id="res-margin-rate">0.0%</div>
+                <div class="label">최종 마진율</div>
             </div>
-            <div class="input-group">
-                <label for="coupangFee">쿠팡 판매수수료 (%)</label>
-                <input type="number" id="coupangFee" value="10.5" placeholder="카테고리별 수수료 입력">
+        </section>
+
+        <!-- Strategy Analysis -->
+        <section class="analysis-grid">
+            <div class="analysis-card">
+                <div class="val" id="res-end-roas">0%</div>
+                <div class="label">엔드 ROAS (손익분기점)</div>
             </div>
-             <div class="input-group">
-                <label for="shippingCost">쿠팡 배송비 (원)</label>
-                <input type="number" id="shippingCost" value="3300" placeholder="제품 크기/무게별 요금">
+            <div class="analysis-card">
+                <div class="val" id="res-max-ads">0원</div>
+                <div class="label">최대 광고비 한도 (개당)</div>
             </div>
-            <button onclick="calculate()">마진 계산하기</button>
+        </section>
+
+        <!-- Simulator Core -->
+        <section class="simulator-section">
+            <!-- Inputs -->
+            <div class="input-panel">
+                <h3>데이터 시뮬레이션</h3>
+                <div class="field">
+                    <label>판매가 (Price)</label>
+                    <input type="number" id="in-price" value="0" placeholder="0" oninput="calculateAll()">
+                </div>
+                <div class="field">
+                    <label>매입 원가 (Cost)</label>
+                    <input type="number" id="in-cost" value="0" placeholder="0" oninput="calculateAll()">
+                </div>
+                <div class="field">
+                    <label>배송비 (Logistics) <span>로켓 고정값</span></label>
+                    <input type="number" id="in-shipping" value="3000" oninput="calculateAll()">
+                </div>
+                <div class="field">
+                    <label>수수료율 (%) <span>카테고리 기준</span></label>
+                    <input type="number" id="rate-fee" value="10.8" step="0.1" oninput="calculateAll()">
+                </div>
+                <div class="field">
+                    <label>광고 마케팅비 (%) <span>부가세 포함</span></label>
+                    <input type="number" id="rate-ads" value="10.0" step="0.1" oninput="calculateAll()">
+                </div>
+                <div class="field">
+                    <label>예상 손실률 (%) <span>반품/파손</span></label>
+                    <input type="number" id="rate-loss" value="3.0" step="0.1" oninput="calculateAll()">
+                </div>
+                <div class="field">
+                    <label>세금율 (%) <span>순익 대비</span></label>
+                    <input type="number" id="rate-tax" value="10.0" step="0.1" oninput="calculateAll()">
+                </div>
+            </div>
+
+            <!-- Detailed Statement -->
+            <div class="bill-panel">
+                <h3>비용 상세 명세 (Bill)</h3>
+                <div class="bill-row">
+                    <span class="name">🚀 로켓 입고 및 배송비</span>
+                    <span class="amount" id="bill-shipping">-0원</span>
+                </div>
+                <div class="bill-row">
+                    <span class="name">📉 판매 플랫폼 수수료</span>
+                    <span class="amount" id="bill-fee">-0원</span>
+                </div>
+                <div class="bill-row">
+                    <span class="name">📢 광고 집행 및 부가세</span>
+                    <span class="amount" id="bill-ads">-0원</span>
+                </div>
+                <div class="bill-row">
+                    <span class="name">⚠️ 운영 리스크 및 손실액</span>
+                    <span class="amount" id="bill-loss">-0원</span>
+                </div>
+                <div class="bill-row">
+                    <span class="name">🏦 예상 납부 법인/소득세</span>
+                    <span class="amount" id="bill-tax">-0원</span>
+                </div>
+                <div class="bill-row total">
+                    <span>지출 합계 (Total)</span>
+                    <span id="bill-total">-0원</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Disclaimer -->
+        <div class="notice">
+            ※ 본 대시보드는 로켓그로스 셀러의 생존과 성장을 위해 설계되었습니다. 개인 사정에 맞춰 수식 수정이 가능합니다.
         </div>
-        <div class="result-section" id="result" style="display:none;">
-            <h2>📊 분석 결과</h2>
-            <div class="result-grid">
-                <div class="result-item">
-                    <p>총 정산금액</p>
-                    <span id="totalSettle"></span>
-                </div>
-                <div class="result-item">
-                    <p>쿠팡 총 수수료</p>
-                    <span id="totalFee"></span>
-                </div>
-                <div class="result-item">
-                    <p><strong>최종 순수익</strong></p>
-                    <span id="netProfit"></span>
-                </div>
-                <div class="result-item">
-                    <p><strong>마진율(%)</strong></p>
-                    <span id="marginRate"></span>
-                </div>
-            </div>
-        </div>
+
+        <footer>
+            STRATEGIC REVENUE MANAGEMENT SYSTEM // NO NICKNAME.
+        </footer>
     </div>
 
     <script>
-        function calculate() {
-            const sellPrice = parseFloat(document.getElementById('sellPrice').value) || 0;
-            const purchaseCost = parseFloat(document.getElementById('purchaseCost').value) || 0;
-            const coupangFeeRate = parseFloat(document.getElementById('coupangFee').value) || 0;
-            const shippingCost = parseFloat(document.getElementById('shippingCost').value) || 0;
+        function calculateAll() {
+            const price = parseFloat(document.getElementById('in-price').value) || 0;
+            const cost = parseFloat(document.getElementById('in-cost').value) || 0;
+            const shipping = parseFloat(document.getElementById('in-shipping').value) || 0;
+            
+            const rFee = parseFloat(document.getElementById('rate-fee').value) || 0;
+            const rAds = parseFloat(document.getElementById('rate-ads').value) || 0;
+            const rLoss = parseFloat(document.getElementById('rate-loss').value) || 0;
+            const rTax = parseFloat(document.getElementById('rate-tax').value) || 0;
 
-            if (sellPrice === 0) {
-                alert('판매가를 입력해주세요.');
+            if (price === 0) {
+                resetUI();
                 return;
             }
 
-            const coupangFee = sellPrice * (coupangFeeRate / 100);
-            const totalSettle = sellPrice - coupangFee;
-            const totalFee = coupangFee + shippingCost;
-            const netProfit = totalSettle - purchaseCost - shippingCost;
-            const marginRate = (netProfit / sellPrice) * 100;
-
-            document.getElementById('totalSettle').textContent = Math.round(totalSettle).toLocaleString() + '원';
-            document.getElementById('totalFee').textContent = Math.round(totalFee).toLocaleString() + '원';
+            // 비용 계산
+            const feeAmt = price * (rFee / 100);
+            const adsAmt = price * (rAds / 100);
+            const lossAmt = price * (rLoss / 100);
             
-            const netProfitElem = document.getElementById('netProfit');
-            const marginRateElem = document.getElementById('marginRate');
-
-            netProfitElem.textContent = Math.round(netProfit).toLocaleString() + '원';
-            marginRateElem.textContent = marginRate.toFixed(2) + '%';
+            // 세전이익 (광고비 포함)
+            const grossProfit = price - (cost + shipping + feeAmt + adsAmt + lossAmt);
+            const taxAmt = grossProfit > 0 ? grossProfit * (rTax / 100) : 0;
             
-            if (netProfit < 0) {
-                netProfitElem.className = 'loss';
-                marginRateElem.className = 'loss';
-            } else {
-                netProfitElem.className = 'profit';
-                marginRateElem.className = 'profit';
-            }
+            // 최종 순수익
+            const netProfit = grossProfit - taxAmt;
+            const marginRate = (netProfit / price) * 100;
 
-            document.getElementById('result').style.display = 'block';
+            // 전략 지표: 엔드 ROAS 및 최대 광고비 한도
+            // 광고비를 제외한 마진금액 (이 금액이 0이 되면 손익분기점)
+            const marginExclAds = price - (cost + shipping + feeAmt + lossAmt + taxAmt);
+            const endRoas = marginExclAds > 0 ? (price / marginExclAds) * 100 : 0;
+            const maxAdsLimit = marginExclAds > 0 ? marginExclAds : 0;
+
+            // UI 업데이트
+            updateText('res-net-profit', Math.floor(netProfit).toLocaleString() + '원');
+            updateText('res-margin-rate', marginRate.toFixed(1) + '%');
+            updateText('res-end-roas', (endRoas > 0 ? Math.floor(endRoas) : 0) + '%');
+            updateText('res-max-ads', Math.floor(maxAdsLimit).toLocaleString() + '원');
+
+            updateText('bill-shipping', '-' + Math.floor(shipping).toLocaleString() + '원');
+            updateText('bill-fee', '-' + Math.floor(feeAmt).toLocaleString() + '원');
+            updateText('bill-ads', '-' + Math.floor(adsAmt).toLocaleString() + '원');
+            updateText('bill-loss', '-' + Math.floor(lossAmt).toLocaleString() + '원');
+            updateText('bill-tax', '-' + Math.floor(taxAmt).toLocaleString() + '원');
+            updateText('bill-total', '-' + Math.floor(shipping + feeAmt + adsAmt + lossAmt + taxAmt).toLocaleString() + '원');
         }
+
+        function updateText(id, val) {
+            document.getElementById(id).innerText = val;
+        }
+
+        function resetUI() {
+            const ids = ['res-net-profit', 'res-margin-rate', 'res-end-roas', 'res-max-ads', 'bill-shipping', 'bill-fee', 'bill-ads', 'bill-loss', 'bill-tax', 'bill-total'];
+            ids.forEach(id => updateText(id, id.includes('rate') || id.includes('roas') ? '0.0%' : '0원'));
+        }
+
+        // 초기화
+        calculateAll();
     </script>
 </body>
 </html>
