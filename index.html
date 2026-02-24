@@ -1,179 +1,171 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta name="google-site-verification" content="ZG6gfxDhR1g3iGvjrZ5d4_ba7230zxs_PrDnE-ogSwk" />
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>이커머스 및 투자자를 위한 핵심 도구 모음</title>
-    <meta name="description" content="이커머스 셀러와 투자자를 위한 필수 도구. 마진 계산, 평단가 분석, 원가 계산 등 성공적인 비즈니스와 투자를 위한 모든 것을 지원합니다.">
-    
-    <!-- Pretendard 폰트 -->
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>퀀트 기반 금융 계산기 - 실전 투자와 커머스를 위한 모든 도구</title>
+    <meta name="description" content="상위 1% 전문가들이 사용하는 실전 금융 계산기 모음. 복리, 켈리 공식, 평단(물타기), 쿠팡 마진 계산기로 투자의사결정과 수익 극대화를 경험하세요.">
+    <meta name="keywords" content="금융 계산기, 투자 계산기, 복리 계산기, 켈리 공식, 물타기 계산기, 평단가 계산기, 쿠팡 마진 계산기, 애드센스, 재테크">
     
     <style>
         :root {
-            --bg: #000000;
-            --card: #0d1117;
-            --accent: #00f2ff;
-            --accent-glow: rgba(0, 242, 255, 0.3);
-            --text: #f0f6fc;
-            --text-dim: #8b949e;
-            --border: #30363d;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --neon-green: #39ff14;
+            --text-main: #ffffff;
+            --text-dim: #cccccc;
+            --border-color: #333;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            font-family: 'Pretendard', sans-serif; 
-            background-color: var(--bg); 
-            color: var(--text); 
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
             line-height: 1.6;
-            font-size: 16px;
-            word-break: keep-all;
         }
 
-        .container { 
-            max-width: 1200px; 
-            margin: 0 auto; 
-            padding: 60px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            justify-content: center;
-        }
-        
-        header { 
-            text-align: center; 
-            margin-bottom: 60px; 
-        }
-        h1 { 
-            font-size: 2.5rem; 
-            font-weight: 900; 
-            letter-spacing: -1px;
-            color: var(--text);
-            margin-bottom: 10px;
-        }
-        h1 span {
-            color: var(--accent);
-        }
-
-        .tool-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            width: 100%;
+        .container {
             max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: var(--text-main);
+            font-weight: 800;
+            margin: 0 0 10px 0;
+        }
+
+        header p {
+            font-size: 1rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2열 그리드로 변경 */
+            gap: 25px;
         }
 
         .tool-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 30px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
             text-decoration: none;
-            color: var(--text);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            color: var(--text-main);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .tool-card:hover {
             transform: translateY(-5px);
-            border-color: var(--accent);
-            box-shadow: 0 0 30px var(--accent-glow);
+            box-shadow: 0 8px 25px rgba(57, 255, 20, 0.15);
+            border-color: var(--neon-green);
         }
 
-        .tool-card h3 {
+        .tool-card h2 {
             font-size: 1.4rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-            color: var(--text);
+            color: var(--neon-green);
+            margin: 0 0 10px 0;
         }
-        
+
         .tool-card p {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--text-dim);
-        }
-
-        .tool-card.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            filter: grayscale(80%);
+            margin: 0;
+            flex-grow: 1; /* 카드의 높이가 달라도 p가 공간을 채우도록 함 */
         }
         
-        .tool-card.disabled:hover {
-            transform: none;
-            box-shadow: none;
-            border-color: var(--border);
-        }
-        
-        .tool-card.disabled p::after {
-            content: '(준비 중)';
+        .tool-card .status {
             font-size: 0.9rem;
-            color: var(--accent);
-            margin-left: 8px;
-            font-weight: 700;
+            font-weight: 600;
+            color: #ffc107; /* 준비 중 태그 색상 */
+            margin-top: 15px;
         }
 
-
-        footer { 
-            text-align: center; 
-            font-size: 0.85rem; 
-            color: #444; 
-            font-weight: 700; 
-            margin-top: 80px;
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #888;
         }
 
-        /* Mobile Optimization */
         @media (max-width: 768px) {
-            .container { padding: 40px 20px; }
-            h1 { font-size: 2rem; }
-            .tool-grid {
-                grid-template-columns: 1fr;
+            body { padding: 15px; }
+            h1 { font-size: 1.8rem; }
+            header { margin-bottom: 30px; }
+            .tools-grid {
+                grid-template-columns: 1fr; /* 모바일에서는 1열로 변경 */
+                gap: 20px;
             }
-            .tool-card h3 { font-size: 1.3rem; }
-            body { font-size: 15px; }
         }
-
     </style>
 </head>
 <body>
+
     <div class="container">
         <header>
-            <h1>핵심 <span>도구</span> 모음</h1>
+            <h1>실전 투자 & 커머스 계산기</h1>
+            <p>데이터 기반의 냉철한 의사결정을 위한 전문가용 웹툴 컬렉션</p>
         </header>
 
-        <main class="tool-grid">
-            <a href="reality-calc.html" class="tool-card">
-                <h3>복리 계산기</h3>
-                <p>수수료, 목표 수익률을 반영한 실전 복리 효과를 시뮬레이션합니다.</p>
-            </a>
-            <a href="kelly-calc.html" class="tool-card">
-                <h3>켈리 공식 계산기</h3>
-                <p>승률과 손익비 기반 최적 투자 비중을 계산하여 파산을 방지합니다.</p>
-            </a>
-            <a href="coin-calc.html" class="tool-card">
-                <h3>코인 물타기 계산기</h3>
-                <p>분할매수 시뮬레이터로 최종 평단가, 청산가, 본절가를 즉시 계산합니다.</p>
-            </a>
-            <a href="margin-calc.html" class="tool-card">
-                <h3>로켓그로스 정밀 마진 계산기</h3>
-                <p>1688원가, 물류비, 광고비, 세금을 모두 반영한 최종 순수익을 계산합니다.</p>
-            </a>
-            <a href="#" class="tool-card disabled">
-                <h3>중국 사입 원가 계산기</h3>
-                <p>위안화 환율, 배대지 비용 등을 고려한 최종 매입 원가를 계산합니다.</p>
-            </a>
-            <a href="#" class="tool-card disabled">
-                <h3>유튜브 예상 수익 계산기</h3>
-                <p>조회수, 구독자, 광고 단가를 기반으로 예상 월수익을 시뮬레이션합니다.</p>
-            </a>
+        <main>
+            <div class="tools-grid">
+                <a href="./compound-interest-calc.html" class="tool-card">
+                    <h2>복리 계산기</h2>
+                    <p>시간의 마법, 복리 효과를 시뮬레이션하여 장기 투자 계획과 은퇴 시점의 자산을 예측합니다.</p>
+                </a>
+                
+                <a href="./kelly-calc.html" class="tool-card">
+                    <h2>켈리 공식 계산기</h2>
+                    <p>승률과 손익비를 기반으로 파산을 방지하고 자산 증식을 극대화하는 최적의 베팅 비율을 찾습니다.</p>
+                </a>
+
+                <a href="./stock-calc.html" class="tool-card">
+                    <h2>코인/주식 평단 계산기 (물타기)</h2>
+                    <p>분할 매수 시나리오에 따른 평균 매수 단가와 수익률 변화를 계산하여 리스크를 관리합니다.</p>
+                </a>
+                
+                <a href="./margin-calc.html" class="tool-card">
+                    <h2>쿠팡 로켓그로스 마진 계산기</h2>
+                    <p>수수료, 물류비, 광고비 등 모든 비용을 반영하여 셀러의 실제 순수익과 ROI를 정밀 분석합니다.</p>
+                </a>
+
+                <!--
+                <a href="#" class="tool-card">
+                    <h2>중국 사입 원가 계산기</h2>
+                    <p>1688, 타오바오 상품의 위안화 원가, 배대지 비용, 관부가세를 포함한 최종 매입 원가를 계산합니다.</p>
+                    <span class="status">(준비 중)</span>
+                </a>
+
+                <a href="#" class="tool-card">
+                    <h2>유튜브 예상 수익 계산기</h2>
+                    <p>구독자 수, 평균 조회수, RPM(천 회당 수익)을 기반으로 유튜버의 월/연간 수익을 예측합니다.</p>
+                    <span class="status">(준비 중)</span>
+                </a>
+                -->
+            </div>
         </main>
-        
+
         <footer>
-            <p>&copy; 2024. All rights reserved.</p>
+            <p>&copy; 2024 Quant-Based Financial Tools. All rights reserved.</p>
         </footer>
     </div>
+
 </body>
 </html>
