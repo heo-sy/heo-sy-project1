@@ -192,9 +192,33 @@
     </style>
 </head>
 <body>
-    <nav class="main-nav">
-        <a href="index.html">⬅ 메인 대시보드로 돌아가기</a>
-    </nav>
+<style>
+    .gnb-header { background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(10px); position: -webkit-sticky; position: sticky; top: 0; z-index: 9999; border-bottom: 1px solid #2a2a2a; width: 100%; font-family: "Pretendard", sans-serif; }
+    .gnb-container { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; box-sizing: border-box; }
+    .gnb-logo { font-size: 1.4rem; font-weight: 900; color: #ffffff; text-decoration: none; letter-spacing: -0.5px; display: flex; align-items: center; gap: 5px; }
+    .gnb-logo span { color: #00f2ff; }
+    .gnb-nav-list { display: flex; gap: 15px; list-style: none; margin: 0; padding: 0; }
+    .gnb-nav-list a { display: block; padding: 6px 10px; color: #888888; text-decoration: none; font-size: 0.95rem; font-weight: 700; transition: all 0.2s ease; border-radius: 6px; }
+    .gnb-nav-list a:hover { color: #00f2ff; background: rgba(0, 242, 255, 0.1); }
+    @media (max-width: 768px) {
+        .gnb-container { flex-direction: column; gap: 15px; padding: 15px; }
+        .gnb-nav-list { gap: 5px; justify-content: center; width: 100%; flex-wrap: wrap; }
+        .gnb-nav-list a { font-size: 0.9rem; padding: 8px 12px; }
+    }
+</style>
+<header class="gnb-header">
+    <div class="gnb-container">
+        <a href="index.html" class="gnb-logo">Quant <span>Hub</span></a>
+        <nav>
+            <ul class="gnb-nav-list">
+                <li><a href="index.html">🏠 홈</a></li>
+                <li><a href="reality-calc.html">📈 복리 계산기</a></li>
+                <li><a href="kelly-calc.html">⚖️ 켈리 공식</a></li>
+                <li><a href="coin-calc.html">💧 물타기 계산기</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
 
     <div class="container">
         <header>
