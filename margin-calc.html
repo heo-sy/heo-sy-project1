@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쿠팡 로켓그로스 마진 계산기</title>
+    <style>
+        body { font-family: 'Pretendard', sans-serif; background-color: #0a0a0a; color: #f0f0f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background-color: #121212; padding: 30px 40px; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.5); width: 100%; max-width: 600px; border: 1px solid #2a2a2a; }
+        h1 { color: #39ff14; text-align: center; font-size: 1.8rem; margin-bottom: 25px; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 500; color: #a0a0a0; }
+        input { width: 100%; background-color: #1e1e1e; border: 1px solid #333; color: #f0f0f0; padding: 12px; border-radius: 6px; box-sizing: border-box; font-size: 1rem; transition: border-color 0.2s, box-shadow 0.2s; }
+        input:focus { outline: none; border-color: #39ff14; box-shadow: 0 0 0 3px rgba(57, 255, 20, 0.2); }
+        button { background-color: #39ff14; color: #000; border: none; padding: 14px 0; width: 100%; border-radius: 6px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: background-color 0.2s; margin-top: 10px;}
+        button:hover { background-color: #4aff2a; }
+        .result-section { margin-top: 30px; padding-top: 20px; border-top: 1px solid #2a2a2a; }
+        h2 { text-align: center; color: #f0f0f0; margin-bottom: 20px; }
+        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .result-item { background-color: #1e1e1e; padding: 15px; border-radius: 8px; }
+        .result-item p { margin: 0; font-size: 0.9rem; color: #a0a0a0; }
+        .result-item span { display: block; font-size: 1.4rem; font-weight: 700; color: #f0f0f0; margin-top: 5px; }
+        .profit { color: #39ff14 !important; }
+        .loss { color: #ff4136 !important; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📦 쿠팡 로켓그로스 마진 계산기</h1>
+        <div>
+            <div class="input-group">
+                <label for="sellPrice">판매가 (원)</label>
+                <input type="number" id="sellPrice" placeholder="고객이 결제하는 최종 금액">
+            </div>
+            <div class="input-group">
+                <label for="purchaseCost">매입 원가 (원)</label>
+                <input type="number" id="purchaseCost" placeholder="제품 1개당 사입 비용">
+            </div>
+            <div class="input-group">
+                <label for="coupangFee">쿠팡 판매수수료 (%)</label>
+                <input type="number" id="coupangFee" value="10.5" placeholder="카테고리별 수수료 입력">
+            </div>
+             <div class="input-group">
+                <label for="shippingCost">쿠팡 배송비 (원)</label>
+                <input type="number" id="shippingCost" value="3300" placeholder="제품 크기/무게별 요금">
+            </div>
+            <button onclick="calculate()">마진 계산하기</button>
+        </div>
+        <div class="result-section" id="result" style="display:none;">
+            <h2>📊 분석 결과</h2>
+            <div class="result-grid">
+                <div class="result-item">
+                    <p>총 정산금액</p>
+                    <span id="totalSettle"></span>
+                </div>
+                <div class="result-item">
+                    <p>쿠팡 총 수수료</p>
+                    <span id="totalFee"></span>
+                </div>
+                <div class="result-item">
+                    <p><strong>최종 순수익</strong></p>
+                    <span id="netProfit"></span>
+                </div>
+                <div class="result-item">
+                    <p><strong>마진율(%)</strong></p>
+                    <span id="marginRate"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculate() {
+            const sellPrice = parseFloat(document.getElementById('sellPrice').value) || 0;
+            const purchaseCost = parseFloat(document.getElementById('purchaseCost').value) || 0;
+            const coupangFeeRate = parseFloat(document.getElementById('coupangFee').value) || 0;
+            const shippingCost = parseFloat(document.getElementById('shippingCost').value) || 0;
+
+            if (sellPrice === 0) {
+                alert('판매가를 입력해주세요.');
+                return;
+            }
+
+            const coupangFee = sellPrice * (coupangFeeRate / 100);
+            const totalSettle = sellPrice - coupangFee;
+            const totalFee = coupangFee + shippingCost;
+            const netProfit = totalSettle - purchaseCost - shippingCost;
+            const marginRate = (netProfit / sellPrice) * 100;
+
+            document.getElementById('totalSettle').textContent = Math.round(totalSettle).toLocaleString() + '원';
+            document.getElementById('totalFee').textContent = Math.round(totalFee).toLocaleString() + '원';
+            
+            const netProfitElem = document.getElementById('netProfit');
+            const marginRateElem = document.getElementById('marginRate');
+
+            netProfitElem.textContent = Math.round(netProfit).toLocaleString() + '원';
+            marginRateElem.textContent = marginRate.toFixed(2) + '%';
+            
+            if (netProfit < 0) {
+                netProfitElem.className = 'loss';
+                marginRateElem.className = 'loss';
+            } else {
+                netProfitElem.className = 'profit';
+                marginRateElem.className = 'profit';
+            }
+
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
