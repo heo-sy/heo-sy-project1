@@ -3,167 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>퀀트 기반 금융 계산기 - 실전 투자와 커머스를 위한 모든 도구</title>
-    <meta name="description" content="상위 1% 전문가들이 사용하는 실전 금융 계산기 모음. 복리, 켈리 공식, 평단(물타기), 쿠팡 마진 계산기로 투자의사결정과 수익 극대화를 경험하세요.">
-    <meta name="keywords" content="금융 계산기, 투자 계산기, 복리 계산기, 켈리 공식, 물타기 계산기, 평단가 계산기, 쿠팡 마진 계산기, 애드센스, 재테크">
+    <title>N잡러의 무기창고 : 실전 계산기 & 실전 칼럼</title>
+    <meta name="description" content="데이터 기반의 냉철한 수익 분석과 분야별 실전 노하우. 투자, 이커머스, 수익화 전문가를 위한 필수 도구와 팁.">
+    <meta name="keywords" content="N잡러, 수익 계산기, 투자 도구, 커머스 도구, 애드센스, 블로그, 재테크, 마진 계산, 평단가 계산, 켈리 공식, 복리 계산">
     
     <style>
         :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
+            --bg-color: #000000;
+            --card-bg: #1a1a1a;
+            --text-main: #f0f0f0;
+            --text-dim: #a0a0a0;
+            --border-color: #2a2a2a;
+            --neon-blue: #00B2FF;
             --neon-green: #39ff14;
-            --text-main: #ffffff;
-            --text-dim: #cccccc;
-            --border-color: #333;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
-            padding: 20px;
-            line-height: 1.6;
+            padding: 0;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 20px;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
+        /* Navigation Bar */
+        .nav-bar {
+            background-color: rgba(16, 16, 16, 0.8);
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        h1 {
-            font-size: 2.2rem;
+        .nav-logo a {
+            font-size: 1.2rem;
+            font-weight: 700;
             color: var(--text-main);
-            font-weight: 800;
-            margin: 0 0 10px 0;
+            text-decoration: none;
         }
-
-        header p {
-            font-size: 1rem;
-            color: var(--text-dim);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2열 그리드로 변경 */
+        
+        .nav-menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
             gap: 25px;
         }
 
-        .tool-card {
+        .nav-menu a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            color: var(--text-main);
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0 0 15px 0;
+            letter-spacing: -1px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* Main Content Layout */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .section {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 0 0 25px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title.invest { color: var(--neon-blue); }
+        .section-title.commerce { color: var(--neon-green); }
+
+        /* Tool Cards */
+        .tool-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .tool-card {
+            background-color: #0e0e0e;
+            border: 1px solid #222;
             border-radius: 12px;
-            padding: 25px;
+            padding: 20px;
             text-decoration: none;
             color: var(--text-main);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
             display: flex;
             flex-direction: column;
         }
-
-        .tool-card:hover {
+        
+        .invest .tool-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(57, 255, 20, 0.15);
-            border-color: var(--neon-green);
+            border-color: var(--neon-blue);
+            box-shadow: 0 5px 20px rgba(0, 178, 255, 0.1);
         }
 
-        .tool-card h2 {
-            font-size: 1.4rem;
-            color: var(--neon-green);
-            margin: 0 0 10px 0;
+        .commerce .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-green);
+            box-shadow: 0 5px 20px rgba(57, 255, 20, 0.1);
+        }
+
+        .tool-card h3 {
+            font-size: 1.3rem;
+            margin: 0 0 8px 0;
+            color: var(--text-main);
         }
 
         .tool-card p {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--text-dim);
             margin: 0;
-            flex-grow: 1; /* 카드의 높이가 달라도 p가 공간을 채우도록 함 */
+            line-height: 1.5;
         }
         
-        .tool-card .status {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #ffc107; /* 준비 중 태그 색상 */
-            margin-top: 15px;
-        }
-
+        /* Footer */
         footer {
             text-align: center;
-            margin-top: 60px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
+            padding: 60px 20px 30px;
             font-size: 0.9rem;
-            color: #888;
+            color: #666;
         }
 
+        /* Responsive */
         @media (max-width: 768px) {
-            body { padding: 15px; }
-            h1 { font-size: 1.8rem; }
-            header { margin-bottom: 30px; }
-            .tools-grid {
-                grid-template-columns: 1fr; /* 모바일에서는 1열로 변경 */
-                gap: 20px;
+            h1 { font-size: 2.2rem; }
+            header p { font-size: 1rem; }
+            .main-content {
+                grid-template-columns: 1fr;
             }
+            .nav-bar { padding: 15px 20px; }
+            .nav-menu { display: none; } /* Simple mobile menu handling */
         }
     </style>
 </head>
 <body>
 
+    <nav class="nav-bar">
+        <div class="nav-logo">
+            <a href="#">N잡러의 무기창고</a>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="#" class="active">홈</a></li>
+            <li><a href="#">투자 도구</a></li>
+            <li><a href="#">커머스 도구</a></li>
+            <li><a href="#">수수료/마진 팁(Blog)</a></li>
+        </ul>
+    </nav>
+
     <div class="container">
         <header>
-            <h1>실전 투자 & 커머스 계산기</h1>
-            <p>데이터 기반의 냉철한 의사결정을 위한 전문가용 웹툴 컬렉션</p>
+            <h1>N잡러의 무기창고 : 실전 계산기 & 실전 칼럼</h1>
+            <p>데이터 기반의 냉철한 수익 분석과 분야별 실전 노하우</p>
         </header>
 
-        <main>
-            <div class="tools-grid">
-                <a href="./reality-calc.html" class="tool-card">
-                    <h2>복리 계산기</h2>
-                    <p>시간의 마법, 복리 효과를 시뮬레이션하여 장기 투자 계획과 은퇴 시점의 자산을 예측합니다.</p>
-                </a>
-                
-                <a href="./kelly-calc.html" class="tool-card">
-                    <h2>켈리 공식 계산기</h2>
-                    <p>승률과 손익비를 기반으로 파산을 방지하고 자산 증식을 극대화하는 최적의 베팅 비율을 찾습니다.</p>
-                </a>
+        <main class="main-content">
+            <section class="section invest">
+                <h2 class="section-title invest">📊 투자 & 트레이딩</h2>
+                <div class="tool-grid">
+                    <a href="./calculator.html" class="tool-card">
+                        <h3>복리 계산기</h3>
+                        <p>장기 투자 계획과 은퇴 자산을 예측하는 복리 효과 시뮬레이터.</p>
+                    </a>
+                    <a href="./kelly-calc.html" class="tool-card">
+                        <h3>켈리 공식 계산기</h3>
+                        <p>파산을 방지하고 자금 증식을 극대화하는 최적의 베팅 비율 산출.</p>
+                    </a>
+                    <a href="./coin-calc.html" class="tool-card">
+                        <h3>코인/주식 평단 계산기</h3>
+                        <p>분할 매수 시나리오에 따른 평균 매수 단가와 수익률 변화 분석.</p>
+                    </a>
+                </div>
+            </section>
 
-                <a href="./stock-calc.html" class="tool-card">
-                    <h2>코인/주식 평단 계산기 (물타기)</h2>
-                    <p>분할 매수 시나리오에 따른 평균 매수 단가와 수익률 변화를 계산하여 리스크를 관리합니다.</p>
-                </a>
-                
-                <a href="./margin-calc.html" class="tool-card">
-                    <h2>쿠팡 로켓그로스 마진 계산기</h2>
-                    <p>수수료, 물류비, 광고비 등 모든 비용을 반영하여 셀러의 실제 순수익과 ROI를 정밀 분석합니다.</p>
-                </a>
-
-                <!--
-                <a href="#" class="tool-card">
-                    <h2>중국 사입 원가 계산기</h2>
-                    <p>1688, 타오바오 상품의 위안화 원가, 배대지 비용, 관부가세를 포함한 최종 매입 원가를 계산합니다.</p>
-                    <span class="status">(준비 중)</span>
-                </a>
-
-                <a href="#" class="tool-card">
-                    <h2>유튜브 예상 수익 계산기</h2>
-                    <p>구독자 수, 평균 조회수, RPM(천 회당 수익)을 기반으로 유튜버의 월/연간 수익을 예측합니다.</p>
-                    <span class="status">(준비 중)</span>
-                </a>
-                -->
-            </div>
+            <section class="section commerce">
+                <h2 class="section-title commerce">📦 이커머스 & 수익화</h2>
+                <div class="tool-grid">
+                    <a href="./margin-calc.html" class="tool-card">
+                        <h3>쿠팡 로켓그로스 마진 계산기</h3>
+                        <p>모든 비용을 반영하여 셀러의 실제 순수익과 ROI를 정밀 분석.</p>
+                    </a>
+                </div>
+            </section>
         </main>
 
         <footer>
-            <p>&copy; 2024 Quant-Based Financial Tools. All rights reserved.</p>
+            <p>&copy; 2024 N잡러의 무기창고. All Rights Reserved.</p>
         </footer>
     </div>
 
