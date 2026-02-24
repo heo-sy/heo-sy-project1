@@ -7,6 +7,8 @@
     <meta name="description" content="승률과 손익비를 바탕으로 파산을 막고 복리 수익을 극대화하는 켈리 공식 계산기입니다. 하프 켈리 비중과 리스크 관리 전략을 확인하세요.">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9707678635895853"
      crossorigin="anonymous"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         :root {
             --background-color: #121212;
@@ -158,7 +160,11 @@
 
             <article class="seo-content">
                 <h2>켈리 공식(Kelly Criterion)이란 무엇인가?</h2>
-                <p>켈리 공식은 정보 이론에 뿌리를 둔 수학적 공식으로, 장기적으로 수익을 극대화할 수 있는 최적의 투자 비중을 계산하는 데 사용됩니다. 1956년 벨 연구소의 과학자 존 켈리(John Kelly)가 발표한 이 공식은 당신의 투자 전략이 긍정적인 기대수익을 가질 때, 각 거래마다 총자산의 몇 퍼센트를 투자해야 하는지를 알려줍니다. 이 공식의 핵심 목표는 단기적인 대박이 아닌 '파산 방지'에 있습니다. 아무리 승률이 높은 훌륭한 전략이라도, 한 번의 과도한 베팅으로 모든 것을 잃는다면 아무 소용이 없습니다. 켈리 공식은 이러한 치명적인 리스크를 수학적으로 통제하여, 장기적인 관점에서 안정적인 자산 관리와 복리 수익 극대화를 추구하도록 돕습니다. 이는 감이나 운에 의존하는 투자가 아닌, 데이터와 확률에 기반한 체계적인 리스크 관리의 첫걸음입니다.</p>
+                <p>
+                    켈리 공식은 \( K\% = W - \frac{(1-W)}{R} \) 와 같이 표현됩니다.
+                    여기서 \(K\%\)는 자산의 최적 베팅 비율, \(W\)는 승률, \(R\)은 손익비를 의미합니다.
+                    이 공식은 장기적으로 수익을 극대화하고 파산 위험을 최소화하는 데 도움을 줍니다.
+                </p>
 
                 <h3>왜 '풀 켈리' 대신 '하프 켈리'를 실전에서 쓰는가?</h3>
                 <p>계산된 켈리 값(풀 켈리)은 이론적으로 자산 증식 속도가 가장 빠른 최적의 베팅 비율이지만, 여기에는 몇 가지 함정이 존재합니다. 첫째, 풀 켈리 전략은 극심한 변동성(MDD, 최대 낙폭)을 동반합니다. 이론적으로 최적일지라도, 실제로 자산의 30~50%가 순식간에 사라지는 경험을 하면 대부분의 투자자는 심리적 압박을 견디지 못하고 비합리적인 결정을 내리게 됩니다. 둘째, 켈리 공식은 '정확한 승률과 손익비를 알고 있다'는 전제 하에 성립합니다. 하지만 현실 세계의 투자에서 승률과 손익비는 과거 데이터에 기반한 추정치일 뿐, 미래에도 동일하리란 보장이 없습니다. 만약 실제 승률이 추정치보다 낮게 나온다면, 풀 켈리 베팅은 오히려 파산의 지름길이 될 수 있습니다. 이러한 이유로 수많은 전문 투자자들은 계산된 켈리 값의 절반, 즉 '하프 켈리(Half Kelly)'를 사용하는 것을 선호합니다. 하프 켈리는 수익 극대화 속도를 다소 희생하는 대신, 변동성을 크게 줄여 훨씬 안정적인 자산 관리를 가능하게 하고, 추정 오류에 대한 안전 마진을 제공하여 장기 생존 확률을 비약적으로 높여줍니다.</p>
@@ -202,18 +208,18 @@
             if (fullKelly <= 0) {
                 resultDiv.innerHTML = '<p class="result-value negative" style="font-size: 24px;">⚠️ 투자 금지 (손실 예상)</p>';
             } else {
-                resultDiv.innerHTML = \`
+                resultDiv.innerHTML = `
                     <div>
                         <h3 class="result-title">풀 켈리 (Full Kelly)</h3>
-                        <p class="result-value positive">\${fullKelly.toFixed(2)}%</p>
+                        <p class="result-value positive">${fullKelly.toFixed(2)}%</p>
                         <p class="result-description">이론상 수익 극대화 비중</p>
                     </div>
                     <div style="margin-top: 2rem;">
                         <h3 class="result-title">하프 켈리 (Half Kelly)</h3>
-                        <p class="result-value positive">\${halfKelly.toFixed(2)}%</p>
+                        <p class="result-value positive">${halfKelly.toFixed(2)}%</p>
                         <p class="result-description">실전 권장 투자 비중 (변동성 관리)</p>
                     </div>
-                \`;
+                `;
             }
         }
     </script>

@@ -1,28 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://heo-sy.github.io/heo-sy-project1/</loc>
-    <lastmod>2026-02-23</lastmod>
-    <priority>1.00</priority>
+    <loc>https://heo-sy-project1.pages.dev/</loc>
+    <lastmod>2024-07-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://heo-sy.github.io/heo-sy-project1/index.html</loc>
-    <lastmod>2026-02-23</lastmod>
-    <priority>0.80</priority>
+    <loc>https://heo-sy-project1.pages.dev/index.html</loc>
+    <lastmod>2024-07-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://heo-sy.github.io/heo-sy-project1/reality-calc.html</loc>
-    <lastmod>2026-02-23</lastmod>
-    <priority>0.80</priority>
+    <loc>https://heo-sy-project1.pages.dev/reality-calc.html</loc>
+    <lastmod>2024-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://heo-sy.github.io/heo-sy-project1/coin-calc.html</loc>
-    <lastmod>2026-02-23</lastmod>
-    <priority>0.80</priority>
+    <loc>https://heo-sy-project1.pages.dev/margin-calc.html</loc>
+    <lastmod>2024-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://heo-sy.github.io/heo-sy-project1/margin-calc.html</loc>
-    <lastmod>2026-02-23</lastmod>
-    <priority>0.80</priority>
+    <loc>https://heo-sy-project1.pages.dev/kelly-calc.html</loc>
+    <lastmod>2024-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://heo-sy-project1.pages.dev/coin-calc.html</loc>
+    <lastmod>2024-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>
