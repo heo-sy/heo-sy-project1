@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>쿠팡 로켓그로스 마진 계산기 - 수수료 및 부가세 포함 순수익 계산기</title>
-    <meta name="description" content="쿠팡 로켓그로스 판매자를 위한 정밀 마진 계산기입니다. 입점 수수료, 광고비, 부가세, 배송비 등을 포함한 정확한 순수익과 ROI를 확인하세요.">
-    <meta name="keywords" content="쿠팡 마진 계산기, 로켓그로스 계산기, 순수익, 마진율, ROI, 부가세, 쿠팡 수수료, 커머스, 이커머스">
+    <title>쿠팡 로켓그로스 마진 계산기 - 상위 1% 셀러의 순수익 계산법</title>
+    <meta name="description" content="상위 1% 쿠팡 탑셀러가 사용하는 정밀 마진 계산기. 수수료(10.8%), 물류비, 광고비, 손실률, 세금을 모두 반영한 실전 순수익과 ROI를 즉시 확인하세요.">
+    <meta name="keywords" content="쿠팡 마진 계산기, 로켓그로스 계산기, 순수익, 마진율, ROI, 쿠팡 수수료, ACOS, 역마진, 커머스, 퀀트">
 
     <style>
         :root {
@@ -85,18 +85,52 @@
         .metric .title { font-size: 14px; color: var(--text-dim); margin-bottom: 5px; }
         .metric .value { font-size: 28px; font-weight: 800; color: var(--neon-green); }
 
-        .seo-article { margin-top: 50px; padding-top: 30px; border-top: 1px solid var(--border-color); }
-        .seo-article h2 { text-align: center; font-size: 1.6rem; margin-bottom: 30px; }
-        .seo-card {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 10px;
-            border-left: 3px solid var(--neon-green);
-            margin-bottom: 20px;
+        /* --- SEO Article Styles --- */
+        .seo-article {
+            margin-top: 60px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border-color);
         }
-        .seo-card h3 { margin-top: 0; font-size: 1.2rem; }
-        .seo-card p, .seo-card ul { font-size: 15px; color: var(--text-dim); }
-        .seo-card li { margin-bottom: 10px; }
+        .seo-article h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 40px;
+            font-weight: 700;
+        }
+        .seo-article h3 {
+            font-size: 1.3rem;
+            color: var(--neon-green);
+            margin-top: 0;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .seo-article .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 4px solid var(--neon-green);
+            margin-bottom: 30px;
+        }
+        .seo-article p {
+            font-size: 16px;
+            color: var(--text-dim);
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        .seo-article strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+        .seo-article code {
+            background-color: #000;
+            color: var(--neon-green);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: "SF Mono", "Courier New", monospace;
+            font-size: 0.9em;
+        }
 
         @media (max-width: 600px) {
             body { padding: 15px; }
@@ -105,6 +139,9 @@
             .card { padding: 20px; }
             .results-grid { gap: 25px; }
             .metric .value { font-size: 26px; }
+            .seo-article h2 { font-size: 1.5rem; }
+            .seo-article h3 { font-size: 1.2rem; }
+            .seo-article .card { padding: 25px; }
         }
     </style>
 </head>
@@ -120,11 +157,11 @@
                 <div class="grid-layout">
                     <div class="input-group">
                         <label for="sellPrice">판매가 (원)</label>
-                        <input type="number" id="sellPrice" placeholder="판매 금액" inputmode="numeric" oninput="calculate()">
+                        <input type="number" id="sellPrice" placeholder="고객 결제 금액" inputmode="numeric" oninput="calculate()">
                     </div>
                     <div class="input-group">
                         <label for="buyPrice">매입가 (원)</label>
-                        <input type="number" id="buyPrice" placeholder="총 원가" inputmode="numeric" oninput="calculate()">
+                        <input type="number" id="buyPrice" placeholder="제품 원가 + 포장비 등" inputmode="numeric" oninput="calculate()">
                     </div>
                 </div>
             </section>
@@ -133,28 +170,28 @@
                 <div class="grid-layout">
                     <div class="input-group">
                         <label for="platformFee">쿠팡 수수료 (%)</label>
-                        <input type="number" id="platformFee" value="10" inputmode="numeric" oninput="calculate()">
-                        <p class="help-text">카테고리별 수수료(평균 5~11%)를 입력하세요.</p>
+                        <input type="number" id="platformFee" value="10.8" inputmode="numeric" oninput="calculate()">
+                        <p class="help-text">쿠팡 판매 수수료(부가세 포함) 평균치인 10.8%를 적용했습니다. 본인 카테고리에 맞게 수정하세요.</p>
                     </div>
                     <div class="input-group">
-                        <label for="shippingCost">배송/보관비 (원)</label>
-                        <input type="number" id="shippingCost" value="3000" inputmode="numeric" oninput="calculate()">
-                        <p class="help-text">로켓그로스 요금(평균 3,000원~) 또는 3PL 실비를 입력하세요.</p>
+                        <label for="shippingCost">로켓그로스 물류비 (원)</label>
+                        <input type="number" id="shippingCost" value="4000" inputmode="numeric" oninput="calculate()">
+                        <p class="help-text">입출고+보관비. 내 상품의 부피/무게에 맞는 실비를 입력하세요.</p>
                     </div>
                     <div class="input-group">
-                        <label for="adRate">광고비 (%)</label>
-                        <input type="number" id="adRate" value="10" inputmode="numeric" oninput="calculate()">
-                        <p class="help-text">매출 대비 목표 광고비 비율(ACOS)을 입력하세요.</p>
+                        <label for="adRate">광고비 (ACOS %)</label>
+                        <input type="number" id="adRate" value="15" inputmode="numeric" oninput="calculate()">
+                        <p class="help-text">매출 대비 목표 광고비 비율(ACOS)을 입력하세요. (15% 내외 권장)</p>
                     </div>
                     <div class="input-group">
-                        <label for="lossRate">손실/예비비 (%)</label>
+                        <label for="lossRate">손실률 (%)</label>
                         <input type="number" id="lossRate" value="3" inputmode="numeric" oninput="calculate()">
-                        <p class="help-text">반품, 불량, 재고 폐기 등 예상 손실률(3% 권장)입니다.</p>
+                        <p class="help-text">반품, 폐기, 고객 보상 등 예상 손실 비용입니다. (최소 3% 권장)</p>
                     </div>
                     <div class="input-group">
                         <label for="taxRate">세금 (%)</label>
                         <input type="number" id="taxRate" value="10" inputmode="numeric" oninput="calculate()">
-                        <p class="help-text">부가세(10%) 및 종소세 대비, 보수적 순수익 계산용입니다.</p>
+                        <p class="help-text">부가세 및 종합소득세 대비, 보수적 순수익 계산을 위해 적용합니다.</p>
                     </div>
                 </div>
             </section>
@@ -163,7 +200,7 @@
                 <h2>최종 수익 분석</h2>
                 <div class="results-grid">
                     <div class="metric">
-                        <div class="title">순수익</div>
+                        <div class="title">순수익 (세후)</div>
                         <div class="value" id="netProfit">0원</div>
                     </div>
                     <div class="metric">
@@ -171,7 +208,7 @@
                         <div class="value" id="marginRate">0%</div>
                     </div>
                     <div class="metric">
-                        <div class="title">ROI (수익률)</div>
+                        <div class="title">ROI (투자 대비 수익률)</div>
                         <div class="value" id="roi">0%</div>
                     </div>
                 </div>
@@ -179,18 +216,27 @@
         </main>
 
         <article class="seo-article">
-            <h2>로켓그로스 마진 계산 시 주의할 점 3가지</h2>
-            <div class="seo-card">
-                <h3>1. 부가세: 환급을 고려한 실질 비용 분석</h3>
-                <p>계산기에 입력하는 세금 10%는 최종 수익에 대한 보수적인 추정치입니다. 실제 사업에서는 매입 시 지불한 부가세(매입세액)를 매출 시 발생한 부가세(매출세액)에서 공제받을 수 있습니다. 예를 들어, 1,000원짜리 상품을 매입했다면 그 안에 포함된 100원(매입세액)은 나중에 환급 대상이 될 수 있습니다. 따라서 이 계산기로는 보수적인 현금 흐름을 파악하고, 실제 세무 신고 시에는 반드시 세무 전문가와 상담하여 매입세액 공제를 반영한 정확한 세금을 계산해야 합니다.</p>
+            <h2>상위 1% 셀러의 정밀 마진 계산법과 숨은 비용 방어 전략</h2>
+
+            <div class="card">
+                <h3>파트 A: 초보 셀러가 반드시 외워야 할 마진 공식의 원리</h3>
+                <p>온라인 판매의 성패는 '감'이 아닌 '숫자'에 달려있습니다. 특히 쿠팡 로켓그로스는 다양한 비용 구조가 얽혀 있어, 정확한 계산 없이 진입하면 역마진의 늪에 빠지기 쉽습니다. 이 계산기는 다음의 실전 공식에 기반해 여러분의 돈을 지켜드립니다.</p>
+                <p><code>순수익 = 판매가 - (매입가 + 수수료 + 물류비 + 광고비 + 손실률 + 세금)</code></p>
+                <p><strong>판매가</strong>는 고객이 최종 결제하는 금액, 즉 우리 통장에 꽂히기 전의 총 매출입니다. <strong>매입가</strong>는 제품 원가, 포장 부자재, 사은품 등 상품 하나를 파는 데 들어간 모든 비용을 포함해야 합니다. 이 두 가지를 제외한 나머지 항목이 바로 우리가 통제하고 방어해야 할 '비용'입니다. 이 비용들을 정확히 예측하고 빼야만 진짜 내 돈, <strong>순수익</strong>이 보입니다.</p>
             </div>
-            <div class="seo-card">
-                <h3>2. 쿠팡 수수료: 카테고리, 판매가, 프로모션의 함정</h3>
-                <p>쿠팡의 판매 수수료는 카테고리마다 천차만별이며, 동일 카테고리 내에서도 판매 가격 구간에 따라 달라질 수 있습니다. 또한, 쿠팡이 자체적으로 진행하는 할인 프로모션에 동의할 경우, 할인 금액의 일부 또는 전체를 판매자가 부담하게 되어 실질 수수료가 예상보다 높아질 수 있습니다. '윙(Wing)' 판매자 센터의 [리포트] > [정산 현황] 메뉴에서 실제 정산 내역을 주기적으로 확인하여, 내 상품의 '실질 수수료율'이 얼마인지 파악하고 계산기에 반영해야 역마진을 피할 수 있습니다.</p>
-            </div>
-            <div class="seo-card">
-                <h3>3. 배송비: 부피와 무게에 따른 역마진 방지 전략</h3>
-                <p>로켓그로스의 배송 요금은 상품의 크기(부피)와 무게에 따라 결정됩니다. 작고 가벼운 상품은 저렴하지만, 부피가 크거나 무거운 상품(예: 가구, 생수)은 배송비가 판매가의 상당 부분을 차지할 수 있습니다. 상품 입고 전, '윙(Wing)'에서 제공하는 요금표를 기준으로 내 상품의 '예상 배송비'를 반드시 확인해야 합니다. 만약 배송비가 부담스럽다면, 1)여러 개를 묶어파는 합포장 전략으로 객단가를 높이거나, 2)부피를 줄일 수 있도록 포장을 개선하여 배송 요금 구간을 한 단계 낮추는 전략을 고려해야 합니다.</p>
+
+            <div class="card">
+                <h3>파트 B: 실전에서 마진을 갉아먹는 3가지 핵심</h3>
+                <p>월 매출이 수억 원이라도 순수익이 마이너스인 셀러가 많습니다. 이유는 단 하나, 아래의 '숨은 비용'들을 간과했기 때문입니다. 정산일에 당황하지 않으려면 이 세 가지를 반드시 명심해야 합니다.</p>
+                
+                <p><strong>1) 쿠팡 수수료 10.8%의 진실</strong><br>
+                "제 카테고리 수수료는 10%인데, 왜 10.8%를 넣어야 하나요?" 라고 많은 분들이 묻습니다. 정답은 <strong>수수료에 붙는 부가세 10%</strong> 때문입니다. 쿠팡은 판매자에게 부과하는 수수료에 대해 10%의 부가세를 추가로 떼어갑니다. 즉, 명목 수수료가 10%라면 실제로는 <code>10% + (10%의 10%) = 11%</code>가 실질 수수료가 되는 셈입니다. 10.8%는 모든 카테고리의 평균적인 실질 수수료이며, 정확한 계산을 위한 최소한의 기준선입니다.</p>
+
+                <p><strong>2) 로켓그로스 물류비의 함정</strong><br>
+                로켓그로스는 편리하지만, 비용 구조를 모르면 독이 됩니다. 특히 <strong>부피와 무게에 따른 입출고비, 그리고 팔리지 않을 때 쌓이는 재고 보관비</strong>는 시한폭탄과 같습니다. '이 정도는 괜찮겠지' 하고 입고시켰다가, 월말에 배보다 배꼽이 더 큰 물류비 청구서를 받을 수 있습니다. 상품 기획 단계부터 포장 후 부피와 무게를 계산해 예상 물류비를 반드시 확인하고, 판매가를 책정해야 합니다.</p>
+
+                <p><strong>3) 광고비(ACOS)와 반품/폐기 손실률 방어</strong><br>
+                겉보기 매출과 광고 효율(ACOS)에만 집중하면 안 됩니다. 실제 정산금은 고객 변심으로 인한 <strong>반품비, 검수 과정에서의 제품 파손, 장기 재고 폐기 비용</strong> 등이 차감된 금액입니다. 탑셀러들은 이 모든 리스크를 미리 '손실률'로 계산에 포함합니다. 이 계산기의 <strong>손실률 3%</strong>는 이러한 잠재적 비용에 대한 최소한의 보험입니다. 이 3%를 미리 떼어놓고도 수익이 나는 구조를 만들어야만, 어떤 변수가 발생해도 흔들리지 않고 꾸준히 이익을 쌓아갈 수 있습니다.</p>
             </div>
         </article>
 
