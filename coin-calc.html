@@ -6,6 +6,8 @@
     <title>코인 물타기 프로그램 & 청산가 계산기</title>
     <meta name="description" content="바이낸스, 비트겟 등 모든 거래소용 코인 선물 청산가 계산기. 다중 분할매수(물타기) 시나리오를 시뮬레이션하여 최종 평단가, 레버리지, 예상 청산 가격, 진짜 본절가를 즉시 확인하고 청산 위험을 관리하세요.">
     <meta name="keywords" content="코인 물타기 프로그램, 코인 선물 계산기, 청산가 계산기, 물타기 계산기, 평단가 계산기, 바이낸스 물타기 계산기, 비트겟 청산가 계산, 코인 선물 평단가, 수수료 계산법, 롱포지션, 숏포지션, 격리, 교차">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9707678635895853"
+     crossorigin="anonymous"></script>
 
     <!-- Pretendard 폰트 -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
@@ -543,7 +545,7 @@
                 const rows = entriesContainer.querySelectorAll('.entry-row');
                 rows.forEach((row, index) => {
                     row.querySelector('.input-group:first-child label').textContent = `${index + 1}차 진입가 ($)`;
-                    row.querySelector('.input-group:nth-child(2) label').textContent = `${index + 1}차 투자액 (USDT)`;
+                    row.querySelector('p.input-group:nth-child(2) label').textContent = `${index + 1}차 투자액 (USDT)`;
                 });
             }
 
