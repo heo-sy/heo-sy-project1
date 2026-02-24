@@ -125,7 +125,18 @@
         /* Notice & Footer */
         .notice { font-size: 0.95rem; color: #555; text-align: center; padding: 25px; background: rgba(0,242,255,0.03); border-radius: 12px; border-left: 4px solid var(--accent); margin-bottom: 50px; }
         footer { text-align: center; font-size: 0.8rem; color: #222; font-weight: 900; letter-spacing: 3px; padding-bottom: 40px; }
-
+        
+        .seo-article { margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border); line-height: 1.8; }
+        .seo-article h2 { font-size: 1.8rem; color: var(--accent); margin-bottom: 30px; text-align: center; font-weight: 900; }
+        .seo-article h3 { font-size: 1.4rem; color: var(--text); margin: 40px 0 20px; border-left: 4px solid var(--accent); padding-left: 15px; }
+        .seo-article p { color: var(--text-dim); margin-bottom: 20px; font-size: 1.05rem; }
+        .seo-article strong { color: var(--accent); }
+        .seo-card { background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 12px; margin-bottom: 25px; }
+        .seo-card ul { color: var(--text-dim); padding-left: 20px; margin-bottom: 20px; }
+        .seo-card li { margin-bottom: 10px; }
+        .check-list { background: #161b22; border: 1px dashed var(--accent); padding: 20px; border-radius: 8px; margin-top: 20px; }
+        .check-list h4 { color: var(--accent); margin-bottom: 10px; font-size: 1.1rem; }
+        
         /* Mobile Optimization */
         @media (max-width: 800px) {
             body { font-size: calc(var(--base-font) * 0.8); }
@@ -249,6 +260,56 @@
         <div class="notice">
             ※ 본 대시보드는 로켓그로스 셀러의 생존과 성장을 위해 설계되었습니다. 개인 사정에 맞춰 수식 수정이 가능합니다.
         </div>
+        
+        <article class="seo-article">
+            <h2>상위 1% 로켓그로스 셀러가 집착하는 숫자의 비밀: 정밀 마진 분석 가이드</h2>
+            
+            <div class="seo-card">
+                <h3>1. 왜 '대충' 계산하면 반드시 역마진이 날까요?</h3>
+                <p>쿠팡 로켓그로스(Rocket Growth)는 강력한 물류망을 빌려 쓰는 편리한 시스템이지만, 그 이면에는 복잡한 수수료 체계가 숨어 있습니다. 많은 초보 셀러들이 <strong>"매출은 터지는데 정산금을 보니 남는 게 없다"</strong>고 호소하는 이유는 '보이지 않는 비용'을 계산에서 누락했기 때문입니다.</p>
+                <p>단순히 '판매가 - 원가' 수준의 계산은 위험합니다. 본 대시보드는 <strong>실질 수수료(부가세 포함), 물류비의 변동성, 광고비 집행 한도, 운영 리스크(반품/폐기)</strong>를 모두 반영한 퀀트 기반의 수식을 사용합니다. 정확한 숫자를 직시하고 데이터에 기반해 사입 물량을 결정하는 것이 셀러 생존의 첫걸음입니다.</p>
+            </div>
+
+            <div class="seo-card">
+                <h3>2. 실무에서 마진을 갉아먹는 3가지 핵심 피해구역</h3>
+                <p>전문 셀러들이 정산일에 웃을 수 있는 이유는 아래 3가지 '마진 도둑'을 미리 계산기에 넣고 방어하기 때문입니다.</p>
+                
+                <p><strong>① 쿠팡 수수료 10.8%의 진실</strong><br>
+                대부분의 카테고리 명목 수수료는 10% 내외지만, 여기에 <strong>수수료에 대한 부가세 10%</strong>가 별도로 붙습니다. 즉, 10% 수수료인 상품은 실제로는 11%가 지출되는 셈입니다. 10.8%는 로켓그로스 평균치를 반영한 보수적인 기준점입니다. 이 미세한 0.8%의 차이가 월 매출 1억 원 시점에서는 무려 80만 원의 순이익 차이를 만듭니다.</p>
+
+                <p><strong>② 로켓그로스 물류비와 '장기 보관료'의 함정</strong><br>
+                3,000원의 입출고비는 시작일 뿐입니다. 상품의 <strong>체적 중량(부피와 무게)</strong>에 따라 입출고비가 예상보다 높게 책정될 수 있으며, 특히 판매 회전율이 낮아 창고에 재고가 쌓이면 '장기 보관료'라는 무서운 비용이 청구됩니다. 본 계산기를 통해 물류비를 보수적으로 설정하고, <a href="reality-calc.html" style="color:var(--accent); text-decoration:none;">복리 계산기</a>를 활용해 재투자 효율을 점검해야 합니다.</p>
+
+                <p><strong>③ 광고비와 손실률 3% 방어선</strong><br>
+                광고 효율(ROAS)이 좋아 보여도 반품 한두 번에 마진은 증발합니다. <strong>단순 변심 반품, 배송 중 파손, 검수 탈락</strong> 등은 온라인 커머스에서 피할 수 없는 비용입니다. 상위 1% 셀러들은 항상 <strong>최소 3%의 손실률</strong>을 미리 떼어놓고 계산합니다. 이 손실률을 감당하지 못하는 상품은 구조적으로 위험한 상품으로 분류해야 합니다.</p>
+            </div>
+
+            <div class="seo-card">
+                <h3>3. 전략적 지표: 엔드 ROAS와 광고비 한도 활용법</h3>
+                <p>본 대시보드가 제공하는 <strong>'엔드 ROAS(손익분기점)'</strong>는 여러분의 광고 캠페인이 절대로 넘지 말아야 할 마지막 마지노선입니다. 예를 들어 엔드 ROAS가 350%로 도출되었다면, 광고 수익률이 그 이하로 떨어지는 순간 팔수록 적자가 나는 구조임을 의미합니다.</p>
+                <p>또한 <strong>'최대 광고비 한도'</strong>는 상품 1개를 팔 때 마케팅에 쏟아부을 수 있는 순수 현금의 최대치입니다. 이 숫자를 명확히 알고 광고를 집행하는 셀러는 공격적인 키워드 입찰 시에도 '역마진'을 피할 수 있습니다. <a href="kelly-calc.html" style="color:var(--accent); text-decoration:none;">켈리 공식</a>을 응용해 광고 예산의 비중을 조절하는 것도 좋은 방법입니다.</p>
+            </div>
+
+            <div class="seo-card">
+                <h3>4. 셀러를 위한 실무 운영 체크리스트</h3>
+                <p>숫자는 거짓말을 하지 않습니다. 지속 가능한 성장을 위해 아래 체크리스트를 매주 점검하세요.</p>
+                <div class="check-list">
+                    <h4>✅ 성공 셀러의 루틴</h4>
+                    <ul>
+                        <li>매월 1일, 쿠팡 카테고리 수수료 정책 변경 사항을 확인하고 계산기에 반영했는가?</li>
+                        <li>상품 포장 부피를 최적화하여 로켓그로스 물류 등급을 낮췄는가?</li>
+                        <li>반품률이 5%를 넘어가는 경우, 제품 상세 페이지의 오해 소지를 수정했는가?</li>
+                        <li>세후 순수익의 일부를 세금 납부용 계좌에 따로 적립하고 있는가?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="seo-card">
+                <h3>5. 결론: 매출 지표보다 중요한 것은 '현금 흐름'입니다</h3>
+                <p>화려한 매출은 허상일 수 있습니다. 진짜 실력은 정산 후 내 통장에 남는 <strong>'현금'</strong>에서 증명됩니다. 구글 검색 엔진이 신뢰하는 전문적인 데이터 분석 툴인 본 계산기를 활용하여, 매일 변하는 시장 상황 속에서도 흔들리지 않는 수익 구조를 만드시기 바랍니다.</p>
+                <p>성공적인 셀러의 길은 냉정한 숫자 관리에서 시작됩니다. 지금 바로 판매 중인 상품의 데이터를 입력하여 당신의 비즈니스 건강 상태를 체크해 보세요.</p>
+            </div>
+        </article>
 
         <footer>
             STRATEGIC REVENUE MANAGEMENT SYSTEM // NO NICKNAME.
