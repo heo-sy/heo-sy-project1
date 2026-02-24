@@ -73,8 +73,7 @@
         @media (max-width: 600px) {
             body { padding: 15px; }
             h1 { font-size: 1.6rem; }
-            .grid-layout { grid-template-columns: 1fr; } /* All grids stack by default */
-            .grid-layout.horizontal-on-mobile { grid-template-columns: 1fr 1fr; } /* This class keeps the grid horizontal */
+            .grid-layout { grid-template-columns: 1fr 1fr; } /* 2-column grid on mobile */
             .card { padding: 20px; }
             .metric .title { font-size: 12px; }
             .metric .value { font-size: 22px; }
@@ -111,7 +110,7 @@
             </section>
 
             <section class="card">
-                <div class="grid-layout horizontal-on-mobile">
+                <div class="grid-layout">
                     <div class="input-group">
                         <label for="sellPrice">판매가 (원)</label>
                         <input type="number" id="sellPrice" placeholder="고객 결제 금액" inputmode="numeric" oninput="calculate()">
