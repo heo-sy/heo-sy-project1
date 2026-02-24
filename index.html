@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>N잡러의 무기창고 : 실전 계산기 & 실전 칼럼</title>
+    <title>Quant Hub: 실전 계산기 & 수익화 칼럼</title>
     <meta name="description" content="데이터 기반의 냉철한 수익 분석과 분야별 실전 노하우. 투자, 이커머스, 수익화 전문가를 위한 필수 도구와 팁.">
-    <meta name="keywords" content="N잡러, 수익 계산기, 투자 도구, 커머스 도구, 애드센스, 블로그, 재테크, 마진 계산, 평단가 계산, 켈리 공식, 복리 계산">
+    <meta name="keywords" content="Quant Hub, 퀀트허브, 수익 계산기, 투자 도구, 커머스 도구, 애드센스, 블로그, 재테크, 마진 계산, 평단가 계산, 켈리 공식, 복리 계산">
     
     <style>
         :root {
             --bg-color: #000000;
-            --card-bg: #1a1a1a;
+            --card-bg: #121212;
             --text-main: #f0f0f0;
             --text-dim: #a0a0a0;
             --border-color: #2a2a2a;
@@ -21,9 +21,10 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             margin: 0;
             padding: 0;
+            line-height: 1.6;
         }
 
         .container {
@@ -33,9 +34,9 @@
         }
 
         /* Navigation Bar */
-        .nav-bar {
-            background-color: rgba(16, 16, 16, 0.8);
-            backdrop-filter: blur(10px);
+        .gnb {
+            background-color: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border-color);
             padding: 15px 30px;
             display: flex;
@@ -46,48 +47,48 @@
             z-index: 1000;
         }
 
-        .nav-logo a {
-            font-size: 1.2rem;
-            font-weight: 700;
+        .gnb-logo a {
+            font-size: 1.3rem;
+            font-weight: 800;
             color: var(--text-main);
             text-decoration: none;
         }
         
-        .nav-menu {
+        .gnb-menu {
             list-style: none;
             margin: 0;
             padding: 0;
             display: flex;
-            gap: 25px;
+            gap: 30px;
         }
 
-        .nav-menu a {
+        .gnb-menu a {
             color: var(--text-dim);
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.95rem;
+            font-size: 1rem;
             transition: color 0.2s ease;
         }
 
-        .nav-menu a:hover, .nav-menu a.active {
+        .gnb-menu a:hover, .gnb-menu a.active {
             color: var(--text-main);
         }
 
         /* Header */
         header {
             text-align: center;
-            padding: 80px 20px;
+            padding: 70px 20px 80px;
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 2.8rem;
             font-weight: 800;
             margin: 0 0 15px 0;
             letter-spacing: -1px;
         }
 
         header p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--text-dim);
             max-width: 650px;
             margin: 0 auto;
@@ -101,14 +102,14 @@
         }
 
         .section {
-            background: var(--card-bg);
+            background: transparent;
             border: 1px solid var(--border-color);
             border-radius: 16px;
             padding: 30px;
         }
         
         .section-title {
-            font-size: 1.8rem;
+            font-size: 1.7rem;
             font-weight: 700;
             margin: 0 0 25px 0;
             display: flex;
@@ -125,10 +126,10 @@
         }
 
         .tool-card {
-            background-color: #0e0e0e;
+            background-color: var(--card-bg);
             border: 1px solid #222;
             border-radius: 12px;
-            padding: 20px;
+            padding: 25px;
             text-decoration: none;
             color: var(--text-main);
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
@@ -139,13 +140,13 @@
         .invest .tool-card:hover {
             transform: translateY(-5px);
             border-color: var(--neon-blue);
-            box-shadow: 0 5px 20px rgba(0, 178, 255, 0.1);
+            box-shadow: 0 6px 25px rgba(0, 178, 255, 0.15);
         }
 
         .commerce .tool-card:hover {
             transform: translateY(-5px);
             border-color: var(--neon-green);
-            box-shadow: 0 5px 20px rgba(57, 255, 20, 0.1);
+            box-shadow: 0 6px 25px rgba(57, 255, 20, 0.15);
         }
 
         .tool-card h3 {
@@ -155,7 +156,7 @@
         }
 
         .tool-card p {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: var(--text-dim);
             margin: 0;
             line-height: 1.5;
@@ -164,48 +165,48 @@
         /* Footer */
         footer {
             text-align: center;
-            padding: 60px 20px 30px;
+            padding: 80px 20px 40px;
             font-size: 0.9rem;
             color: #666;
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            h1 { font-size: 2.2rem; }
-            header p { font-size: 1rem; }
+            h1 { font-size: 2rem; }
+            header { padding: 50px 20px 60px; }
             .main-content {
                 grid-template-columns: 1fr;
             }
-            .nav-bar { padding: 15px 20px; }
-            .nav-menu { display: none; } /* Simple mobile menu handling */
+            .gnb { padding: 15px 20px; }
+            .gnb-menu { display: none; } /* On mobile, we might need a hamburger menu logic */
         }
     </style>
 </head>
 <body>
 
-    <nav class="nav-bar">
-        <div class="nav-logo">
-            <a href="#">N잡러의 무기창고</a>
+    <nav class="gnb">
+        <div class="gnb-logo">
+            <a href="#">Quant Hub</a>
         </div>
-        <ul class="nav-menu">
+        <ul class="gnb-menu">
             <li><a href="#" class="active">홈</a></li>
             <li><a href="#">투자 도구</a></li>
             <li><a href="#">커머스 도구</a></li>
-            <li><a href="#">수수료/마진 팁(Blog)</a></li>
+            <li><a href="#">수익화 팁(Blog)</a></li>
         </ul>
     </nav>
 
     <div class="container">
         <header>
-            <h1>N잡러의 무기창고 : 실전 계산기 & 실전 칼럼</h1>
+            <h1>Quant Hub: 실전 계산기 & 수익화 칼럼</h1>
             <p>데이터 기반의 냉철한 수익 분석과 분야별 실전 노하우</p>
         </header>
 
         <main class="main-content">
             <section class="section invest">
-                <h2 class="section-title invest">📊 투자 & 트레이딩</h2>
+                <h2 class="section-title invest">📊 실전 투자 & 트레이딩</h2>
                 <div class="tool-grid">
-                    <a href="./calculator.html" class="tool-card">
+                    <a href="./reality-calc.html" class="tool-card">
                         <h3>복리 계산기</h3>
                         <p>장기 투자 계획과 은퇴 자산을 예측하는 복리 효과 시뮬레이터.</p>
                     </a>
@@ -224,7 +225,7 @@
                 <h2 class="section-title commerce">📦 이커머스 & 수익화</h2>
                 <div class="tool-grid">
                     <a href="./margin-calc.html" class="tool-card">
-                        <h3>쿠팡 로켓그로스 마진 계산기</h3>
+                        <h3>로켓그로스 마진 계산기</h3>
                         <p>모든 비용을 반영하여 셀러의 실제 순수익과 ROI를 정밀 분석.</p>
                     </a>
                 </div>
@@ -232,7 +233,7 @@
         </main>
 
         <footer>
-            <p>&copy; 2024 N잡러의 무기창고. All Rights Reserved.</p>
+            <p>&copy; 2024 Quant Hub. All Rights Reserved.</p>
         </footer>
     </div>
 
