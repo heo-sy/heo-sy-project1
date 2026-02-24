@@ -112,7 +112,6 @@
             font-size: 1.3rem;
             font-weight: 800;
             outline: none;
-            inputmode: decimal;
         }
         .field input:focus { border-color: var(--accent); }
 
@@ -152,9 +151,24 @@
     </style>
 </head>
 <body>
-    <nav class="main-nav">
-        <a href="index.html">⬅ 메인 대시보드로 돌아가기</a>
-    </nav>
+<style>
+    .gnb-header-seller { background: rgba(10, 10, 10, 0.85); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 9999; border-bottom: 1px solid #2a2a2a; width: 100%; font-family: "Pretendard", sans-serif; }
+    .gnb-container-seller { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; box-sizing: border-box; }
+    .gnb-logo-seller { font-size: 1.4rem; font-weight: 900; color: #ffffff; text-decoration: none; letter-spacing: -0.5px; display: flex; align-items: center; gap: 5px; }
+    .gnb-logo-seller span { color: #39ff14; }
+    .gnb-nav-list-seller { display: flex; gap: 15px; list-style: none; margin: 0; padding: 0; }
+    .gnb-nav-list-seller a { display: block; padding: 6px 10px; color: #888888; text-decoration: none; font-size: 0.95rem; font-weight: 700; transition: all 0.2s ease; border-radius: 6px; }
+    .gnb-nav-list-seller a:hover { color: #39ff14; background: rgba(57, 255, 20, 0.1); }
+</style>
+<header class="gnb-header-seller">
+    <div class="gnb-container-seller">
+        <a href="index.html" class="gnb-logo-seller">Quant <span>Hub</span></a>
+        <nav><ul class="gnb-nav-list-seller">
+            <li><a href="index.html">🏠 홈</a></li>
+            <li><a href="margin-calc.html">📦 로켓그로스 마진 계산기</a></li>
+        </ul></nav>
+    </div>
+</header>
     <div class="container">
         <header>
             <div class="badge">Rocket Growth Strategy Lab</div>
@@ -280,9 +294,6 @@
 
                 <p><strong>② 로켓그로스 물류비와 '장기 보관료'의 함정</strong><br>
                 3,000원의 입출고비는 시작일 뿐입니다. 상품의 <strong>체적 중량(부피와 무게)</strong>에 따라 입출고비가 예상보다 높게 책정될 수 있으며, 특히 판매 회전율이 낮아 창고에 재고가 쌓이면 '장기 보관료'라는 무서운 비용이 청구됩니다. 본 계산기를 통해 물류비를 보수적으로 설정하고, <a href="reality-calc.html" style="color:var(--accent); text-decoration:none;">복리 계산기</a>를 활용해 재투자 효율을 점검해야 합니다.</p>
-
-                <p><strong>③ 광고비와 손실률 3% 방어선</strong><br>
-                광고 효율(ROAS)이 좋아 보여도 반품 한두 번에 마진은 증발합니다. <strong>단순 변심 반품, 배송 중 파손, 검수 탈락</strong> 등은 온라인 커머스에서 피할 수 없는 비용입니다. 상위 1% 셀러들은 항상 <strong>최소 3%의 손실률</strong>을 미리 떼어놓고 계산합니다. 이 손실률을 감당하지 못하는 상품은 구조적으로 위험한 상품으로 분류해야 합니다.</p>
             </div>
 
             <div class="seo-card">
@@ -292,17 +303,13 @@
             </div>
 
             <div class="seo-card">
-                <h3>4. 셀러를 위한 실무 운영 체크리스트</h3>
-                <p>숫자는 거짓말을 하지 않습니다. 지속 가능한 성장을 위해 아래 체크리스트를 매주 점검하세요.</p>
-                <div class="check-list">
-                    <h4>✅ 성공 셀러의 루틴</h4>
-                    <ul>
-                        <li>매월 1일, 쿠팡 카테고리 수수료 정책 변경 사항을 확인하고 계산기에 반영했는가?</li>
-                        <li>상품 포장 부피를 최적화하여 로켓그로스 물류 등급을 낮췄는가?</li>
-                        <li>반품률이 5%를 넘어가는 경우, 제품 상세 페이지의 오해 소지를 수정했는가?</li>
-                        <li>세후 순수익의 일부를 세금 납부용 계좌에 따로 적립하고 있는가?</li>
-                    </ul>
-                </div>
+                <h4>✅ 성공 셀러의 루틴</h4>
+                <ul>
+                    <li>매월 1일, 쿠팡 카테고리 수수료 정책 변경 사항을 확인하고 계산기에 반영했는가?</li>
+                    <li>상품 포장 부피를 최적화하여 로켓그로스 물류 등급을 낮췄는가?</li>
+                    <li>반품률이 5%를 넘어가는 경우, 제품 상세 페이지의 오해 소지를 수정했는가?</li>
+                    <li>세후 순수익의 일부를 세금 납부용 계좌에 따로 적립하고 있는가?</li>
+                </ul>
             </div>
 
             <div class="seo-card">
@@ -312,10 +319,6 @@
             </div>
         </article>
 
-        <footer style="text-align: center; color: #888; margin-top: 80px; padding: 30px 20px; font-size: 0.85rem; border-top: 1px solid #2a2a2a; background-color: #0d1117;">
-    <p>본 사이트의 모든 계산 결과는 투자 참고용이며, 법적 책임을 지지 않습니다. 투자의 최종 책임은 본인에게 있습니다.</p>
-    <p>&copy; 2024 Quant Hub. All rights reserved. | <a href="#" style="color: #888; text-decoration: underline;">개인정보처리방침</a></p>
-</footer>
     </div>
 
     <script>
@@ -379,5 +382,9 @@
         // 초기화
         calculateAll();
     </script>
+<footer style="text-align: center; color: #888; margin-top: 80px; padding: 30px 20px; font-size: 0.85rem; border-top: 1px solid #2a2a2a; background-color: #0d1117;">
+    <p>본 사이트의 모든 계산 결과는 투자 참고용이며, 법적 책임을 지지 않습니다. 투자의 최종 책임은 본인에게 있습니다.</p>
+    <p>&copy; 2024 Quant Hub. All rights reserved. | <a href="#" style="color: #888; text-decoration: underline;">개인정보처리방침</a></p>
+</footer>
 </body>
 </html>
